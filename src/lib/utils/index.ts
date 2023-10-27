@@ -1,0 +1,157 @@
+import { pb } from '$lib/pocketbase';
+
+export const serializeNonPOJOs = (obj: any) => {
+	return JSON.parse(JSON.stringify(obj));
+};
+
+export const getPbImageUrl = (doc: any, img: string | null, dim: string | undefined) => {
+	let logo = (img ? pb.files.getUrl(doc, img, { thumb: dim ?? '100x100' }) : null) ?? null;
+	return logo;
+};
+
+export function formatDate(input: string | Date | null): string {
+	if (!input) {
+		return ''
+	}
+	let date: Date;
+	if (typeof input === 'string') {
+		// Parse the input string as a Date
+		date = new Date(input);
+	} else if (input instanceof Date) {
+		// If input is already a Date object, use it as is
+		date = input;
+	} else {
+		throw new Error('Invalid input. Please provide a valid string date or Date object.');
+	}
+
+	if (isNaN(date.getTime())) {
+		throw new Error('Invalid date format. Please provide a valid date.');
+	}
+	const day = String(date.getDate()).padStart(2, '0');
+	const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is zero-based
+	const year = String(date.getFullYear())//.slice(-2); // Get last 2 digits of the year
+
+	return `${day}/${month}/${year}`;
+}
+
+export function formatObject(input: InputObject): InputObject {
+	const formattedObject: InputObject = {};
+
+	for (const key in input) {
+		if (input.hasOwnProperty(key)) {
+			const [property, type] = key.split('__');
+			const value = input[key];
+
+			switch (type) {
+				case 'bool':
+					formattedObject[property] = value === 1 ? `is ${property}` : `is not ${property}`;
+					break;
+				case 'string':
+					formattedObject[property] = value as string;
+					break;
+				case 'date':
+					formattedObject[property] = formatDate(value+'') as string;
+					break;
+				default:
+					formattedObject[property] = value;
+					break;
+			}
+		}
+	}
+
+	return formattedObject;
+}
+
+
+export function dateTimeFormatter(date: string): string {
+	const options: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour12: true,hour:'2-digit',minute:"2-digit" };
+	const d: Date = new Date(date);
+	return d.toLocaleDateString('en-US', options);
+}
+
+
+export function setSearchParams(url: URL | string, key: string, value: string) {
+    const hostname = "http://localhost:3000";
+    try {
+        const search = new URL(url).search;
+		const object:Record<string,any> = new URL(url).searchParams
+        for (const key in object) {
+			if (Object.prototype.hasOwnProperty.call(object, key)) {
+				const element = object[key];
+				console.log(element)
+			}
+		}
+        const pathname = new URL(url).pathname;
+        const params = new URLSearchParams(search);
+        params.set(key, value);
+        const new_params = params.toString();
+        const newUrl = pathname + "?" + new_params;
+        return newUrl;
+    } catch (error) {
+        url = hostname + url;
+        const search = new URL(url).search;
+        const pathname = new URL(url).pathname;
+        const params = new URLSearchParams(search);
+        params.set(key, value);
+        const new_params = params.toString();
+        const newUrl = pathname + "?" + new_params;
+        return newUrl;
+    }
+}
+export function getSearchParams(url: URL | string) {
+    try {
+        const search = new URL(url).search;
+        const params = new URLSearchParams(search);
+        
+		for (const iterator of params) {
+			console.log(iterator)
+		}
+        const new_params = params.toString();
+        return "?q=" + new_params;
+    } catch (error) {
+        return '?q=';
+    }
+}
+
+export async function urlToBase64(url: string): Promise<string | null> {
+  try {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const base64 = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = () => reject(new Error('Failed to read the file as base64'));
+      reader.readAsDataURL(blob);
+    });
+    return base64;
+  } catch (error) {
+    console.error("Error converting URL to base64:", error);
+    return null;
+  }
+}
+
+// const imageUrl = 'http://example.com/path/to/your/image.jpg';
+
+export function printFxn(divId: string, title = 'Document'): void {
+	const fileName = `${title}_${new Date().toLocaleDateString()}.html`;
+	const mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=150');
+
+	if (mywindow) {
+		mywindow.document.write(`<html><head><title>${title}</title>`);
+		mywindow.document.write('</head><body>');
+
+		const divContent = document.getElementById(divId)?.innerHTML;
+
+		if (divContent) {
+			mywindow.document.write(divContent);
+		}
+
+		mywindow.document.write('</body></html');
+
+		mywindow.document.close(); // Necessary for IE >= 10
+		mywindow.focus(); // Necessary for IE >= 10
+		mywindow.print();
+	} else {
+		console.error('Failed to open a new window for printing.');
+	}
+}

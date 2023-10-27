@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		<meta name="viewport" content="width=device-width" />
+		%sveltekit.head%
+		<!-- Font Awesome -->
+		<!-- https://fontawesome.com/docs/web/setup/host-yourself/webfonts -->
+		<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+		<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+		<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+
+		<!-- prefetch common tinymce resources to speed up the initial loading times -->
+		<link rel="prefetch" href="/libs/tinymce/skins/content/default/content.min.css" as="style" />
+		<link rel="prefetch" href="/libs/tinymce/skins/ui/pocketbase/skin.min.css" as="style" />
+		<link rel="prefetch" href="/libs/tinymce/skins/ui/pocketbase/content.min.css" as="style" />
+		<link rel="prefetch" href="/libs/tinymce/tinymce.min.js" as="script" />
+		<link rel="prefetch" href="/libs/tinymce/themes/silver/theme.min.js" as="script" />
+		<link rel="prefetch" href="/libs/tinymce/models/dom/model.min.js" as="script" />
+		<link rel="prefetch" href="/libs/tinymce/icons/default/icons.min.js" as="script" />
+		<link rel="prefetch" href="/libs/tinymce/plugins/directionality/plugin.min.js" as="script" />
+		<link rel="prefetch" href="/libs/tinymce/plugins/autoresize/plugin.min.js" as="script" />
+		<link rel="prefetch" href="/libs/tinymce/plugins/autolink/plugin.min.js" as="script" />
+		<link rel="prefetch" href="/libs/tinymce/plugins/lists/plugin.min.js" as="script" />
+		<link rel="prefetch" href="/libs/tinymce/plugins/link/plugin.min.js" as="script" />
+		<link rel="prefetch" href="/libs/tinymce/plugins/image/plugin.min.js" as="script" />
+		<link rel="prefetch" href="/libs/tinymce/plugins/searchreplace/plugin.min.js" as="script" />
+		<link rel="prefetch" href="/libs/tinymce/plugins/fullscreen/plugin.min.js" as="script" />
+		<link rel="prefetch" href="/libs/tinymce/plugins/media/plugin.min.js" as="script" />
+		<link rel="prefetch" href="/libs/tinymce/plugins/table/plugin.min.js" as="script" />
+		<link rel="prefetch" href="/libs/tinymce/plugins/code/plugin.min.js" as="script" />
+		<link rel="prefetch" href="/libs/tinymce/plugins/codesample/plugin.min.js" as="script" />
+	
+	</head>
+	<body data-sveltekit-prefetch class="bg-white custom-scrollbar dark:bg-gray-900">
+		<div >%sveltekit.body%</div>
+	</body>
+</html>

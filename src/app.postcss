@@ -1,0 +1,46 @@
+/* Write your global styles here, in PostCSS syntax */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* For WebKit browsers */
+/* Customize the width, color, and other properties */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #7b8ca0 #F1F5F9;
+}
+
+/* WebKit specific styles for the vertical scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 3px; /* Customize the width to make it very thin */
+  height: 3px; /* Customize the width to make it very thin */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #7b8ca0; /* Customize thumb color */
+  border-radius: 50px; /* Set the border radius to 50 for a fully rounded appearance */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #5d656d; /* Customize hover color */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #F1F5F9; /* Customize track color */
+}
+
+/* WebKit specific styles for the horizontal scrollbar */
+.custom-scrollbar::-webkit-scrollbar-horizontal {
+  width: 1px; /* Customize the height to make it very thin */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:horizontal {
+  background-color: #7b8ca0; /* Customize thumb color for horizontal scrollbar */
+  border-radius: 50px; /* Set the border radius to 50 for a fully rounded appearance */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:horizontal:hover {
+  background-color: #7b8ca0; /* Customize hover color for horizontal scrollbar */
+}
+
