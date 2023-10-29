@@ -1,6 +1,6 @@
 <script>
     import tooltip from "$lib/actions/tooltip";
-	import { formatDate } from "$lib/utils";
+	import { formatDate, timeFormatter } from "$lib/utils";
     import CommonHelper from "$lib/utils/CommonHelper";
 
     export let date = "";
@@ -21,7 +21,7 @@
 {#if date}
     <div class="datetime" use:tooltip={tooltipData}>
         <div class="date">{formatDate(dateOnly)}</div>
-        <div class="time">{timeOnly} UTC</div>
+        <div class="time">{timeFormatter(date)}|{timeOnly} UTC</div>
     </div>
 {:else}
     <span class="txt txt-hint">N/A</span>

@@ -64,9 +64,17 @@ export function formatObject(input: InputObject): InputObject {
 
 
 export function dateTimeFormatter(date: string): string {
-	const options: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour12: true,hour:'2-digit',minute:"2-digit" };
+	const options: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric', hour12: true,hour:'2-digit',minute:"2-digit" };
 	const d: Date = new Date(date);
 	return d.toLocaleDateString('en-US', options);
+}
+export function timeFormatter(date: string|Date|null): string {
+	if (!date) {
+		date = new Date()
+	}
+	const options: Intl.DateTimeFormatOptions = { hour12: true,hour:'2-digit',minute:"2-digit" };
+	const d: Date = new Date(date);
+	return ((''+d.toLocaleDateString('en-US', options))?.split(','))[1];
 }
 
 

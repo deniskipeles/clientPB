@@ -111,7 +111,7 @@
 			const encoded = localStorage.getItem(hiddenColumnsKey);
 			if (encoded) {
 				hiddenColumns = JSON.parse(encoded) || [];
-                schemaHiddenColumnsStore.set(hiddenColumns)
+				schemaHiddenColumnsStore.set(hiddenColumns);
 			}
 		} catch (_) {}
 	}
@@ -131,7 +131,8 @@
 	}
 
 	import { page, page as storePage } from '$app/stores';
-	import { recordsStore, schemaHiddenColumnsStore } from '$lib/stores/collections';
+	import { recordsStore, schemaHiddenColumnsStore, view_cards } from '$lib/stores/collections';
+	import { Card, Label } from 'flowbite-svelte';
 	// import { afterNavigate } from "$app/navigation";
 	// afterNavigate(()=>load(1))
 
@@ -323,7 +324,7 @@
 									CommonHelper.pushUnique(hiddenColumns, column.id);
 								}
 								hiddenColumns = hiddenColumns;
-								schemaHiddenColumnsStore.set(hiddenColumns)
+								schemaHiddenColumnsStore.set(hiddenColumns);
 							}}
 						/>
 						<label for={uniqueId}>{column.name}</label>
@@ -333,202 +334,18 @@
 		{/if}
 	</svelte:fragment>
 
-	<table class="table" class:table-loading={isLoading}>
-		<thead>
-			<tr>
-				{#if isView}
-					<th class="bulk-select-col min-width">
-						{#if isLoading}
-							<span class="loader loader-sm" />
-						{:else}
-							<div class="form-field">
-								<input
-									type="checkbox"
-									id="checkbox_0"
-									disabled={!records.length}
-									checked={areAllRecordsSelected}
-									on:change={() => toggleSelectAllRecords()}
-								/>
-								<label for="checkbox_0" />
-							</div>
-						{/if}
-					</th>
-				{/if}
-
-				{#if hiddenColumns.includes('@id')}
-					<SortHeader class="col-type-text col-field-id" name="id" bind:sort>
-						<div class="col-header-content">
-							<i class={CommonHelper.getFieldTypeIcon('primary')} />
-							<span class="txt">id</span>
-						</div>
-					</SortHeader>
-				{/if}
-
-				{#if isAuth}
-					{#if !hiddenColumns.includes('@username')}
-						<SortHeader class="col-type-text col-field-id" name="username" bind:sort>
-							<div class="col-header-content">
-								<i class={CommonHelper.getFieldTypeIcon('user')} />
-								<span class="txt">username</span>
-							</div>
-						</SortHeader>
-					{/if}
-					{#if !hiddenColumns.includes('@email')}
-						<SortHeader class="col-type-email col-field-email" name="email" bind:sort>
-							<div class="col-header-content">
-								<i class={CommonHelper.getFieldTypeIcon('email')} />
-								<span class="txt">email</span>
-							</div>
-						</SortHeader>
-					{/if}
-				{/if}
-
-				{#each visibleFields as field (field.name)}
-					<SortHeader
-						class="col-type-{field.type} col-field-{field.name}"
-						name={field.name}
-						bind:sort
-					>
-						<div class="col-header-content">
-							<i
-								class={CommonHelper.getFieldTypeIcon(field.name == '_ID' ? 'number' : field.type)}
-							/>
-							<span class="txt">{field.name?.split('_')?.join(' ')}</span>
-						</div>
-					</SortHeader>
-				{/each}
-
-				{#if hasCreated && !hiddenColumns.includes('@created')}
-					<SortHeader class="col-type-date col-field-created" name="created" bind:sort>
-						<div class="col-header-content">
-							<i class={CommonHelper.getFieldTypeIcon('date')} />
-							<span class="txt">created</span>
-						</div>
-					</SortHeader>
-				{/if}
-
-				{#if hasUpdated && !hiddenColumns.includes('@updated')}
-					<SortHeader class="col-type-date col-field-updated" name="updated" bind:sort>
-						<div class="col-header-content">
-							<i class={CommonHelper.getFieldTypeIcon('date')} />
-							<span class="txt">updated</span>
-						</div>
-					</SortHeader>
-				{/if}
-
-				<th class="col-type-action min-width">
-					{#if collumnsToHide.length}
-						<button
-							bind:this={columnsTrigger}
-							type="button"
-							aria-label="Toggle columns"
-							class="btn btn-sm btn-transparent p-0"
-						>
-							<i class="ri-more-line" />
-						</button>
-					{/if}
-				</th>
-			</tr>
-		</thead>
-		<tbody>
+	{#if $view_cards}
+		<div class="grid relative md:grid-cols-3 gap-6">
 			{#each records as record (!isView ? record.id : record)}
-				<tr
-					tabindex="0"
-					class="row-handle"
-					on:click={() => dispatch('select', record)}
-					on:keydown={(e) => {
-						if (e.code === 'Enter') {
-							e.preventDefault();
-							dispatch('select', record);
-						}
-					}}
-				>
-					{#if isView}
-						<td class="bulk-select-col min-width">
-							<!-- svelte-ignore a11y-click-events-have-key-events -->
-							<!-- svelte-ignore a11y-no-static-element-interactions -->
-							<div class="form-field" on:click|stopPropagation>
-								<input
-									type="checkbox"
-									id="checkbox_{record.id}"
-									checked={bulkSelected[record.id]}
-									on:change={() => toggleSelectRecord(record)}
-								/>
-								<label for="checkbox_{record.id}" />
-							</div>
-						</td>
-					{/if}
-
-					{#if hiddenColumns.includes('@id')}
-						<td class="col-type-text col-field-id">
-							<div class="flex flex-gap-5">
-								<div class="label">
-									<CopyIcon value={record.id} />
-									<div class="txt">{record.id}</div>
-								</div>
-
-								{#if isAuth}
-									{#if record.verified}
-										<i
-											class="ri-checkbox-circle-fill txt-sm txt-success"
-											use:tooltip={'Verified'}
-										/>
-									{:else}
-										<i class="ri-error-warning-fill txt-sm txt-hint" use:tooltip={'Unverified'} />
-									{/if}
-								{/if}
-							</div>
-						</td>
-					{/if}
-
-					{#if isAuth}
-						{#if !hiddenColumns.includes('@username')}
-							<td class="col-type-text col-field-username">
-								{#if CommonHelper.isEmpty(record.username)}
-									<span class="txt-hint">N/A</span>
-								{:else}
-									<span class="txt txt-ellipsis" title={record.username}>
-										{record.username}
-									</span>
-								{/if}
-							</td>
-						{/if}
-						{#if !hiddenColumns.includes('@email')}
-							<td class="col-type-text col-field-email">
-								{#if CommonHelper.isEmpty(record.email)}
-									<span class="txt-hint">N/A</span>
-								{:else}
-									<span class="txt txt-ellipsis" title={record.email}>
-										{record.email}
-									</span>
-								{/if}
-							</td>
-						{/if}
-					{/if}
-
-					{#each visibleFields as field (field.name)}
-						<td class="col-type-{field.type} col-field-{field.name}">
-							<RecordFieldValue short {record} {field} />
-						</td>
-					{/each}
-
-					{#if hasCreated && !hiddenColumns.includes('@created')}
-						<td class="col-type-date col-field-created">
-							<FormattedDate date={record.created} />
-						</td>
-					{/if}
-
-					{#if hasUpdated && !hiddenColumns.includes('@updated')}
-						<td class="col-type-date col-field-updated">
-							<FormattedDate date={record.updated} />
-						</td>
-					{/if}
-
-					<td class="col-type-action gap-4 min-width">
-						<i class="ri-arrow-right-line" />
-						<!-- <button type="button" on:click={() => dispatch("select", record)}>
-                            <i class="ri-eye-line" />
-                        </button> -->
+				<Card padding="sm" class="items-start text-left">
+					<div class="btns-group">
+						<button
+							type="button"
+							class="btn btn-sm btn-circle btn-transparent btn-hint m-l-auto"
+							on:click={() => dispatch('select', record)}
+						>
+							<i class="ri-eye-line" />
+						</button>
 						{#if $page.data.user && !$page.data.user.collectionName?.includes('student')}
 							&nbsp;
 							<button
@@ -544,58 +361,286 @@
 								<i class="ri-pencil-line" />
 							</button>
 						{/if}
-					</td>
+					</div>
+					{#each visibleFields as field (field.name)}
+						<p class="mb-1 font-semibold text-gray-900 dark:text-white">
+							<Label for="name2" class="mb-2">
+								<i
+									class={CommonHelper.getFieldTypeIcon(field.name == '_ID' ? 'number' : field.type)}
+								/>
+								<span class="txt">{field.name?.split('_')?.join(' ')}</span>
+							</Label>
+							<RecordFieldValue short {record} {field} />
+						</p>
+					{/each}
+				</Card>
+			{/each}
+		</div>
+	{:else}
+		<table class="table" class:table-loading={isLoading}>
+			<thead>
+				<tr>
+					{#if isView}
+						<th class="bulk-select-col min-width">
+							{#if isLoading}
+								<span class="loader loader-sm" />
+							{:else}
+								<div class="form-field">
+									<input
+										type="checkbox"
+										id="checkbox_0"
+										disabled={!records.length}
+										checked={areAllRecordsSelected}
+										on:change={() => toggleSelectAllRecords()}
+									/>
+									<label for="checkbox_0" />
+								</div>
+							{/if}
+						</th>
+					{/if}
+
+					{#if hiddenColumns.includes('@id')}
+						<SortHeader class="col-type-text col-field-id" name="id" bind:sort>
+							<div class="col-header-content">
+								<i class={CommonHelper.getFieldTypeIcon('primary')} />
+								<span class="txt">id</span>
+							</div>
+						</SortHeader>
+					{/if}
+
+					{#if isAuth}
+						{#if !hiddenColumns.includes('@username')}
+							<SortHeader class="col-type-text col-field-id" name="username" bind:sort>
+								<div class="col-header-content">
+									<i class={CommonHelper.getFieldTypeIcon('user')} />
+									<span class="txt">username</span>
+								</div>
+							</SortHeader>
+						{/if}
+						{#if !hiddenColumns.includes('@email')}
+							<SortHeader class="col-type-email col-field-email" name="email" bind:sort>
+								<div class="col-header-content">
+									<i class={CommonHelper.getFieldTypeIcon('email')} />
+									<span class="txt">email</span>
+								</div>
+							</SortHeader>
+						{/if}
+					{/if}
+
+					{#each visibleFields as field (field.name)}
+						<SortHeader
+							class="col-type-{field.type} col-field-{field.name}"
+							name={field.name}
+							bind:sort
+						>
+							<div class="col-header-content">
+								<i
+									class={CommonHelper.getFieldTypeIcon(field.name == '_ID' ? 'number' : field.type)}
+								/>
+								<span class="txt">{field.name?.split('_')?.join(' ')}</span>
+							</div>
+						</SortHeader>
+					{/each}
+
+					{#if hasCreated && !hiddenColumns.includes('@created')}
+						<SortHeader class="col-type-date col-field-created" name="created" bind:sort>
+							<div class="col-header-content">
+								<i class={CommonHelper.getFieldTypeIcon('date')} />
+								<span class="txt">created</span>
+							</div>
+						</SortHeader>
+					{/if}
+
+					{#if hasUpdated && !hiddenColumns.includes('@updated')}
+						<SortHeader class="col-type-date col-field-updated" name="updated" bind:sort>
+							<div class="col-header-content">
+								<i class={CommonHelper.getFieldTypeIcon('date')} />
+								<span class="txt">updated</span>
+							</div>
+						</SortHeader>
+					{/if}
+
+					<th class="col-type-action min-width">
+						{#if collumnsToHide.length}
+							<button
+								bind:this={columnsTrigger}
+								type="button"
+								aria-label="Toggle columns"
+								class="btn btn-sm btn-transparent p-0"
+							>
+								<i class="ri-more-line" />
+							</button>
+						{/if}
+					</th>
 				</tr>
-			{:else}
-				{#if isLoading}
-					<tr>
-						<td colspan="99" class="p-xs">
-							<span class="skeleton-loader m-0" />
-						</td>
-					</tr>
-				{:else}
-					<tr>
-						<td colspan="99" class="txt-center txt-hint p-xs">
-							<h6>No records found.</h6>
-							{#if filter?.length}
+			</thead>
+			<tbody>
+				{#each records as record (!isView ? record.id : record)}
+					<tr
+						tabindex="0"
+						class="row-handle"
+						on:click={() => dispatch('select', record)}
+						on:keydown={(e) => {
+							if (e.code === 'Enter') {
+								e.preventDefault();
+								dispatch('select', record);
+							}
+						}}
+					>
+						{#if isView}
+							<td class="bulk-select-col min-width">
+								<!-- svelte-ignore a11y-click-events-have-key-events -->
+								<!-- svelte-ignore a11y-no-static-element-interactions -->
+								<div class="form-field" on:click|stopPropagation>
+									<input
+										type="checkbox"
+										id="checkbox_{record.id}"
+										checked={bulkSelected[record.id]}
+										on:change={() => toggleSelectRecord(record)}
+									/>
+									<label for="checkbox_{record.id}" />
+								</div>
+							</td>
+						{/if}
+
+						{#if hiddenColumns.includes('@id')}
+							<td class="col-type-text col-field-id">
+								<div class="flex flex-gap-5">
+									<div class="label">
+										<CopyIcon value={record.id} />
+										<div class="txt">{record.id}</div>
+									</div>
+
+									{#if isAuth}
+										{#if record.verified}
+											<i
+												class="ri-checkbox-circle-fill txt-sm txt-success"
+												use:tooltip={'Verified'}
+											/>
+										{:else}
+											<i class="ri-error-warning-fill txt-sm txt-hint" use:tooltip={'Unverified'} />
+										{/if}
+									{/if}
+								</div>
+							</td>
+						{/if}
+
+						{#if isAuth}
+							{#if !hiddenColumns.includes('@username')}
+								<td class="col-type-text col-field-username">
+									{#if CommonHelper.isEmpty(record.username)}
+										<span class="txt-hint">N/A</span>
+									{:else}
+										<span class="txt txt-ellipsis" title={record.username}>
+											{record.username}
+										</span>
+									{/if}
+								</td>
+							{/if}
+							{#if !hiddenColumns.includes('@email')}
+								<td class="col-type-text col-field-email">
+									{#if CommonHelper.isEmpty(record.email)}
+										<span class="txt-hint">N/A</span>
+									{:else}
+										<span class="txt txt-ellipsis" title={record.email}>
+											{record.email}
+										</span>
+									{/if}
+								</td>
+							{/if}
+						{/if}
+
+						{#each visibleFields as field (field.name)}
+							<td class="col-type-{field.type} col-field-{field.name}">
+								<RecordFieldValue short {record} {field} />
+							</td>
+						{/each}
+
+						{#if hasCreated && !hiddenColumns.includes('@created')}
+							<td class="col-type-date col-field-created">
+								<FormattedDate date={record.created} />
+							</td>
+						{/if}
+
+						{#if hasUpdated && !hiddenColumns.includes('@updated')}
+							<td class="col-type-date col-field-updated">
+								<FormattedDate date={record.updated} />
+							</td>
+						{/if}
+
+						<td class="col-type-action gap-4 min-width">
+							<i class="ri-arrow-right-line" />
+							<!-- <button type="button" on:click={() => dispatch("select", record)}>
+								 <i class="ri-eye-line" />
+							 </button> -->
+							{#if $page.data.user && !$page.data.user.collectionName?.includes('student')}
+								&nbsp;
 								<button
 									type="button"
-									class="btn btn-hint btn-expanded m-t-sm"
-									on:click={() => (filter = '')}
+									class="btn btn-sm btn-circle btn-transparent btn-hint m-l-auto"
+									use:tooltip={'Edit'}
+									on:keydown|stopPropagation
+									on:click|stopPropagation={() => {
+										record.edit = true;
+										dispatch('select', record);
+									}}
 								>
-									<span class="txt">Clear filters</span>
-								</button>
-							{:else if !isView}
-								<button
-									type="button"
-									class="btn btn-secondary btn-expanded m-t-sm"
-									on:click={() => dispatch('new')}
-								>
-									<i class="ri-add-line" />
-									<span class="txt">New record</span>
+									<i class="ri-pencil-line" />
 								</button>
 							{/if}
 						</td>
 					</tr>
-				{/if}
-			{/each}
+				{:else}
+					{#if isLoading}
+						<tr>
+							<td colspan="99" class="p-xs">
+								<span class="skeleton-loader m-0" />
+							</td>
+						</tr>
+					{:else}
+						<tr>
+							<td colspan="99" class="txt-center txt-hint p-xs">
+								<h6>No records found.</h6>
+								{#if filter?.length}
+									<button
+										type="button"
+										class="btn btn-hint btn-expanded m-t-sm"
+										on:click={() => (filter = '')}
+									>
+										<span class="txt">Clear filters</span>
+									</button>
+								{:else if !isView}
+									<button
+										type="button"
+										class="btn btn-secondary btn-expanded m-t-sm"
+										on:click={() => dispatch('new')}
+									>
+										<i class="ri-add-line" />
+										<span class="txt">New record</span>
+									</button>
+								{/if}
+							</td>
+						</tr>
+					{/if}
+				{/each}
 
-			{#if records.length && canLoadMore}
-				<tr>
-					<td colspan="99" class="txt-center">
-						<button
-							class="btn btn-expanded-lg btn-secondary btn-horizontal-sticky"
-							disabled={isLoading}
-							class:btn-loading={isLoading}
-							on:click|preventDefault={() => load(currentPage + 1)}
-						>
-							<span class="txt">Load more</span>
-						</button>
-					</td>
-				</tr>
-			{/if}
-		</tbody>
-	</table>
+				{#if records.length && canLoadMore}
+					<tr>
+						<td colspan="99" class="txt-center">
+							<button
+								class="btn btn-expanded-lg btn-secondary btn-horizontal-sticky"
+								disabled={isLoading}
+								class:btn-loading={isLoading}
+								on:click|preventDefault={() => load(currentPage + 1)}
+							>
+								<span class="txt">Load more</span>
+							</button>
+						</td>
+					</tr>
+				{/if}
+			</tbody>
+		</table>
+	{/if}
 </Scroller>
 
 {#if totalBulkSelected}

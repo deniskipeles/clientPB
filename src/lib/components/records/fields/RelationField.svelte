@@ -8,6 +8,7 @@
     import RecordsPicker from "$lib/components/records/RecordsPicker.svelte";
     import RecordInfo from "$lib/components/records/RecordInfo.svelte";
 	import { pb as ApiClient } from "$lib/pocketbase";
+	import { page } from "$app/stores";
 
     const batchSize = 100;
 
@@ -23,6 +24,13 @@
 
     $: isMultiple = field.options?.maxSelect != 1;
 
+    let times = 0
+    $: if ($page?.data?.user && field?.options?.collectionId == $page?.data?.user?.collectionId) {
+        if ((value == undefined || value == '') && times < 2) {
+            times += 1
+            value = $page?.data?.user?.id
+        }
+    }
     $: if (typeof value != "undefined") {
         fieldRef?.changed();
     }

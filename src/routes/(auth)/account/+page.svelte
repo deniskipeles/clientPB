@@ -43,7 +43,7 @@
 
 			let { ...dt } = $user;
 			dt = serializeNonPOJOs(dt);
-			console.log(dt);
+			// console.log(dt);
 			let record =await pb.collection(data?.user?.collectionName).update(data?.user?.id, dt)
 			record = serializeNonPOJOs(record);
 			data.user = record;
@@ -60,7 +60,7 @@
 				updateSuccess = false;
 			}
 		} catch (err: any) {
-			console.log(JSON.stringify(err))
+			// console.log(JSON.stringify(err))
 			error = serializeNonPOJOs(err);
 			updating = false;
 			updateError = 'Error occured.';
@@ -106,7 +106,7 @@
 				uploading = false;
 			}
 		} catch (e) {
-			console.log(JSON.stringify(e))
+			// console.log(JSON.stringify(e))
 			error = e;
 			uploading = false;
 		}
@@ -132,7 +132,7 @@
 				username_exist = true;
 			}
 		} catch (error) {
-			console.log(error);
+			// console.log(error);
 			username_exist = false;
 		}
 	};

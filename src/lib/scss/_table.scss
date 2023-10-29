@@ -274,7 +274,7 @@ table {
     thead {
         position: sticky;
         top: 0;
-        z-index: 100;
+        z-index: 0;
         transition: box-shadow var(--baseAnimationSpeed);
     }
     tbody {
