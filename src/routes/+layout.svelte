@@ -73,6 +73,13 @@
 		'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700 divide-gray-200 dark:divide-gray-700 flex items-center justify-between w-full mx-auto py-1.5 px-4';
 </script>
 
+
+
+<svelte:head>
+  <title>{school?.data?.name ?? "Prime School"}</title>
+  <meta name="description" content={school?.data?.decription ?? "Prime School Online Resources"} />
+</svelte:head>
+
 <svelte:window bind:innerWidth={width} />
 <header style="position: fixed;" class="flex fixed z-50 w-full mx-auto bg-white dark:bg-slate-950">
 	<Navbar {navDivClass} let:hidden let:toggle>
