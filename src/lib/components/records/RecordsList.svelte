@@ -207,12 +207,12 @@
 						}
 
 						records = records.concat(result.items.splice(0, 20));
-						recordsStore.set(records);
 						await CommonHelper.yieldToMain();
 					}
 				} else {
 					records = records.concat(result.items);
 				}
+				recordsStore.set(records);
 			})
 			.catch((err) => {
 				if (!err?.isAbort) {
@@ -227,6 +227,7 @@
 	function clearList() {
 		scrollWrapper?.resetVerticalScroll();
 		records = [];
+		recordsStore.set(records)
 		currentPage = 1;
 		lastTotal = 0;
 		bulkSelected = {};
@@ -346,7 +347,7 @@
 						>
 							<i class="ri-eye-line" />
 						</button>
-						{#if $page.data.user && !$page.data.user.collectionName?.includes('student')}
+						{#if $page.data.user && !($page.data.user.collectionName?.includes('students'))}
 							&nbsp;
 							<button
 								type="button"

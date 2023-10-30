@@ -34,7 +34,8 @@
 		);
 	}
 
-	$: schema = $activeCollection?.schema; //?.filter((i:any)=>!($schemaHiddenColumnsStore?.includes(i?.name)));
+	export let collection = $activeCollection;
+	$: schema = collection?.schema; //?.filter((i:any)=>!($schemaHiddenColumnsStore?.includes(i?.name)));
 	export let contenteditable = false;
 
 	let printingPDF = false;
@@ -43,6 +44,7 @@
 	import autoTable from 'jspdf-autotable';
 	import tooltip from '$lib/actions/tooltip';
 	import { addErrorToast } from '$lib/stores/toasts';
+	import CommonHelper from '$lib/utils/CommonHelper';
 
 	$: loadingPDF = false;
 	// $: images = []
@@ -65,23 +67,18 @@
 		$recordsStore.forEach((item, row) => {
 			schema?.forEach((schema_item, col) => {
 				if (schema_item.type == 'file') {
-					let imageLink = schema_item?.options?.maxSelect == 1
-								? item[schema_item?.name]
-								: Array.isArray(item[schema_item?.name]) && item[schema_item?.name].length > 0
-								? item[schema_item?.name][0]
-								: ''
-					urlToBase64(
-						getPbImageUrl(
-							item,
-							imageLink,
-							undefined
-						) ?? ''
-					)
+					let imageLink =
+						schema_item?.options?.maxSelect == 1
+							? item[schema_item?.name]
+							: Array.isArray(item[schema_item?.name]) && item[schema_item?.name].length > 0
+							? item[schema_item?.name][0]
+							: '';
+					urlToBase64(getPbImageUrl(item, imageLink, undefined) ?? '')
 						.then((base64) => {
-							images = [...images, { row, col,imageLink, base64 }];
+							images = [...images, { row, col, imageLink, base64 }];
 						})
 						.catch((e) => {
-							images = [...images, { row, col,imageLink, base64: null }];
+							images = [...images, { row, col, imageLink, base64: null }];
 						});
 					setTimeout(() => {}, 200);
 				}
@@ -89,9 +86,11 @@
 		});
 	};
 
-
-	const doc = new jsPDF();
-	function downloadFxn() {
+	let doc = new jsPDF();
+	function downloadFxn(size:string) {
+		if (size == 'short') {
+			doc = new jsPDF()
+		}
 		loadingPDF = true;
 		// It can parse html:
 		// <table id="my-table"><!-- ... --></table>
@@ -150,7 +149,8 @@
 									}) ?? [];
 								return answers.join('\n');
 							} else {
-								return JSON.stringify(json);
+								const stringifiedJson = CommonHelper.trimQuotedValue(JSON.stringify(json)) || '""'
+								return CommonHelper.truncate(stringifiedJson,50)
 							}
 						} else if (schema_item.type == 'date') {
 							return dateTimeFormatter(item[schema_item?.name ?? '']);
@@ -173,20 +173,25 @@
 					) {
 						// var base64Img = 'data:image/jpeg;base64,iVBORw0KGgoAAAANS...';
 						var type = image.base64.split(';')[0]?.split('/')[1]?.toUpperCase();
-						console.log(data.cell.text,type,image);
+						// console.log(data.cell.text,type,image);
 						// data.cell.text = []
-						// doc.addImage(image.base64, type, data.cell.x + 2, data.cell.y + 2, 10, 10);
+						if (type == 'JPG' || type == 'JPEG' || type == 'PNG') {
+							doc.addImage(image.base64, type, data.cell.x + 2, data.cell.y + 2, 10, 10);
+						}
 					}
 				});
 			}
 		});
 		try {
 			doc.save(`table_${Date.now()}.pdf`);
-			loadingPDF = false;
+			setTimeout(() => {}, 1000);
 		} catch (error) {
+			console.log(error);
+		} finally {
 			loadingPDF = false;
 		}
 	}
+	$: filds = Number(schema.length) - Number($schemaHiddenColumnsStore.length) + 2;
 </script>
 
 <div class="page-header">
@@ -200,22 +205,40 @@
 			<PencilSquare />{contenteditable ? 'block editing' : 'edit to download'}
 		</button>
 		<button
-			use:tooltip={`Click here to download pdf of the content you are viewing currently.(${$activeCollection?.schema.length-($schemaHiddenColumnsStore.length-2)} fields)`}
+			use:tooltip={`Click here to download pdf of the content you are viewing currently.(${filds} fields)`}
 			class={`flex ${loadingPDF ? 'animate-ping' : ''}`}
 			on:click={() => {
-				getLocal()
+				getLocal();
 				loadingPDF = true;
-				if (($activeCollection?.schema.length-($schemaHiddenColumnsStore.length-2)) <= 10) {		
-					downloadFxn();
+				if (filds <= 10) {
+					downloadFxn('short');
 				} else {
-					addErrorToast("The table fields should be less than or equal to 10.")
+					addErrorToast('The table fields should be less than or equal to 10.');
 				}
 				setTimeout(() => {
 					loadingPDF = false;
 				}, 2000);
 			}}
 		>
-			<CloudArrowDown />{`download(${$activeCollection?.schema.length-($schemaHiddenColumnsStore.length-2)} fields)`}
+			<CloudArrowDown />{`single pdf`}
+		</button>
+		<button
+			use:tooltip={`Click here to create a long pdf from this current table to the next data table. eg questions and attendance in one table`}
+			class={`flex ${loadingPDF ? 'animate-ping' : ''}`}
+			on:click={() => {
+				getLocal();
+				loadingPDF = true;
+				if (filds <= 10) {
+					downloadFxn('big');
+				} else {
+					addErrorToast('The table fields should be less than or equal to 10.');
+				}
+				setTimeout(() => {
+					loadingPDF = false;
+				}, 2000);
+			}}
+		>
+			<CloudArrowDown />{`continuous pdf`}
 		</button>
 		<button
 			use:tooltip={`Click here to download or print what you see in this table in pdf format.`}

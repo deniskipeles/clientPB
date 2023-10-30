@@ -31,6 +31,7 @@
 	const initialQueryParams = $page.url.searchParams;
 
 	export let collectionUpsert = $activeCollection;
+	export let collection = $activeCollection;
 	let recordUpsertPanel;
 	let recordPreviewPanel;
 	let recordsList;
@@ -145,7 +146,7 @@
 	</PageWrapper>
 {:else}
 	<PageWrapper class="flex-content mt-16">
-		<RecordsActionsButtons {contenteditableFxn} {contenteditable} />
+		<RecordsActionsButtons {contenteditableFxn} {collection} {contenteditable} />
 		<header class="page-header">
 			<nav class="breadcrumbs">
 				<div class="breadcrumb-item capitalize">
@@ -216,7 +217,8 @@
 
 					!e.detail.edit
 						? recordPreviewPanel?.show(showModel)
-						: $activeCollection.name?.includes('tests')
+						: $activeCollection.name?.includes('tests') &&
+						  $page.data?.user?.collectionName?.includes('student')
 						? questionUpsertPanel.show(showModel)
 						: recordUpsertPanel?.show(showModel);
 				}}

@@ -138,7 +138,7 @@
 			<SidebarGroup>
 				<SidebarItem label="Home" href="/" on:click={toggleSide} active={activeUrl === `/`} />
 				{#each data?.tables as { name, type, id }}
-					{#if (type == 'view' && name.includes($page.data?.user?.collectionName) && name != 'view_tables')}
+					{#if (type == 'view' && name.includes(`${$page.data?.user?.collectionName}_view_`) && name != 'view_tables')}
 						<SidebarItem
 							label={name.replace($page.data?.user?.collectionName,'').split('_').join(' ')}
 							href={`/pages/${name}?collectionId=${id}`}

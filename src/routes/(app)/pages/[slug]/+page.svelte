@@ -25,5 +25,5 @@
 </script>
 
 {#if clientView}
-	<PageRecords {collectionUpsert} />
+	<PageRecords collection={data.table} {collectionUpsert} />
 {/if}

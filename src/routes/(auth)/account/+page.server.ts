@@ -2,7 +2,7 @@ import { redirect } from "@sveltejs/kit";
 /** @type {import('./$types').LayoutServerLoad} */
 export async function load({ locals }) {
   // let parentData = await parent();
-  console.log(locals)
+  // console.log(locals)
   if (locals?.user) {
     return { user:locals?.user }
   } else {

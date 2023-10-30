@@ -55,7 +55,7 @@ export const listTablesRecords = async () => {
 	try {
 		// you can also fetch all records at once via getFullList
 		records = await pb.collection('view_tables').getFullList({
-			sort: '-created'
+			sort: 'name'
 		});
 		records = serializeNonPOJOs(records);
 		return records;

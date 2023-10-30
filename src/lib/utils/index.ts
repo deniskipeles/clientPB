@@ -86,7 +86,7 @@ export function setSearchParams(url: URL | string, key: string, value: string) {
         for (const key in object) {
 			if (Object.prototype.hasOwnProperty.call(object, key)) {
 				const element = object[key];
-				console.log(element)
+				// console.log(element)
 			}
 		}
         const pathname = new URL(url).pathname;
@@ -111,9 +111,9 @@ export function getSearchParams(url: URL | string) {
         const search = new URL(url).search;
         const params = new URLSearchParams(search);
         
-		for (const iterator of params) {
-			console.log(iterator)
-		}
+		// for (const iterator of params) {
+		// 	console.log(iterator)
+		// }
         const new_params = params.toString();
         return "?q=" + new_params;
     } catch (error) {

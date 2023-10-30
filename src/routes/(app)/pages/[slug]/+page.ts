@@ -36,7 +36,7 @@ export async function load({ params, url, parent }) {
 		// });
 		return { table };
 	} catch (error) {
-		console.log(error);
+		// console.log(error);
 		return { error: serializeNonPOJOs(error),table };
 	}
 }
