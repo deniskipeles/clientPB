@@ -135,6 +135,7 @@
 	}
 
 	let questionUpsertPanel;
+	$: is_student = $page.data?.user?.collectionName?.includes('student');
 </script>
 
 {#if $isCollectionsLoading}
@@ -215,12 +216,11 @@
 				on:select={(e) => {
 					let showModel = e.detail._partial ? e.detail.id : e.detail;
 
-					!e.detail.edit && !($page.data?.user?.collectionName?.includes('student'))
-						? recordPreviewPanel?.show(showModel)
-						: $activeCollection.name?.includes('tests') &&
-						  $page.data?.user?.collectionName?.includes('student')
+					$activeCollection.name?.includes('tests') && is_student
 						? questionUpsertPanel.show(showModel)
-						: recordUpsertPanel?.show(showModel);
+						: (e.detail.edit && !is_student)
+						? recordUpsertPanel?.show(showModel)
+						: recordPreviewPanel?.show(showModel);
 				}}
 				on:delete={() => {
 					recordsCount?.reload();
