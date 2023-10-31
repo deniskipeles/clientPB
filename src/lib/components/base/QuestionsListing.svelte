@@ -7,6 +7,7 @@
 	import { addErrorToast, addSuccessToast } from '$lib/stores/toasts';
 	import { page } from '$app/stores';
 	import { confirm } from '$lib/stores/confirmation';
+	import { goto } from '$app/navigation';
 
 	let showOverlay = false;
 	onMount(() => (showOverlay = true));
@@ -51,6 +52,14 @@
 		if (isSaving || !collectionUpsert?.id) {
 			return;
 		}
+
+		for (const ans of answers) {
+			if (ans.answers.length == 0) {
+				addErrorToast(`${ans.question}. !!Has no answers`);
+				setTimeout(() => {}, 500);
+			}
+		}
+
 		if (!$page.data?.user?.collectionName?.includes('student')) {
 			addErrorToast('Only students are allowed to answer.');
 			return;
@@ -59,12 +68,15 @@
 
 		try {
 			let formData = { answers, student: $page.data?.user?.id, test: record?.id };
-			let rec = await await ApiClient.collection(collectionUpsert.id).create(formData);
+			// console.log(formData);
+			const rec = await ApiClient.collection('tests_students_answers').create(formData);
 			addSuccessToast(`Successfully save the records'.`);
 
 			dispatch('save', rec);
 			recordPanel.hide();
+			goto('/pages/students_view_tests_students_answers');
 		} catch (err) {
+			// console.log(JSON.stringify(err));
 			if (!err?.isAbort) {
 				ApiClient.error(err, err?.status != 400); // silence filter errors
 			}
@@ -85,8 +97,8 @@
 	let isLoading = false;
 	export function hide() {
 		isLoading = false;
-        answers = []
-        record = {}
+		answers = [];
+		record = {};
 		return recordPanel?.hide();
 	}
 
@@ -103,6 +115,7 @@
 				answers.push({ answers: [], question });
 			}
 		}
+		// console.log(record);
 
 		isLoading = false;
 	}
@@ -141,6 +154,22 @@
 	};
 	let answers: Question[] = [];
 	// let answers = answers_partial;
+	$: q = [];
+	$: if (
+		(record?.expand && record?.expand?.questions && Array.isArray(record?.expand?.questions)) ||
+		(Array.isArray(record?.questions) && typeof record?.questions?.[0] == 'object')
+	) {
+		if (record?.questions && tests_students_answers) {
+			const mq = record.questions?.map((i) => ({
+				question: i,
+				marks: i?.answers?.filter((i) => i.correct == true)?.length ?? 0
+			}));
+			q = mq;
+		} else {
+			q = record?.expand?.questions ?? [];
+		}
+	}
+	$: tests_students_answers = $page.params?.slug?.includes('tests_students_answers');
 </script>
 
 {#if showOverlay}
@@ -154,15 +183,19 @@
 	>
 		<svelte:fragment slot="header">
 			<h4>
-				Attempt <strong>Question & Answers</strong> records
+				Attempt <strong>Question & Answers</strong>
+				{tests_students_answers ? 'results' : 'records'}
 			</h4>
 		</svelte:fragment>
 
-		{#if record?.expand && record?.expand?.questions && Array.isArray(record?.expand?.questions)}
-			{@const questions = record.expand.questions ?? []}
-			{#each questions as questionObj, i}
+		{#if q.length}
+			<!-- {@const questions = record?.expand?.questions ?? (typeof (record?.questions[0]) == 'object'  ? record?.question : [])} -->
+			{#each q as questionObj, i}
 				{@const question = questionObj.question}
-				<h5 class="section-title">{question?.question}</h5>
+				<h5 class="section-title">
+					<strong>{i + 1}</strong>{question?.question}({questionObj?.marks}
+					{questionObj?.marks == 1 ? 'mark' : 'marks'})
+				</h5>
 				<div class="tab-items">
 					<div class="list picker-list m-b-base">
 						{#each question?.answers ?? [] as answer, i (answer?.answer)}
@@ -192,7 +225,13 @@
 									}
 								}}
 							>
-								{#if selected}
+								{#if tests_students_answers}
+									{#if answer?.correct}
+										<i class="ri-checkbox-circle-fill txt-success" />
+									{:else}
+										<i class="ri-close-circle-fill txt-danger" />
+									{/if}
+								{:else if selected}
 									<i class="ri-checkbox-circle-fill txt-success" />
 								{:else}
 									<i class="ri-checkbox-blank-circle-line txt-disabled" />
@@ -203,7 +242,7 @@
 							</div>
 							<!-- </Draggable> -->
 						{/each}
-						{#if Array.isArray(answers[i]?.answers) && answers[i]?.answers?.length}
+						{#if Array.isArray(answers[i]?.answers) && answers[i]?.answers?.length && !tests_students_answers}
 							<h5 class="section-title">
 								Selected ({answers[i]?.answers?.length} of MAX {(question.answers?.filter(
 									(i) => i.correct == true
@@ -237,12 +276,18 @@
 		{/if}
 
 		<svelte:fragment slot="footer">
-			<button type="button" class="btn btn-transparent" on:click={() => hide()}>
-				<span class="txt">Cancel</span>
-			</button>
-			<button type="button" class="btn" on:click={() => saveConfirm()}>
-				<span class="txt">Save Attendances</span>
-			</button>
+			{#if tests_students_answers}
+				<button type="button" class="btn btn-transparent" on:click={() => hide()}>
+					<span class="txt">Close</span>
+				</button>
+			{:else}
+				<button type="button" class="btn btn-transparent" on:click={() => hide()}>
+					<span class="txt">Cancel</span>
+				</button>
+				<button type="button" class="btn" on:click={() => saveConfirm()}>
+					<span class="txt">Save Attendances</span>
+				</button>
+			{/if}
 		</svelte:fragment>
 	</OverlayPanel>
 {/if}

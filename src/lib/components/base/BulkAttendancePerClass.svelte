@@ -76,6 +76,7 @@
 			record.registered_by = $page.data?.user?.id;
 			record.date = date;
 			record.subject = subject;
+			record.class = class_selected?.id;
 			const schema: any[] = collectionUpsert?.schema;
 			let formData: any = {};
 			schema.forEach((element) => {

@@ -227,7 +227,7 @@
 	function clearList() {
 		scrollWrapper?.resetVerticalScroll();
 		records = [];
-		recordsStore.set(records)
+		recordsStore.set(records);
 		currentPage = 1;
 		lastTotal = 0;
 		bulkSelected = {};
@@ -347,7 +347,7 @@
 						>
 							<i class="ri-eye-line" />
 						</button>
-						{#if $page.data.user && !($page.data.user.collectionName?.includes('students'))}
+						{#if $page.data.user && !$page.data.user.collectionName?.includes('students')}
 							&nbsp;
 							<button
 								type="button"
@@ -357,6 +357,7 @@
 								on:click|stopPropagation={() => {
 									record.edit = true;
 									dispatch('select', record);
+									record.edit = false;
 								}}
 							>
 								<i class="ri-pencil-line" />
@@ -584,6 +585,7 @@
 									on:click|stopPropagation={() => {
 										record.edit = true;
 										dispatch('select', record);
+										record.edit = false;
 									}}
 								>
 									<i class="ri-pencil-line" />

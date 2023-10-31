@@ -4,10 +4,11 @@
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import { page } from '$app/stores';
-	import { beforeNavigate } from '$app/navigation';
+	import { ErrorComp } from '$lib/components';
+	import { error } from '@sveltejs/kit';
 
 	export let data: PageData;
-	
+
 	$: clientView = false;
 	onMount(() => {
 		activeCollection.set(data.table);
@@ -24,6 +25,9 @@
 		) ?? {};
 </script>
 
+{#if data.error}
+	<ErrorComp error={data.error} />
+{/if}
 {#if clientView}
 	<PageRecords collection={data.table} {collectionUpsert} />
 {/if}

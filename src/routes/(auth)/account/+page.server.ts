@@ -8,7 +8,7 @@ export async function load({ locals }) {
   } else {
     throw redirect(
       301,
-      "/login?alert_danger=you are not allowed to access that page"
+      "/auth/login?alert_danger=you are not allowed to access that page"
     );
   }
 }

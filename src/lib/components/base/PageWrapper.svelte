@@ -19,7 +19,7 @@
         </a>
         <span class="delimiter">|</span>
         <a href={import.meta.env.PB_RELEASES} target="_blank" rel="noopener noreferrer" title="Releases">
-            <span class="txt">PocketBase {import.meta.env.PB_VERSION}</span>
+            <span class="txt">kit-pb-school {import.meta.env.PB_VERSION ?? 1.0}</span>
         </a>
     </footer>
 </div>

@@ -40,5 +40,4 @@
             }}
         /> -->
     </FullPage>
-    this is page index
 {/if}

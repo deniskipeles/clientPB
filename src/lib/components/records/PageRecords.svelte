@@ -215,7 +215,7 @@
 				on:select={(e) => {
 					let showModel = e.detail._partial ? e.detail.id : e.detail;
 
-					!e.detail.edit
+					!e.detail.edit && !($page.data?.user?.collectionName?.includes('student'))
 						? recordPreviewPanel?.show(showModel)
 						: $activeCollection.name?.includes('tests') &&
 						  $page.data?.user?.collectionName?.includes('student')

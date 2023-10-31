@@ -10,7 +10,7 @@
   <title>{school?.data?.name ?? "Prime School"}</title>
   <meta name="description" content={school?.data?.decription ?? "Prime School Online Resources"} />
 </svelte:head>
-<div class="pt-16 m-4">
+<div class="pt-16 m-2">
 	<P class="px-8 py-4">
 		{@html home_page?.html_data}
 	</P>
