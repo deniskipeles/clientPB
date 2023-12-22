@@ -4,6 +4,7 @@
 	import { P } from 'flowbite-svelte';
 
 	$: home_page = $page.data?.roots?.find((i) => i?.name?.includes('home page')) ?? {};
+	$: about_page = $page.data?.roots?.find((i) => i?.name?.includes('about page')) ?? {};
 	$: school = $page.data?.roots?.find((i) => i?.name?.includes('school')) ?? {};
 </script>
 
@@ -31,7 +32,7 @@
 			toolbar: '',
 			plugins: ['autoresize']
 		}}
-		value={home_page?.html_data}
+		value={about_page?.html_data ?? home_page?.html_data}
 		disabled
 	/>
 </div>

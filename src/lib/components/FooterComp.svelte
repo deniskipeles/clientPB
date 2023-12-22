@@ -11,7 +11,10 @@
 	import { AcademicCap } from 'svelte-heros-v2';
 	// import { FacebookSolid, GithubSolid, DiscordSolid, TwitterSolid } from 'flowbite-svelte-icons';
 	export let school: any;
-	$: logo = (school?.photos && Array.isArray(school?.photos)) ? school?.photos[school?.data?.logo ?? 0] : null;
+	$: logo =
+		school?.photos && Array.isArray(school?.photos)
+			? school?.photos[school?.data?.logo ?? 0]
+			: null;
 </script>
 
 <Footer footerType="socialmedia">
@@ -20,7 +23,7 @@
 			{#if school?.photos?.length == 0}
 				<AcademicCap />
 			{:else}
-				{#await (getPbImageUrl(school, logo, undefined) ?? '') then value}
+				{#await getPbImageUrl(school, logo, undefined) ?? '/favicon.svg' then value}
 					<FooterBrand
 						href="/"
 						src={value ?? ''}
@@ -36,7 +39,7 @@
 					Resources
 				</h2>
 				<FooterLinkGroup>
-					<FooterLink liClass="mb-4" href="https://ketchs.xyz">ketchs</FooterLink>
+					<FooterLink liClass="mb-4" href="https://ktechs.xyz">ketchs</FooterLink>
 					<FooterLink liClass="mb-4" href="/">Tailwind CSS</FooterLink>
 				</FooterLinkGroup>
 			</div>
@@ -45,7 +48,7 @@
 					Follow us
 				</h2>
 				<FooterLinkGroup>
-					<FooterLink liClass="mb-4" href="/">GitHub</FooterLink>
+					<FooterLink liClass="mb-4" href="https://github.com/deniskipeles">GitHub</FooterLink>
 					<FooterLink liClass="mb-4" href="/">Discord</FooterLink>
 				</FooterLinkGroup>
 			</div>
@@ -60,7 +63,7 @@
 	</div>
 	<hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
 	<div class="sm:flex sm:items-center sm:justify-between">
-		<FooterCopyright target="www.ketchs.xyz" href="https://ketchs.xyz" by="Ktechs™" />
+		<FooterCopyright target="www.ketchs.xyz" href="https://ktechs.xyz" by="Ktechs™" />
 		<div class="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
 			<!-- <FooterIcon href="/">
           <FacebookSolid class="w-4 h-4 text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white" />

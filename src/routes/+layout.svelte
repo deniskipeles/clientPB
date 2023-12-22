@@ -44,9 +44,9 @@
 		drawerHidden = true;
 		activateClickOutside = true;
 	}
-	let showWhichHasOverlay = false
+	let showWhichHasOverlay = false;
 	onMount(() => {
-		showWhichHasOverlay = true
+		showWhichHasOverlay = true;
 		if (width >= breakPoint) {
 			drawerHidden = false;
 			activateClickOutside = false;
@@ -63,7 +63,7 @@
 	const toggleDrawer = () => {
 		drawerHidden = false;
 	};
-	$: school = $page.data?.roots?.find((i:any)=>i?.name?.includes('school')) ?? {}
+	$: school = $page.data?.roots?.find((i: any) => i?.name?.includes('school')) ?? {};
 	$: activeUrl = $page.url.pathname;
 	let spanClass = 'pl-2 self-center text-md text-gray-900 whitespace-nowrap dark:text-white';
 	let divClass = 'w-full ml-auto lg:block lg:w-auto  lg:order-none z-50 right-0 top-0';
@@ -73,11 +73,9 @@
 		'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700 divide-gray-200 dark:divide-gray-700 flex items-center justify-between w-full mx-auto py-1.5 px-4';
 </script>
 
-
-
 <svelte:head>
-  <title>{school?.data?.name ?? "Prime School"}</title>
-  <meta name="description" content={school?.data?.decription ?? "Prime School Online Resources"} />
+	<title>{school?.data?.name ?? 'Prime School'}</title>
+	<meta name="description" content={school?.data?.decription ?? 'Prime School Online Resources'} />
 </svelte:head>
 
 <svelte:window bind:innerWidth={width} />
@@ -88,9 +86,9 @@
 			btnClass="focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 m-0 mr-3 lg:hidden"
 		/>
 		<NavBrand href="/" class="lg:ml-0 gap-1">
-			<AcademicCap/>
+			<AcademicCap />
 			<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-				{school?.data?.name ?? "Prime School"}
+				{school?.data?.name ?? 'Prime School'}
 			</span>
 		</NavBrand>
 		<NavUl
@@ -101,7 +99,7 @@
 			activeClass="md:!pl-3 md:!py-2 lg:!pl-0 lg:text-primary-700 text-white dark:text-white dark:lg:text-primary-500 bg-primary-700 lg:bg-transparent dark:bg-primary-600 lg:dark:bg-transparent cursor-default"
 		>
 			<NavLi class="lg:px-2 lg:mb-0" active={activeUrl === '/'} href="/">Home</NavLi>
-			<NavLi class="lg:px-2 lg:mb-0" active={activeUrl === '/pages/about'} href="/pages/about"
+			<NavLi class="lg:px-2 lg:mb-0" active={activeUrl === '/about'} href="/about"
 				>About</NavLi
 			>
 			<NavLi
@@ -111,13 +109,14 @@
 				>{$page?.data?.user?.username ?? $page?.data?.user?.email ?? 'Login'}</NavLi
 			>
 		</NavUl>
-		<div class=" absolute z-50  right-0 top-0">
-			<DarkMode 
-			btnClass = 'dark:bg-gray-100 text-gray-500 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5'
-			class="inline-block  dark:hover:text-white hover:text-gray-900" />
-		</div>
 		<NavHamburger on:click={toggle} btnClass="lg:hidden" />
 	</Navbar>
+	<div class="absolute z-50 lg:right-2 lg:top-4">
+		<DarkMode
+			btnClass="dark:bg-gray-100 text-gray-500 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
+			class="inline-block  dark:hover:text-white hover:text-gray-900"
+		/>
+	</div>
 </header>
 
 <Drawer
@@ -138,9 +137,9 @@
 			<SidebarGroup>
 				<SidebarItem label="Home" href="/" on:click={toggleSide} active={activeUrl === `/`} />
 				{#each data?.tables as { name, type, id }}
-					{#if (type == 'view' && name.includes(`${$page.data?.user?.collectionName}_view_`) && name != 'view_tables')}
+					{#if type == 'view' && name.includes(`${$page.data?.user?.collectionName}_view_`) && name != 'view_tables'}
 						<SidebarItem
-							label={name.replace($page.data?.user?.collectionName,'').split('_').join(' ')}
+							label={name.replace($page.data?.user?.collectionName, '').split('_').join(' ')}
 							href={`/pages/${name}?collectionId=${id}`}
 							{spanClass}
 							activeClass="flex items-center p-2 text-base font-normal text-gray-900 bg-primary-200 dark:bg-primary-700 rounded-lg dark:text-white hover:bg-primary-100 dark:hover:bg-primary-700"
@@ -200,10 +199,8 @@
 	</main>
 </div>
 {#if showWhichHasOverlay}
-	 <Confirmation />
+	<Confirmation />
 {/if}
 <div class="dark:bg-slate-900 mx-auto mb-4 pt-4 lg:pl-64">
 	<FooterComp {school} />
 </div>
-
-

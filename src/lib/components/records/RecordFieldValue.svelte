@@ -37,7 +37,7 @@
 {:else if CommonHelper.isEmpty(rawValue)}
     <span class="txt-hint">N/A</span>
 {:else if field.type === "bool"}
-    <span class="txt">{rawValue ? "True" : "False"}</span>
+    <span class="txt">{rawValue ? "YES" : "NO"}</span>
 {:else if field.type === "number"}
     <span class="txt">{rawValue}</span>
 {:else if field.type === "url"}

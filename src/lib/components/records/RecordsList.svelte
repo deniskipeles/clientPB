@@ -133,6 +133,7 @@
 	import { page, page as storePage } from '$app/stores';
 	import { recordsStore, schemaHiddenColumnsStore, view_cards } from '$lib/stores/collections';
 	import { Card, Label } from 'flowbite-svelte';
+	import AnswersPreview from '../base/AnswersPreview.svelte';
 	// import { afterNavigate } from "$app/navigation";
 	// afterNavigate(()=>load(1))
 
@@ -336,7 +337,7 @@
 	</svelte:fragment>
 
 	{#if $view_cards}
-		<div class="grid relative md:grid-cols-3 gap-6">
+		<div class="grid relative md:grid-cols-2 lg:grid-cols-3 gap-6">
 			{#each records as record (!isView ? record.id : record)}
 				<Card padding="sm" class="items-start text-left">
 					<div class="btns-group">
@@ -364,17 +365,52 @@
 							</button>
 						{/if}
 					</div>
-					{#each visibleFields as field (field.name)}
-						<p class="mb-1 font-semibold text-gray-900 dark:text-white">
-							<Label for="name2" class="mb-2">
-								<i
-									class={CommonHelper.getFieldTypeIcon(field.name == '_ID' ? 'number' : field.type)}
-								/>
-								<span class="txt">{field.name?.split('_')?.join(' ')}</span>
-							</Label>
-							<RecordFieldValue short {record} {field} />
-						</p>
-					{/each}
+					<table class="w-auto table-border preview-table" class:table-loading={isLoading}>
+						<tbody class="w-auto">
+							{#each visibleFields as field (field.name)}
+								<!-- <p class="mb-1 font-semibold text-gray-900 dark:text-white">
+										<Label for="name2" class="mb-2">
+											<i
+												class={CommonHelper.getFieldTypeIcon(field.name == '_ID' ? 'number' : field.type)}
+											/>
+											<span class="txt">{field.name?.split('_')?.join(' ')}</span>
+										</Label>
+										<RecordFieldValue short {record} {field} />
+									</p> -->
+								<tr class="w-auto">
+									<td class="min-width1 txt-hint txt-bold capitalize"
+										>{field.name?.split('_')?.join(' ')}</td
+									>
+									<td class="col-field">
+										{#if field?.name == 'questions' && record?.expand?.questions}
+											{#each record?.expand?.questions ?? [] as item, pos}
+												<tr>
+													<p class="text-base">{pos + 1} {item?.question?.question}</p>
+													<AnswersPreview answers={item?.question?.answers ?? []} />
+												</tr>
+												<hr />
+											{/each}
+										{:else}
+											<RecordFieldValue {field} {record} />
+										{/if}
+									</td>
+								</tr>
+							{/each}
+							{#if record.created}
+								<tr>
+									<td class="min-width txt-hint txt-bold">created</td>
+									<td class="col-field"><FormattedDate date={record.created} /></td>
+								</tr>
+							{/if}
+
+							{#if record.updated}
+								<tr>
+									<td class="min-width txt-hint txt-bold">updated</td>
+									<td class="col-field"><FormattedDate date={record.updated} /></td>
+								</tr>
+							{/if}
+						</tbody>
+					</table>
 				</Card>
 			{/each}
 		</div>

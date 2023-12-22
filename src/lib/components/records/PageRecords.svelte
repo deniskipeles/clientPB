@@ -166,7 +166,7 @@
 							view_cards.set(!$view_cards);
 						}}
 					/>
-					<label for={uniqueId}>{$view_cards ? 'View table' : 'View Cards'}</label>
+					<label for={uniqueId}>{$view_cards ? 'Table View' : 'Cards View'}</label>
 				</Field>
 			</div>
 
