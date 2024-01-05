@@ -1,4 +1,5 @@
 <script lang="ts">
+	import AiPromptingForm from '$lib/components/base/AiPromptingForm.svelte';
 	import AutoExpandTextarea from '$lib/components/base/AutoExpandTextarea.svelte';
 	import Draggable from '$lib/components/base/Draggable.svelte';
 	import Field from '$lib/components/base/Field.svelte';
@@ -10,7 +11,7 @@
 
 	export let value = QUESTION_CONSTANT;
 	export let setJson: Function;
-	export let field = {name:''};
+	export let field = { name: '' };
 	let showOverlay = false;
 	let questionPanel: any;
 	export function hide() {
@@ -39,6 +40,16 @@
 		});
 	}
 	let answer = '';
+
+	const setAiValues = (inValue: any) => {
+		if (typeof inValue == 'object') {
+			try {
+				value = inValue;
+			} catch (error) {
+				console.log(error);
+			}
+		}
+	};
 </script>
 
 {#if showOverlay}
@@ -60,6 +71,7 @@
 			<h4>
 				Add <strong>Question & Answers</strong> records
 			</h4>
+			<AiPromptingForm {value} {field} {setAiValues} />
 		</svelte:fragment>
 
 		<Field class="form-field required" name={'question'} let:uniqueId>
@@ -76,7 +88,12 @@
 				<span class="txt">{'Add Answer'}</span>
 			</label>
 			<div class="flex">
-				<AutoExpandTextarea id={uniqueId} required={true} bind:value={answer} />
+				<AutoExpandTextarea
+					id={uniqueId}
+					required={true}
+					bind:value={answer}
+					placeholder="Enter your answer here and click add "
+				/>
 				<button
 					type="button"
 					title="Add Answer"
@@ -90,7 +107,7 @@
 						}
 					}}
 				>
-					<i class="ri-add-line" /> answer
+					<i class="ri-add-line" />add answer
 				</button>
 			</div>
 		</Field>

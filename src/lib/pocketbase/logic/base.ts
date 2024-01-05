@@ -6,9 +6,34 @@ import type { RecordModel } from 'pocketbase';
 export async function loadSchool() {
 	let record: RecordModel;
 	try {
-		record = await pb.collection('z_roots').getFirstListItem('name~"school"', {
-			expand: 'photos'
-		});
+		record = await pb
+			.collection('z_roots')
+			.getFirstListItem('name~"school"', {
+				expand: 'photos'
+			})
+			.then(async (value) => {
+				try {
+					await pb
+						.collection('z_roots')
+						.getFirstListItem('name~"ai_key" || name~"aiKey" || name~"ai-key" || name~"ai key"', {})
+						.then((val) => {
+							var ai_key = '';
+							if (typeof val.data == 'string') {
+								ai_key = val.data;
+							}
+							if (typeof val.data == 'object' && !Array.isArray(val?.data)) {
+								ai_key = val.data['ai_key'] ?? val.data['ai-key'] ?? val.data['aiKey'];
+							}
+							value.ai_key = ai_key;
+							value.aiKey = ai_key;
+							value['ai-key'] = ai_key;
+							value['ai key'] = ai_key;
+						});
+					return value;
+				} catch (error) {
+					return value;
+				}
+			});
 		record = serializeNonPOJOs(record);
 	} catch (error) {
 		record = { id: '', collectionId: '', collectionName: '', created: '', updated: '' };
