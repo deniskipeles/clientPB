@@ -21,7 +21,7 @@
 	const headers = {
 		'Content-Type': 'application/json'
 	};
-	let res: AiResponse = {
+	export let res: AiResponse = {
 		questions: [
 			{
 				question: 'question',
@@ -35,6 +35,7 @@
 		totalMarks: 10,
 		title: 'title'
 	};
+
 	type AiResponse = {
 		questions: {
 			question: string;
@@ -52,59 +53,43 @@
 		query = query.replaceAll('<<prompt>>', prompt);
 		query = query.replaceAll('<<context>>', context);
 
-		const strSchool = JSON.stringify($page.data?.school ?? {});
-		console.log(strSchool);
 		const input: any = {
 			prompt: query,
 			key: $page.data?.school?.ai_key ?? 'none provided',
 			url: $page.url.hostname,
 			type: 'school',
-			info: strSchool
+			info: $page.data?.school
 		};
 
 		const queryString = Object.keys(input)
 			.map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(input[key]))
 			.join('&');
 
-		// console.log(queryString);
+		// const url = `https://ktechs.xyz/api/ai?${queryString}`;
 
-		const url = `https://ktechs.xyz/api/ai?${queryString}`;
-
-		await fetch(url, {
-			method: 'GET'
+		await fetch('/api/ai', {
+			method: 'POST',
+			headers: headers,
+			body: JSON.stringify({ prompt: query })
 		})
 			.then((response) => response.json())
 			.then((data) => {
-				console.log(data);
-				setQs(data.res);
+				if (data?.success) {
+					console.log(data);
+					markdown = data;
+					responseText = data?.data;
+					setQs(responseText);
+					jsonData = getJson(data.data);
+				}
+				if (data?.error) {
+					console.log(data.error);
+					addErrorToast(JSON.stringify(data?.error));
+				}
 			})
 			.catch((error) => {
-				console.error('Error:', error);
-				addErrorToast(error + '');
+				console.log('catch', error);
+				addErrorToast(JSON.stringify(error));
 			});
-
-		// console.log(query.length);
-		// await fetch('https/api/ai', {
-		// 	method: 'POST',
-		// 	headers: headers,
-		// 	body: JSON.stringify({ prompt: query })
-		// })
-		// 	.then((response) => response.json())
-		// 	.then((data) => {
-		// 		console.log(data)
-		// 		if (data?.success) {
-		// 			markdown = data;
-		// 			responseText = data;
-		// 			jsonData = getJson(data);
-		// 		}
-		// 		if (data?.error) {
-		// 			addErrorToast(JSON.stringify(data?.error));
-		// 		}
-		// 	})
-		// 	.catch((error) => {
-		// 		console.log(error);
-		// 		addErrorToast(JSON.stringify(error));
-		// 	})
 	}
 	const setQs = (responseText: string) => {
 		try {
@@ -139,6 +124,7 @@
 			}
 		} catch (error) {}
 	};
+
 	const getAnsFromArray = (answers: (string | boolean)[][]) => {
 		const arr: Record<string, any>[] = [];
 		for (const ans of CommonHelper.toArray(answers)) {
@@ -184,6 +170,8 @@
 		}
 		Also part of response
 		`;
+	onMount(() => setQs(responseText));
+
 	async function cleanString(str: string) {
 		str = str.replaceAll('		', ' ');
 		str = str.replaceAll('	', ' ');
@@ -241,6 +229,16 @@
 	}
 	$: editAnswerAt = -1;
 	$: editQuestionAt = -1;
+
+	export let setAiValues=(res: {
+		questions: {
+			question: string;
+			marks: number;
+			answers: (string | boolean)[][];
+		}[];
+		totalMarks: number;
+		title: string;
+	})=> {}
 </script>
 
 {#if showOverlay}
@@ -261,12 +259,16 @@
 			<h4>
 				Prompting <strong>ai</strong> for help.
 			</h4>
-			<h5>
-				After the response scroll down to view your <strong>questions</strong>.
-			</h5>
 		</svelte:fragment>
+		<h5>
+			After the response scroll down to view your <strong>questions</strong>.
+		</h5>
 
-		<JsonField field={{ name: 'Context or Notes or Url', type: 'text' }} bind:value={context} />
+		<JsonField
+			isJson={false}
+			field={{ name: 'Context or Notes or Url', type: 'text' }}
+			bind:value={context}
+		/>
 
 		<Field class="form-field" name={'answer'} let:uniqueId>
 			<label for={uniqueId}>
@@ -279,7 +281,6 @@
 					required={true}
 					bind:value={prompt}
 					placeholder="Enter your prompt here"
-					class="textarea form-field border-pink-100 border-spacing-2"
 				/>
 				<button
 					type="button"
@@ -289,7 +290,7 @@
 						onSubmit();
 					}}
 				>
-					<i class="ri-send-line ri-send" /> Send
+					<i class="ri-message-line" /> Send
 				</button>
 			</div>
 		</Field>
@@ -301,10 +302,10 @@
 			class="btn btn-hint btn-xs"
 			on:click={() => (formView = !formView)}
 		>
-			<i class="ri-send-line ri-send" />toggle to {!formView ? 'json view' : 'form view'}
+			<i class="ri-send-line ri-send" />toggle to {formView ? 'json view' : 'form view'}
 		</button>
 		{#if !formView}
-			<JsonField field={{ name: 'Questions' }} bind:value={questions} />
+			<JsonField isJson={false} field={{ name: 'Questions' }} bind:value={questions} />
 		{:else}
 			{#each qValues as value, indexQ}
 				<div class="picker-list m-b-base">
@@ -342,13 +343,7 @@
 									class:selected
 									class:disabled={false}
 									on:click={() => toggle(indexQ, indexA)}
-									on:keydown={(e) => {
-										// if (e.code === 'Enter' || e.code === 'Space') {
-										// 	e.preventDefault();
-										// 	e.stopPropagation();
-										// 	toggle(indexQ, indexA);
-										// }
-									}}
+									on:keydown={(e) => {}}
 								>
 									{#if selected}
 										<i class="ri-checkbox-circle-fill txt-success" />
@@ -401,7 +396,14 @@
 			<button type="button" class="btn btn-transparent" on:click={() => hide()}>
 				<span class="txt">Cancel</span>
 			</button>
-			<button type="button" class="btn" on:click={() => {}}>
+			<button
+				type="button"
+				class="btn"
+				on:click={() => {
+					setAiValues(res);
+					hide()
+				}}
+			>
 				<span class="txt">Save Questions</span>
 			</button>
 		</svelte:fragment>

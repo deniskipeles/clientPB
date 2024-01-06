@@ -5,9 +5,11 @@
 	import Field from '$lib/components/base/Field.svelte';
 	import { QUESTION_CONSTANT } from '$lib/utils/CONSTANTS';
 	import QuestionForm from './QuestionForm.svelte';
+	import AiPromptingForm from '$lib/components/base/AiPromptingForm.svelte';
 
 	export let field;
 	export let value = undefined;
+	export let isJson = true;
 
 	let editorComponent;
 
@@ -21,7 +23,14 @@
 	$: isValid = isValidJson(serialized);
 
 	function serialize(val) {
-		return JSON.stringify(typeof val === 'undefined' ? null : val, null, 2);
+		if (isJson) {
+			return JSON.stringify(typeof val === 'undefined' ? null : val, null, 2);
+		} else {
+			if (typeof val == 'object') {
+				return JSON.stringify(typeof val === 'undefined' ? null : val, null, 2);
+			}
+			return val;
+		}
 	}
 
 	function isValidJson(val) {
@@ -46,11 +55,24 @@
 	<label for={uniqueId}>
 		<i class={CommonHelper.getFieldTypeIcon(field.type)} />
 		<span class="txt">{field.name}</span>
-		<span class="txt">
+		<span class="flex">
 			<QuestionForm
 				{value}
-                {field}
+				{field}
 				setJson={(inValue) => {
+					if (typeof inValue == 'object') {
+						try {
+							value = inValue;
+						} catch (error) {
+							console.log(error);
+						}
+					}
+				}}
+			/>
+			<AiPromptingForm
+				{value}
+				{field}
+				setAiValues={(inValue) => {
 					if (typeof inValue == 'object') {
 						try {
 							value = inValue;

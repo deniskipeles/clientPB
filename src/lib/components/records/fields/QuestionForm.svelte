@@ -42,21 +42,16 @@
 	let answer = '';
 
 	const setAiValues = (inValue: any) => {
-		if (typeof inValue == 'object') {
-			try {
-				value = inValue;
-			} catch (error) {
-				console.log(error);
-			}
-		}
+		setJson(inValue);
+		hide()
 	};
 </script>
 
 {#if showOverlay}
 	{#if field.name == 'question'}
-		{' in json format'}<button class="btn" on:click={() => questionPanel.show()} type="button"
-			>use question form</button
-		>{'instead'}
+		<button class="btn" on:click={() => questionPanel.show()} type="button"
+			>use form</button
+		>
 	{/if}
 
 	<OverlayPanel
@@ -71,8 +66,8 @@
 			<h4>
 				Add <strong>Question & Answers</strong> records
 			</h4>
-			<AiPromptingForm {value} {field} {setAiValues} />
 		</svelte:fragment>
+		<AiPromptingForm {value} {field} {setAiValues} />
 
 		<Field class="form-field required" name={'question'} let:uniqueId>
 			<label for={uniqueId}>

@@ -19,20 +19,11 @@ export async function POST({ request, locals: { user, school }, url }) {
 		return json({ success: false, error: new Error('Login to use ai.') });
 	}
 	try {
-		const formData = await request.formData();
-		if (formData) {
-			formData.forEach((value, key) => {
-				formDataToJson[key] = value;
-			});
-		}
-	} catch (error) {}
-	try {
-		console.log(formDataToJson);
-
 		const prompt = await getPrompt(formDataToJson);
-		const input:InputPrompt = {
+		console.log(prompt)
+		const input = {
 			prompt,
-			key: school?.ai_key ?? '',
+			key: school?.ai_key ?? 'key',
 			url: url.hostname,
 			type: 'school',
 			info: school
@@ -42,12 +33,12 @@ export async function POST({ request, locals: { user, school }, url }) {
 			'Content-Type': 'application/json'
 		};
 
-		const response = await fetch('https://ktechs.xyz/api/ai', {
+		const response = await fetch('https://www.ktechs.xyz/api/ai', {
 			method: 'PUT',
 			headers: headers,
 			body: JSON.stringify(input)
 		}).then((response) => response.json());
-		return json({ success: true, data: await response?.data });
+		return json({ success: true, data: response });
 	} catch (error: any) {
 		return json({ success: false, error: serializeNonPOJOs(error) });
 	}
