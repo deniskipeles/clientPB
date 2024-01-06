@@ -85,10 +85,12 @@
 					console.log(data.error);
 					addErrorToast(JSON.stringify(data?.error));
 				}
+				prompting.set(false);
 			})
 			.catch((error) => {
 				console.log('catch', error);
 				addErrorToast(JSON.stringify(error));
+				prompting.set(false);
 			});
 	}
 	const setQs = (responseText: string) => {
@@ -230,7 +232,7 @@
 	$: editAnswerAt = -1;
 	$: editQuestionAt = -1;
 
-	export let setAiValues=(res: {
+	export let setAiValues = (res: {
 		questions: {
 			question: string;
 			marks: number;
@@ -238,7 +240,7 @@
 		}[];
 		totalMarks: number;
 		title: string;
-	})=> {}
+	}) => {};
 </script>
 
 {#if showOverlay}
@@ -287,10 +289,13 @@
 					title="Prompt ai"
 					class="btn btn-hint btn-xs"
 					on:click={() => {
-						onSubmit();
+						if (!$prompting) {
+							onSubmit();
+						}
 					}}
 				>
-					<i class="ri-message-line" /> Send
+					<i class="ri-message-line" />
+					{$prompting ? 'loading...' : 'Send'}
 				</button>
 			</div>
 		</Field>
@@ -401,7 +406,7 @@
 				class="btn"
 				on:click={() => {
 					setAiValues(res);
-					hide()
+					hide();
 				}}
 			>
 				<span class="txt">Save Questions</span>
