@@ -273,7 +273,7 @@
 {#if field.name == 'question'}
 	<div>
 		<button class="btn" on:click={() => questionAiPanel.show()} type="button"
-			>Use <strong>ai</strong> to generate questions</button
+			>Use <strong>ai</strong> to generate Quiz</button
 		>
 	</div>
 {/if}
