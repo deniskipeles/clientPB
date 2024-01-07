@@ -64,6 +64,6 @@
 	"dependencies": {
 		"jspdf": "^2.5.1",
 		"jspdf-autotable": "^3.7.0",
-		"pocketbase": "^0.19.0"
+		"pocketbase": "^0.20.1"
 	}
 }

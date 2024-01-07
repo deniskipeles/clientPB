@@ -108,7 +108,7 @@
 		return model;
 	}
 
-    var collection_ = collection;
+	var collection_ = collection;
 	async function load(model) {
 		isLoading = true;
 		if (typeof model !== 'string') {
@@ -244,7 +244,17 @@
 
 			let result;
 			if (isNew) {
-				result = await ApiClient.collection(collection.id).create(data);
+				var qs = data.get('question') ? JSON.parse(data.get('question')) : null;
+
+				if (fieldQ?.name == 'question' && typeof qs == 'object' && Array.isArray(qs)) {
+					for (const iterator of qs) {
+						data.delete(fieldQ.name);
+						data.append(fieldQ.name, JSON.stringify(iterator));
+						result = await ApiClient.collection(collection.id).create(data);
+					}
+				} else {
+					result = await ApiClient.collection(collection.id).create(data);
+				}
 			} else {
 				result = await ApiClient.collection(collection.id).update(record.id, data);
 			}
@@ -446,6 +456,7 @@
 			save(false);
 		}
 	}
+	$: fieldQ = collection?.schema?.find((field) => field.name == 'question');
 </script>
 
 <OverlayPanel

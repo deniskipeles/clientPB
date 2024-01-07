@@ -1,26 +1,37 @@
 import { listRootsRecords, pb } from '$lib/pocketbase';
 import { listTablesRecords, loadSchool } from '$lib/pocketbase';
-import type { Handle } from '@sveltejs/kit';
+import { error, type Handle } from '@sveltejs/kit';
 
 /** @type {import('@sveltejs/kit').Handle} */
 export const handle: Handle = async ({ event, resolve }) => {
-	event.locals.pb = pb;
-	event.locals.pb.authStore.loadFromCookie(event.request.headers.get('cookie') || '');
-	event.locals.tables = await listTablesRecords();
-	event.locals.roots = await listRootsRecords();
-	// let authTables = event.locals.tables.filter(i=>i?.type == 'auth').map(i=>i?.name)
+	pb.authStore.loadFromCookie(event.request.headers.get('cookie') || '');
 	try {
 		// get an up-to-date auth store state by verifying and refreshing the loaded auth model (if any)
-		let collectionName = event.locals.pb.authStore?.model?.collectionName;
-		event.locals.pb.authStore.isValid &&
-			(await event.locals.pb.collection(collectionName)?.authRefresh());
-		event.locals.school = await loadSchool();
-		event.locals.user = structuredClone(event.locals.pb.authStore.model);
+		const collectionName = pb.authStore?.model?.collectionName;
+		if (pb.authStore.isValid && collectionName) {
+			await pb.collection(collectionName)?.authRefresh();
+		}
 	} catch (_) {
 		// clear the auth store on failed refresh
-		event.locals.pb.authStore.clear();
+		pb.authStore.clear();
 	}
+
+	event.locals.pb = pb;
+	event.locals.user = structuredClone(pb.authStore.model);
+
+	try {
+		// this are page builders and are necessary else it return an error page
+		event.locals.tables = await listTablesRecords();
+		event.locals.roots = await listRootsRecords();
+		event.locals.school = await loadSchool();
+	} catch (err) {
+		error(404, { message: `${err}` });
+	}
+
 	const response = await resolve(event);
-	response.headers.append('set-cookie', event.locals.pb.authStore.exportToCookie({httpOnly:false}));
+	response.headers.append(
+		'set-cookie',
+		event.locals.pb.authStore.exportToCookie({ httpOnly: false })
+	);
 	return response;
 };

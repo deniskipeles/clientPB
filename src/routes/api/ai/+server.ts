@@ -1,4 +1,4 @@
-import { createRecord, updateRecord } from '$lib/pocketbase';
+import { PUBLIC_POCKETBASE_URL } from '$env/static/public';
 import { serializeNonPOJOs } from '$lib/utils';
 import { json } from '@sveltejs/kit';
 
@@ -8,8 +8,7 @@ type InputPrompt = {
 	url: string;
 	type: string;
 	info: unknown;
-  };
-
+};
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request, locals: { user, school }, url }) {
@@ -20,12 +19,13 @@ export async function POST({ request, locals: { user, school }, url }) {
 	}
 	try {
 		const prompt = await getPrompt(formDataToJson);
-		console.log(prompt)
 		const input = {
 			prompt,
 			key: school?.ai_key ?? 'key',
 			url: url.hostname,
+			server_url: PUBLIC_POCKETBASE_URL,
 			type: 'school',
+			request_id: formDataToJson?.request_id ?? url.hostname,
 			info: school
 		};
 
@@ -38,7 +38,8 @@ export async function POST({ request, locals: { user, school }, url }) {
 			headers: headers,
 			body: JSON.stringify(input)
 		}).then((response) => response.json());
-		return json({ success: true, data: response });
+		
+		return json(response);
 	} catch (error: any) {
 		return json({ success: false, error: serializeNonPOJOs(error) });
 	}

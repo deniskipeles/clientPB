@@ -3,7 +3,7 @@
 	import AutoExpandTextarea from './AutoExpandTextarea.svelte';
 	import OverlayPanel from './OverlayPanel.svelte';
 	import { writable } from 'svelte/store';
-	import { addErrorToast } from '$lib/stores/toasts';
+	import { addErrorToast, addSuccessToast } from '$lib/stores/toasts';
 	import Field from './Field.svelte';
 	import CommonHelper from '$lib/utils/CommonHelper';
 	import JsonField from '../records/fields/JsonField.svelte';
@@ -12,6 +12,7 @@
 	import Draggable from './Draggable.svelte';
 	import TextField from '../records/fields/TextField.svelte';
 	import { page } from '$app/stores';
+	import { pb as ApiClient } from '$lib/pocketbase';
 
 	let prompt = '';
 	let context = '';
@@ -21,6 +22,7 @@
 	const headers = {
 		'Content-Type': 'application/json'
 	};
+
 	export let res: AiResponse = {
 		questions: [
 			{
@@ -45,6 +47,7 @@
 		totalMarks: number;
 		title: string;
 	};
+	const request_id = CommonHelper.randomString(8);
 	async function onSubmit() {
 		prompting.set(true);
 		let query = ai.questions;
@@ -70,7 +73,7 @@
 		await fetch('/api/ai', {
 			method: 'POST',
 			headers: headers,
-			body: JSON.stringify({ prompt: query })
+			body: JSON.stringify({ prompt: query, request_id })
 		})
 			.then((response) => response.json())
 			.then((data) => {
@@ -79,7 +82,7 @@
 					markdown = data;
 					responseText = data?.data;
 					setQs(responseText);
-					jsonData = getJson(data.data);
+					// jsonData = getJson(data.data);
 				}
 				if (data?.error) {
 					console.log(data.error);
@@ -172,7 +175,6 @@
 		}
 		Also part of response
 		`;
-	onMount(() => setQs(responseText));
 
 	async function cleanString(str: string) {
 		str = str.replaceAll('		', ' ');
@@ -184,7 +186,6 @@
 	}
 
 	let showOverlay = false;
-	onMount(() => (showOverlay = true));
 	let questionAiPanel: any;
 	let questions = res.questions;
 	let isLoading = false;
@@ -194,19 +195,25 @@
 		return questionAiPanel?.hide();
 	}
 
-	let jsonData = {};
-
-	var Values: any[] = [];
 	type Value = {
 		question: string;
+		marks: number;
 		answers: { correct: boolean; answer: string }[];
 	};
-	var value: Value = {
+	export let value: Value = {
 		question: '',
+		marks: 1,
 		answers: []
 	};
 
 	let qValues: any[] = [value];
+	onMount(()=>{
+		showOverlay = true
+		setQs(responseText)
+		if (typeof value == 'object' && !Array.isArray(value) && value?.question) {
+			res.questions = [value];
+		}
+	})
 
 	function deselect(indexQuestion: number, indexAnswer: number) {
 		var record = qValues[indexQuestion];
@@ -229,26 +236,48 @@
 		editQuestionAt = indexQ;
 		editAnswerAt = -1;
 	}
+	function deleteQuestion(indexQ: number) {
+		qValues = qValues.filter((val, index) => index != indexQ);
+		editQuestionAt = -1;
+		editAnswerAt = -1;
+	}
 	$: editAnswerAt = -1;
 	$: editQuestionAt = -1;
 
-	export let setAiValues = (res: {
-		questions: {
+	export let setAiValues = (
+		res: {
 			question: string;
 			marks: number;
 			answers: (string | boolean)[][];
-		}[];
-		totalMarks: number;
-		title: string;
-	}) => {};
+		}[]
+	) => {};
+
+	onMount(async () => {
+		await ApiClient.collection('ai_queries').subscribe(
+			'*',
+			(e) => {
+				if (e.action == 'create' || e.action == 'update') {
+					setQs(e.record?.data);
+					addSuccessToast('The ai generated the questions successfully.');
+				}
+			},
+			{
+				filter: `request_id = '${request_id}' || request_id = '${$page.url.hostname}'`,
+				fields: '*,'
+			}
+		);
+	});
+	export let field = { name: '' };
 </script>
 
-{#if showOverlay}
+{#if field.name == 'question'}
 	<div>
 		<button class="btn" on:click={() => questionAiPanel.show()} type="button"
 			>Use <strong>ai</strong> to generate questions</button
 		>
 	</div>
+{/if}
+{#if showOverlay}
 	<OverlayPanel
 		bind:this={questionAiPanel}
 		popup
@@ -335,6 +364,15 @@
 						>
 							<i class="ri-edit-line" />
 						</button>
+						{'   '}
+						<button
+							type="button"
+							title="Remove"
+							class="btn btn-circle btn-transparent btn-hint btn-xs"
+							on:click={() => deleteQuestion(indexQ)}
+						>
+							<i class="ri-close-line" />
+						</button>
 					</p>
 					<div class="list picker-list m-b-base">
 						{#each value.answers as record, indexA}
@@ -405,7 +443,7 @@
 				type="button"
 				class="btn"
 				on:click={() => {
-					setAiValues(res);
+					setAiValues(res.questions);
 					hide();
 				}}
 			>

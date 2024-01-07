@@ -14,6 +14,7 @@
 	export let field = { name: '' };
 	let showOverlay = false;
 	let questionPanel: any;
+	// let questionAiPanel: any;
 	export function hide() {
 		return questionPanel?.hide();
 	}
@@ -24,7 +25,12 @@
 			value = QUESTION_CONSTANT;
 		}
 	}
-	onMount(() => (showOverlay = true));
+	$: if (Array.isArray(value) && value.length && typeof value[0].question == 'string') {
+		value = value[0];
+	}
+	onMount(() => {
+		showOverlay = true;
+	});
 
 	function deselect(record: { answer: string; correct: boolean }) {
 		CommonHelper.removeByKey(value.answers, 'answer', record.answer);
@@ -40,18 +46,11 @@
 		});
 	}
 	let answer = '';
-
-	const setAiValues = (inValue: any) => {
-		setJson(inValue);
-		hide()
-	};
 </script>
 
 {#if showOverlay}
 	{#if field.name == 'question'}
-		<button class="btn" on:click={() => questionPanel.show()} type="button"
-			>use form</button
-		>
+		<button class="btn" on:click={() => questionPanel.show()} type="button">use form</button>
 	{/if}
 
 	<OverlayPanel
@@ -67,7 +66,7 @@
 				Add <strong>Question & Answers</strong> records
 			</h4>
 		</svelte:fragment>
-		<AiPromptingForm {value} {field} {setAiValues} />
+		<!-- <AiPromptingForm {value} {field} {setAiValues} {questionAiPanel} /> -->
 
 		<Field class="form-field required" name={'question'} let:uniqueId>
 			<label for={uniqueId}>
