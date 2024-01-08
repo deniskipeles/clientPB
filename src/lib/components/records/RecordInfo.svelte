@@ -7,14 +7,17 @@
 
 	export let record;
 
-	$: if (record) {
-		delete record.id;
-		delete record.collectionId;
-		delete record.collectionName;
-		delete record.email;
-		delete record.emailVisibility;
-		delete record.username;
-		delete record.verified;
+	function delSensitives(recordDup) {
+		if (recordDup) {
+			// delete recordDup['id'];
+			// delete recordDup.collectionId;
+			// delete recordDup.collectionName;
+			// delete recordDup.email;
+			// delete recordDup.emailVisibility;
+			// delete recordDup.username;
+			// delete recordDup.verified;
+		}
+		return recordDup;
 	}
 
 	$: collection = $page.data?.tables?.find((item) => item.id == record?.collectionId);
@@ -31,7 +34,7 @@
 		class="link-hint txt-sm ri-information-line"
 		use:tooltip={{
 			text: CommonHelper.truncate(
-				JSON.stringify(CommonHelper.truncateObject(record), null, 2),
+				JSON.stringify(CommonHelper.truncateObject(delSensitives(record)), null, 2),
 				800,
 				true
 			),
@@ -50,7 +53,7 @@
 	{/each}
 
 	<span class="txt txt-ellipsis">
-		{CommonHelper.truncate(CommonHelper.displayValue(record, textDisplayFields), 70)}
+		{CommonHelper.truncate(CommonHelper.displayValue(delSensitives(record), textDisplayFields), 70)}
 	</span>
 </div>
 

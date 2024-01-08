@@ -303,7 +303,7 @@
 				return reloadLoadedPages();
 			});
 	}
-	let arr = [10,25,30,40,50,60,75,80,90,95,100]
+	let arr = [0,5,10,20,25,30,40,50,60,75,80,90,95,100]
 	let minmaxValue = 5;
 	$: opacity = `opacity-${arr[minmaxValue]}`;
 </script>
@@ -312,7 +312,7 @@
 	<Range id="range-minmax" min="0" max="{arr.length}" bind:value={minmaxValue} size='sm' />
 <p>Value: {minmaxValue}</p>
 
-<Scroller bind:this={scrollWrapper} class="table-wrapper opac">
+<Scroller bind:this={scrollWrapper} class="table-wrapper">
 	<svelte:fragment slot="before">
 		{#if columnsTrigger}
 			<Toggler
