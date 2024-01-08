@@ -132,7 +132,7 @@
 
 	import { page, page as storePage } from '$app/stores';
 	import { recordsStore, schemaHiddenColumnsStore, view_cards } from '$lib/stores/collections';
-	import { Card, Label } from 'flowbite-svelte';
+	import { Card, Label, Range } from 'flowbite-svelte';
 	import AnswersPreview from '../base/AnswersPreview.svelte';
 	// import { afterNavigate } from "$app/navigation";
 	// afterNavigate(()=>load(1))
@@ -303,9 +303,16 @@
 				return reloadLoadedPages();
 			});
 	}
+	let arr = [10,25,30,40,50,60,75,80,90,95,100]
+	let minmaxValue = 5;
+	$: opacity = `opacity-${arr[minmaxValue]}`;
 </script>
 
-<Scroller bind:this={scrollWrapper} class="table-wrapper">
+<Label>Opacity of checkboxes and edit buttons</Label>
+	<Range id="range-minmax" min="0" max="{arr.length}" bind:value={minmaxValue} size='sm' />
+<p>Value: {minmaxValue}</p>
+
+<Scroller bind:this={scrollWrapper} class="table-wrapper opac">
 	<svelte:fragment slot="before">
 		{#if columnsTrigger}
 			<Toggler
@@ -348,7 +355,7 @@
 						>
 							<i class="ri-eye-line" />
 						</button>
-						{#if $page.data.user && !$page.data.user.collectionName?.includes('students')}
+						{#if $page.data.user && !$page.data.user.collectionName?.includes('student')}
 							&nbsp;
 							<button
 								type="button"
@@ -526,7 +533,7 @@
 						}}
 					>
 						{#if isView}
-							<td class="bulk-select-col min-width">
+							<td class="bulk-select-col min-width {opacity}">
 								<!-- svelte-ignore a11y-click-events-have-key-events -->
 								<!-- svelte-ignore a11y-no-static-element-interactions -->
 								<div class="form-field" on:click|stopPropagation>
@@ -606,7 +613,7 @@
 							</td>
 						{/if}
 
-						<td class="col-type-action gap-4 min-width">
+						<td class="col-type-action {opacity} gap-4 min-width">
 							<i class="ri-arrow-right-line" />
 							<!-- <button type="button" on:click={() => dispatch("select", record)}>
 								 <i class="ri-eye-line" />
