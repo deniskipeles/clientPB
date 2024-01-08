@@ -4,6 +4,7 @@
 	import Draggable from '$lib/components/base/Draggable.svelte';
 	import Field from '$lib/components/base/Field.svelte';
 	import OverlayPanel from '$lib/components/base/OverlayPanel.svelte';
+	import QaList from '$lib/components/base/QAList.svelte';
 	import { addErrorToast } from '$lib/stores/toasts';
 	import { QUESTION_CONSTANT } from '$lib/utils/CONSTANTS';
 	import CommonHelper from '$lib/utils/CommonHelper';
@@ -26,25 +27,16 @@
 		}
 	}
 	$: if (Array.isArray(value) && value.length && typeof value[0].question == 'string') {
-		value = value[0];
+		let newArr: any[] = [];
+		for (const val of value) {
+			newArr = [...newArr, CommonHelper.getAnsFromArray(val)];
+		}
+		value = newArr;
 	}
 	onMount(() => {
 		showOverlay = true;
 	});
 
-	function deselect(record: { answer: string; correct: boolean }) {
-		CommonHelper.removeByKey(value.answers, 'answer', record.answer);
-		value.answers = value.answers;
-	}
-	function toggle(record: { answer: string; correct: boolean }) {
-		value.answers = value.answers.map((i) => {
-			if (i == record) {
-				i.correct = !record.correct;
-				return i;
-			}
-			return i;
-		});
-	}
 	let answer = '';
 </script>
 
@@ -107,46 +99,7 @@
 		</Field>
 
 		<div class="list picker-list m-b-base">
-			{#each value.answers as record, i (record.answer)}
-				{@const selected = record.correct == true}
-				<Draggable bind:list={value.answers} index={i} let:dragging let:dragover>
-					<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-					<!-- svelte-ignore a11y-no-static-element-interactions -->
-					<div
-						tabindex="0"
-						class="list-item handle"
-						class:selected
-						class:disabled={false}
-						on:click={() => toggle(record)}
-						on:keydown={(e) => {
-							if (e.code === 'Enter' || e.code === 'Space') {
-								e.preventDefault();
-								e.stopPropagation();
-								toggle(record);
-							}
-						}}
-					>
-						{#if selected}
-							<i class="ri-checkbox-circle-fill txt-success" />
-						{:else}
-							<i class="ri-checkbox-blank-circle-line txt-disabled" />
-						{/if}
-						<div class="content">
-							<span class="label" class:label-danger={dragging} class:label-warning={dragover}>
-								{record.answer}
-								<button
-									type="button"
-									title="Remove"
-									class="btn btn-circle btn-transparent btn-hint btn-xs"
-									on:click={() => deselect(record)}
-								>
-									<i class="ri-close-line" />
-								</button>
-							</span>
-						</div>
-					</div>
-				</Draggable>
-			{/each}
+			<QaList qValues={Array.isArray(value) ? value : [value]} />
 		</div>
 
 		<svelte:fragment slot="footer">

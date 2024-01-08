@@ -56,7 +56,7 @@
 		<i class={CommonHelper.getFieldTypeIcon(field.type)} />
 		<span class="txt">{field.name}</span>
 		<span class="flex">
-			<QuestionForm
+			<!-- <QuestionForm
 				{value}
 				{field}
 				setJson={(inValue) => {
@@ -68,7 +68,7 @@
 						}
 					}
 				}}
-			/>
+			/> -->
 			<AiPromptingForm
 				{value}
 				{field}

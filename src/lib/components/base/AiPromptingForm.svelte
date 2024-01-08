@@ -8,17 +8,14 @@
 	import CommonHelper from '$lib/utils/CommonHelper';
 	import JsonField from '../records/fields/JsonField.svelte';
 	import ai from '$lib/utils/ai';
-	import { extractJSON, getJson } from '$lib/utils';
-	import Draggable from './Draggable.svelte';
-	import TextField from '../records/fields/TextField.svelte';
+	import { getJson } from '$lib/utils';
 	import { page } from '$app/stores';
 	import { pb as ApiClient } from '$lib/pocketbase';
+	import QaList from './QAList.svelte';
 
 	let prompt = '';
 	let context = '';
-	$: markdown = '';
 	const prompting = writable(false);
-	const saving = writable(false);
 	const headers = {
 		'Content-Type': 'application/json'
 	};
@@ -65,7 +62,7 @@
 				.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
 				.join('&');
 
-			const url = 'https://www.ktechs.xyz/api/ai?'+queryString;
+			const url = 'https://www.ktechs.xyz/api/ai?' + queryString;
 
 			const response = await fetch(url);
 
@@ -113,12 +110,15 @@
 					} catch (error) {}
 					questions = [
 						...CommonHelper.toArray(q),
-						{ ...obj, answers: getAnsFromArray(obj.answers) }
+						{
+							...obj,
+							answers: CommonHelper.getAnsFromArray(obj.answers)
+						}
 					];
 					qValues = questions.map((val) => {
 						return {
 							...val,
-							answers: getAnsFromArray(val.answers)
+							answers: CommonHelper.getAnsFromArray(val.answers)
 						};
 					});
 				}
@@ -126,22 +126,6 @@
 		} catch (error) {}
 	};
 
-	const getAnsFromArray = (answers: (string | boolean)[][]) => {
-		const arr: Record<string, any>[] = [];
-		for (const ans of CommonHelper.toArray(answers)) {
-			let obj: Record<string, any> = {};
-			if (Array.isArray(ans)) {
-				obj['answer'] = ans[0];
-				obj['correct'] = ans[1];
-			} else {
-				if (!Array.isArray(ans) && typeof ans == 'object') {
-					obj = ans;
-				}
-			}
-			arr.push(obj);
-		}
-		return arr;
-	};
 	let responseText = `
 		This is part of response text
 		{
@@ -211,34 +195,7 @@
 		}
 	});
 
-	function deselect(indexQuestion: number, indexAnswer: number) {
-		var record = qValues[indexQuestion];
-		record.answers = record.answers?.filter((val: any, index: number) => index != indexAnswer);
-		qValues[indexQuestion] = record;
-	}
-	function toggle(indexQuestion: number, indexAnswer: number) {
-		var record = qValues[indexQuestion];
-		record.answers[indexAnswer].correct = !record?.answers[indexAnswer]?.correct;
-		qValues[indexQuestion] = record;
-	}
 	let formView = true;
-
-	function editAnswer(indexQ: number, indexA: number) {
-		editAnswerAt = indexA;
-		editQuestionAt = indexQ;
-	}
-
-	function editQuestion(indexQ: number) {
-		editQuestionAt = indexQ;
-		editAnswerAt = -1;
-	}
-	function deleteQuestion(indexQ: number) {
-		qValues = qValues.filter((val, index) => index != indexQ);
-		editQuestionAt = -1;
-		editAnswerAt = -1;
-	}
-	$: editAnswerAt = -1;
-	$: editQuestionAt = -1;
 
 	export let setAiValues = (
 		res: {
@@ -265,14 +222,11 @@
 	});
 	export let field = { name: '' };
 
-	const apiKey = ''; // Replace with your actual API key
-
-	
-	const getAiQs = async (apiKey:string) => {
+	const getAiQs = async (apiKey: string) => {
 		const url =
 			'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=' +
 			apiKey;
-	
+
 		const data = {
 			contents: [
 				{
@@ -394,100 +348,9 @@
 			<i class="ri-send-line ri-send" />toggle to {formView ? 'json view' : 'form view'}
 		</button>
 		{#if !formView}
-			<JsonField isJson={false} field={{ name: 'Questions' }} bind:value={questions} />
+			<JsonField isJson={false} field={{ name: 'Questions' }} bind:value={qValues} />
 		{:else}
-			{#each qValues as value, indexQ}
-				<div class="picker-list m-b-base">
-					<p class="flex">
-						<strong
-							>({indexQ + 1})
-							{#if editQuestionAt == indexQ && editAnswerAt == -1}
-								<TextField
-									bind:value={qValues[indexQ].question}
-									field={{ name: 'Question', type: 'text' }}
-								/>
-							{:else}
-								{value.question}
-							{/if}
-						</strong>
-						{'   '}
-						<button
-							type="button"
-							title="edit this question"
-							class="btn btn-circle btn-transparent btn-hint btn-xs"
-							on:click={() => editQuestion(indexQ)}
-						>
-							<i class="ri-edit-line" />
-						</button>
-						{'   '}
-						<button
-							type="button"
-							title="Remove"
-							class="btn btn-circle btn-transparent btn-hint btn-xs"
-							on:click={() => deleteQuestion(indexQ)}
-						>
-							<i class="ri-close-line" />
-						</button>
-					</p>
-					<div class="list picker-list m-b-base">
-						{#each value.answers as record, indexA}
-							{@const selected = record.correct == true}
-							<Draggable bind:list={value.answers} index={indexA} let:dragging let:dragover>
-								<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-								<!-- svelte-ignore a11y-no-static-element-interactions -->
-								<div
-									tabindex="0"
-									class="list-item handle"
-									class:selected
-									class:disabled={false}
-									on:click={() => toggle(indexQ, indexA)}
-									on:keydown={(e) => {}}
-								>
-									{#if selected}
-										<i class="ri-checkbox-circle-fill txt-success" />
-									{:else}
-										<i class="ri-checkbox-blank-circle-line txt-disabled" />
-									{/if}
-									<div class="content">
-										<span
-											class="label"
-											class:label-danger={dragging}
-											class:label-warning={dragover}
-										>
-											{#if editAnswerAt == indexA && editQuestionAt == indexQ}
-												<TextField
-													bind:value={qValues[indexQ].answers[indexA].answer}
-													field={{ name: 'answer', type: 'text' }}
-												/>
-											{:else}
-												{record.answer}
-											{/if}
-											{'   '}
-											<button
-												type="button"
-												title="edit this answer"
-												class="btn btn-circle btn-transparent btn-hint btn-xs"
-												on:click={() => editAnswer(indexQ, indexA)}
-											>
-												<i class="ri-edit-line" />
-											</button>
-											{'   '}
-											<button
-												type="button"
-												title="Remove"
-												class="btn btn-circle btn-transparent btn-hint btn-xs"
-												on:click={() => deselect(indexQ, indexA)}
-											>
-												<i class="ri-close-line" />
-											</button>
-										</span>
-									</div>
-								</div>
-							</Draggable>
-						{/each}
-					</div>
-				</div>
-			{/each}
+			<QaList bind:qValues />
 		{/if}
 
 		<svelte:fragment slot="footer">
@@ -498,7 +361,7 @@
 				type="button"
 				class="btn"
 				on:click={() => {
-					setAiValues(res.questions);
+					setAiValues(qValues);
 					hide();
 				}}
 			>

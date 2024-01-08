@@ -1,7 +1,12 @@
-<script>
+<script lang="ts">
 	import { QUESTION_CONSTANT } from '$lib/utils/CONSTANTS';
+	import CommonHelper from '$lib/utils/CommonHelper';
 
 	export let answers = QUESTION_CONSTANT.answers;
+	$: if(answers.length){
+		answers = CommonHelper.getAnsFromArray(answers);
+	}
+	
 </script>
 
 {#each answers as answer}

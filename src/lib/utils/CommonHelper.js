@@ -23,6 +23,28 @@ const documentExtensions = [
 
 export default class CommonHelper {
 	/**
+	 * Checks whether value is array or plain object.
+	 *
+	 * @param  {(string | boolean)[][]} answers
+	 * @return { Record<string, any>[]}
+	 */
+	static getAnsFromArray = (answers ) => {
+		const arr = [];
+		for (const ans of CommonHelper.toArray(answers)) {
+			let obj = {};
+			if (Array.isArray(ans)) {
+				obj['answer'] = ans[0];
+				obj['correct'] = ans[1];
+			} else {
+				if (!Array.isArray(ans) && typeof ans == 'object') {
+					obj = ans;
+				}
+			}
+			arr.push(obj);
+		}
+		return arr;
+	};
+	/**
 	 * Checks whether value is plain object.
 	 *
 	 * @param  {RecordModel[]} viewsAndTables
