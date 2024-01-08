@@ -47,55 +47,51 @@
 		totalMarks: number;
 		title: string;
 	};
+
 	const request_id = CommonHelper.randomString(8);
-	async function onSubmit() {
-		prompting.set(true);
-		let query = ai.questions;
-		prompt = await cleanString(prompt);
-		context = await cleanString(context);
-		query = query.replaceAll('<<prompt>>', prompt);
-		query = query.replaceAll('<<context>>', context);
 
-		const input: any = {
-			prompt: query,
-			key: $page.data?.school?.ai_key ?? 'none provided',
-			url: $page.url.hostname,
-			type: 'school',
-			info: $page.data?.school
-		};
+	async function fetchKey() {
+		try {
+			prompting.set(true);
 
-		const queryString = Object.keys(input)
-			.map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(input[key]))
-			.join('&');
+			const input = {
+				key: $page.data?.school?.ai_key ?? $page.data?.school?.code ?? 'key',
+				urls: $page.url.hostname ?? 'ktechs',
+				type: 'school',
+				request_id
+			};
 
-		// const url = `https://ktechs.xyz/api/ai?${queryString}`;
+			const queryString = Object.entries(input)
+				.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+				.join('&');
 
-		await fetch('/api/ai', {
-			method: 'POST',
-			headers: headers,
-			body: JSON.stringify({ prompt: query, request_id })
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				if (data?.success) {
-					console.log(data);
-					markdown = data;
-					responseText = data?.data;
-					setQs(responseText);
-					// jsonData = getJson(data.data);
-				}
-				if (data?.error) {
-					console.log(data.error);
-					addErrorToast(JSON.stringify(data?.error));
-				}
-				prompting.set(false);
-			})
-			.catch((error) => {
-				console.log('catch', error);
-				addErrorToast(JSON.stringify(error));
-				prompting.set(false);
-			});
+			const url = 'https://www.ktechs.xyz/api/ai?'+queryString;
+
+			const response = await fetch(url);
+
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+
+			const data = await response.json();
+
+			if (data?.success) {
+				return data.data;
+			} else if (data?.error) {
+				console.log(data.error);
+				addErrorToast(JSON.stringify(data.error));
+			}
+
+			return null;
+		} catch (error) {
+			console.error('An error occurred:', error);
+			addErrorToast(JSON.stringify(error));
+			return null;
+		} finally {
+			prompting.set(false);
+		}
 	}
+
 	const setQs = (responseText: string) => {
 		try {
 			const result = getJson(responseText) as AiResponse;
@@ -207,13 +203,13 @@
 	};
 
 	let qValues: any[] = [value];
-	onMount(()=>{
-		showOverlay = true
-		setQs(responseText)
+	onMount(() => {
+		showOverlay = true;
+		setQs(responseText);
 		if (typeof value == 'object' && !Array.isArray(value) && value?.question) {
 			res.questions = [value];
 		}
-	})
+	});
 
 	function deselect(indexQuestion: number, indexAnswer: number) {
 		var record = qValues[indexQuestion];
@@ -268,6 +264,62 @@
 		);
 	});
 	export let field = { name: '' };
+
+	const apiKey = ''; // Replace with your actual API key
+
+	
+	const getAiQs = async (apiKey:string) => {
+		const url =
+			'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=' +
+			apiKey;
+	
+		const data = {
+			contents: [
+				{
+					parts: [
+						{
+							text: prompt
+						}
+					]
+				}
+			]
+		};
+		let responseData: ResponseAi;
+		prompting.set(true);
+
+		let query = ai.questions;
+		prompt = await cleanString(prompt);
+		context = await cleanString(context);
+		query = query.replaceAll('<<prompt>>', prompt);
+		query = query.replaceAll('<<context>>', context);
+		data.contents[0].parts[0].text = query;
+
+		await fetch(url, {
+			method: 'POST',
+			headers: headers,
+			body: JSON.stringify(data)
+		})
+			.then((response) => {
+				if (!response.ok) {
+					addErrorToast('Network response was not ok');
+					throw new Error('Network response was not ok');
+				}
+				return response.json();
+			})
+			.then((jsonData) => {
+				// Handle the response data here
+				console.log(jsonData);
+				responseData = jsonData;
+				setQs(responseData.candidates[0].content.parts[0].text);
+				prompting.set(false);
+			})
+			.catch((error) => {
+				// Handle errors here
+				addErrorToast('There was a problem with the fetch operation:');
+				console.error('There was a problem with the fetch operation:', error);
+				prompting.set(false);
+			});
+	};
 </script>
 
 {#if field.name == 'question'}
@@ -317,9 +369,12 @@
 					type="button"
 					title="Prompt ai"
 					class="btn btn-hint btn-xs"
-					on:click={() => {
+					on:click={async () => {
 						if (!$prompting) {
-							onSubmit();
+							const key = await fetchKey(); //.then((val) => console.log(val));
+							if (key) {
+								getAiQs(key);
+							}
 						}
 					}}
 				>
