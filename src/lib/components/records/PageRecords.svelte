@@ -180,7 +180,8 @@
 			</div>
 
 			<div class="btns-group">
-				{#if $page.params?.slug?.includes('attendances')}
+				{#if $activeCollection.type && $page.data.user && !$page.data.user.collectionName?.includes('student')}
+					{#if $page.params?.slug?.includes('attendances')}
 					<BulkAttendancePerClass
 						on:save={(e) => {
 							recordsCount?.reload();
@@ -188,8 +189,7 @@
 						}}
 						{collectionUpsert}
 					/>
-				{/if}
-				{#if $activeCollection.type && $page.data.user && !$page.data.user.collectionName?.includes('student')}
+					{/if}
 					<button type="button" class="btn btn-expanded" on:click={() => recordUpsertPanel?.show()}>
 						<i class="ri-add-line" />
 						<span class="txt">New record</span>
