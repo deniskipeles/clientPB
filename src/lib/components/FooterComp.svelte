@@ -49,7 +49,7 @@
 				</h2>
 				<FooterLinkGroup>
 					<FooterLink liClass="mb-4" href="https://github.com/deniskipeles">GitHub</FooterLink>
-					<FooterLink liClass="mb-4" href="/">Discord</FooterLink>
+					<FooterLink liClass="mb-4" href="https://discord.com/invite/3buKPDsgym">Discord</FooterLink>
 				</FooterLinkGroup>
 			</div>
 			<div>
