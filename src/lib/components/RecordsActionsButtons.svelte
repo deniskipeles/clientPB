@@ -222,7 +222,7 @@
 		>
 			<CloudArrowDown />{`single pdf`}
 		</button>
-		<button
+		<!--<button
 			use:tooltip={`Click here to create a long pdf from this current table to the next data table. eg questions and attendance in one table`}
 			class={`flex ${loadingPDF ? 'animate-ping' : ''}`}
 			on:click={() => {
@@ -239,7 +239,7 @@
 			}}
 		>
 			<CloudArrowDown />{`continuous pdf`}
-		</button>
+		</button>-->
 		<button
 			use:tooltip={`Click here to download or print what you see in this table in pdf format.`}
 			class={`flex ${printingPDF ? 'animate-ping' : ''}`}
