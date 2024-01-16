@@ -55,7 +55,7 @@
 			<div>
 				<h2 class="mb-6 text-sm font-semibold uppercase text-gray-900 dark:text-white">Legal</h2>
 				<FooterLinkGroup>
-					<FooterLink liClass="mb-4" href="https://www.ktechs.xyz/projects/terms-and-conditions/1/xu5y9lkonkgof4j/">Privacy Policy</FooterLink>
+					<FooterLink liClass="mb-4" href="https://www.freeprivacypolicy.com/live/b2c15db3-1678-443c-8b24-782e23aea8e6">Privacy Policy</FooterLink>
 					<FooterLink liClass="mb-4" href="https://www.ktechs.xyz/projects/terms-and-conditions/1/xu5y9lkonkgof4j/">Terms & Conditions</FooterLink>
 				</FooterLinkGroup>
 			</div>
