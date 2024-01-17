@@ -27,7 +27,6 @@
 				marks: 3,
 				answers: [
 					['answer', false],
-					['answer2', true]
 				]
 			}
 		],
@@ -131,7 +130,17 @@
 		{
 		"title": "Bard Knowledge Quiz",
 		"totalMarks": 50,
-		"questions": []
+		"questions": [
+			{
+			"question": "What is Bard?",
+			"marks": 10,
+			"answers": [
+				{ "answer": "A large language model from Google AI", "correct": true },
+				{ "answer": "A musical instrument", "correct": false },
+				{ "answer": "A character in a Shakespeare play", "correct": false }
+			]
+			},
+		]
 		}
 		Also part of response
 		`;
