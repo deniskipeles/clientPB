@@ -27,6 +27,7 @@
 				marks: 3,
 				answers: [
 					['answer', false],
+					['answer2', true]
 				]
 			}
 		],
@@ -91,6 +92,7 @@
 	const setQs = (responseText: string) => {
 		try {
 			const result = getJson(responseText) as AiResponse;
+                        //result.questions = qvalues;
 			if (result.questions) {
 				// console.log(result);
 				res = result;
@@ -140,6 +142,16 @@
 				{ "answer": "A character in a Shakespeare play", "correct": false }
 			]
 			},
+			{
+			"question": "Identify the Bard logo.",
+			"marks": 5,
+			"image": "https://ai.google/static/images/bard/bard-logo.png",
+			"answers": [
+				{ "answer": "The logo with a blue circle and a stylized B in the center", "correct": true },
+				{ "answer": "The logo with a red guitar", "correct": false },
+				{ "answer": "The logo with a green book", "correct": false }
+			]
+			}
 		]
 		}
 		Also part of response
