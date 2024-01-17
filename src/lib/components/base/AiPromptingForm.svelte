@@ -131,27 +131,7 @@
 		{
 		"title": "Bard Knowledge Quiz",
 		"totalMarks": 50,
-		"questions": [
-			{
-			"question": "What is Bard?",
-			"marks": 10,
-			"answers": [
-				{ "answer": "A large language model from Google AI", "correct": true },
-				{ "answer": "A musical instrument", "correct": false },
-				{ "answer": "A character in a Shakespeare play", "correct": false }
-			]
-			},
-			{
-			"question": "Identify the Bard logo.",
-			"marks": 5,
-			"image": "https://ai.google/static/images/bard/bard-logo.png",
-			"answers": [
-				{ "answer": "The logo with a blue circle and a stylized B in the center", "correct": true },
-				{ "answer": "The logo with a red guitar", "correct": false },
-				{ "answer": "The logo with a green book", "correct": false }
-			]
-			}
-		]
+		"questions": []
 		}
 		Also part of response
 		`;
