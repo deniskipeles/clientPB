@@ -285,7 +285,7 @@
 					<span class="txt">Cancel</span>
 				</button>
 				<button type="button" class="btn" on:click={() => saveConfirm()}>
-					<span class="txt">Save Attendances</span>
+					<span class="txt">Submit</span>
 				</button>
 			{/if}
 		</svelte:fragment>
