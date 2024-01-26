@@ -40,7 +40,7 @@
 				</h2>
 				<FooterLinkGroup>
 					<FooterLink liClass="mb-4" href="https://ktechs.xyz">ketchs</FooterLink>
-					<FooterLink liClass="mb-4" href="/">Tailwind CSS</FooterLink>
+					<FooterLink liClass="mb-4" href="https://www.ktechs.xyz/projects/pricing/1/c9y54kz8o6enaqz/">Founders Edition</FooterLink>
 				</FooterLinkGroup>
 			</div>
 			<div>
