@@ -101,7 +101,7 @@
 			<NavLi class="lg:px-2 lg:mb-0" active={activeUrl === '/'} href="/">Home</NavLi>
  			{#each $page.data?.roots ?? [] as root}
 			   <NavLi class="lg:px-2 lg:mb-0" active={activeUrl === `/${root?.id}`} href={`/${root?.id}`}
-				>{root?.data?.name ?? 'Page x'}</NavLi
+				>{root?.name ?? 'Page x'}</NavLi
 			   >
 			{/each}
 			<NavLi
