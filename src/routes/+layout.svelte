@@ -99,9 +99,11 @@
 			activeClass="md:!pl-3 md:!py-2 lg:!pl-0 lg:text-primary-700 text-white dark:text-white dark:lg:text-primary-500 bg-primary-700 lg:bg-transparent dark:bg-primary-600 lg:dark:bg-transparent cursor-default"
 		>
 			<NavLi class="lg:px-2 lg:mb-0" active={activeUrl === '/'} href="/">Home</NavLi>
-			<NavLi class="lg:px-2 lg:mb-0" active={activeUrl === '/about'} href="/about"
-				>About</NavLi
-			>
+ 			{#each $page.data?.roots ?? [] as root}
+			   <NavLi class="lg:px-2 lg:mb-0" active={activeUrl === `/${root?.id}`} href={`/${root?.id}`}
+				>{root?.data?.name ?? 'Page x'}</NavLi
+			   >
+			{/each}
 			<NavLi
 				class="lg:px-2 lg:mb-0 capitalize"
 				href={$page?.data?.user ? `/account` : `/auth/login`}
