@@ -4,7 +4,7 @@
 	import { P } from 'flowbite-svelte';
 
 	$: home_page = $page.data?.roots?.find((i) => i?.name?.includes('home page')) ?? {};
-	$: root_page = $page.data?.roots?.find((i) => i?.id?.includes($page?.url?.params?.root)) ?? {};
+	$: root_page = $page.data?.roots?.find((i) => i?.id?.includes($page?.params?.root)) ?? {};
 	$: school = $page.data?.roots?.find((i) => i?.name?.includes('school')) ?? {};
 </script>
 
