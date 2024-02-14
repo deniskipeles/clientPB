@@ -142,15 +142,14 @@
 		required: true
 	};
 	let date = new Date().toISOString();
-const baseUrl = import.meta.env.BASE_URL;
-console.log(baseUrl);
+
 </script>
 
 <button type="button" class="btn btn-outline" on:click={() => classesPanel.show()}>
 	<i class="ri-pencil-line" />
 	<span class="txt">Bulk Attendances Per Class</span>
 </button>
-{baseUrl}
+
 {#if showOverlay}
 	<OverlayPanel
 		bind:this={classesPanel}
