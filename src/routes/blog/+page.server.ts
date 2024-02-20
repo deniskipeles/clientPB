@@ -11,7 +11,7 @@ export async function load({ params, url, parent }) {
     
     const filter = `category = "${category}" || title ~ "${search}"`;
     
-    const result = await pb
+    const articles= await pb
       .collection('blog')
       .getList(page, perPage, {
         filter,
@@ -19,7 +19,7 @@ export async function load({ params, url, parent }) {
         fields: `*:excerpt(${200},${true})`
       });
 
-    return { result };
+    return { articles };
   } catch (error) {
     return { error };
   }
