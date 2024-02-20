@@ -37,6 +37,7 @@
 	let class_selected:RecordModel
 	let subject:string
 	async function loadStudents(record: RecordModel) {
+		isLoading = true;
 		subject = record?.subjects[0]
 		class_selected = record
 		try {
@@ -45,8 +46,10 @@
 				expand: 'student',
 				sort: '-created'
 			});
+			isLoading = false;
 		} catch (err) {
 			ApiClient.error(err);
+			isLoading = false;
 		}
 	}
 	function deselect(record: RecordModel) {
@@ -142,7 +145,9 @@
 		required: true
 	};
 	let date = new Date().toISOString();
-
+	$: isLoading = false;
+	import PageWrapper from '$lib/components/base/PageWrapper.svelte';
+	
 </script>
 
 <button type="button" class="btn btn-outline" on:click={() => classesPanel.show()}>
@@ -198,6 +203,14 @@
 				</select>
 			</Field>
 			{/if}
+ 	{#if isLoading}
+	<PageWrapper center>
+		<div class="placeholder-section m-b-base mt-16">
+			<span class="loader loader-lg" />
+			<h1>Loading data...</h1>
+		</div>
+	</PageWrapper>
+	{/if}
 			<div class="list picker-list m-b-base">
 				{#each students ?? [] as record, i (record?.id)}
 					{@const selected = record.present == true}
