@@ -6,8 +6,8 @@ export async function load({ params, url, parent }) {
     // fetch a paginated records list
     const perPage = Number(url.searchParams.get('perPage') ?? 30);
     const page = Number(url.searchParams.get('page') ?? 1);
-    const category = Number(url.searchParams.get('category') ?? '');
-    const search = Number(url.searchParams.get('search') ?? '');
+    const category = (url.searchParams.get('category') ?? '');
+    const search = (url.searchParams.get('search') ?? '');
     
     const filter = `category = "${category}" || title ~ "${search}"`;
     
