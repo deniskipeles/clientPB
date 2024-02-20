@@ -5,15 +5,17 @@
 
 	$: home_page = $page.data?.roots?.find((i) => i?.name?.includes('home page')) ?? {};
 	$: school = $page.data?.roots?.find((i) => i?.name?.includes('school')) ?? {};
+
+      export let data;
 </script>
 
 <svelte:head>
-	<title>{school?.data?.name ?? 'Prime School'}</title>
-	<meta name="description" content={school?.data?.decription ?? 'Prime School Online Resources'} />
+	<title>{data?.article?.title ?? 'Prime School'}</title>
+	<meta name="description" content={data?.decription ?? 'Prime School Online Resources'} />
 </svelte:head>
 <div class="pt-20">
 	<P class="px-6 py-2">
-    {@html "The title of article"}
+    {@html data?.article?.title}
 	</P>
 	<TinyMce
 		cssClass="tinymce-preview custom-scrollbar"
@@ -31,7 +33,7 @@
 			toolbar: '',
 			plugins: ['autoresize']
 		}}
-		value={home_page?.html_data}
+		value={data?.article?.content ?? home_page?.html_data}
 		disabled
 	/>
 </div>
