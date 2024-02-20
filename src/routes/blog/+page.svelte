@@ -24,7 +24,7 @@
 
 
 <div>
-  {#if $page?.data?.user && !$page?.data?.user.roles?.includes('blogger')}
+  {#if $page?.data?.user && $page?.data?.user.roles?.includes('blogger')}
 					<button type="button" class="btn btn-expanded" on:click={() => recordUpsertPanel?.show()}>
 						<i class="ri-add-line" />
 						<span class="txt">New record</span>
