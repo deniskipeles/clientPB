@@ -9,7 +9,7 @@ export async function load({ params, url, parent }) {
     const category = (url.searchParams.get('category') ?? '');
     const search = (url.searchParams.get('search') ?? '');
     
-    const filter = `category = "${category}" || title ~ "${search}"`;
+    const filter = `category ~ "${category}" || title ~ "${search}"`;
     
     const articles= await pb
       .collection('blog')
