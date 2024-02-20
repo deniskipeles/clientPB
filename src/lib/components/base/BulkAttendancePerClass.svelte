@@ -167,7 +167,7 @@
 
 		<h5 class="section-title">classes(Click to load students)</h5>
 		<div class="selected-list">
-			{#each select_options as record, i}
+			{#each select_options ?? [] as record, i}
 				<span class="label">
 					<button
 						type="button"
@@ -191,7 +191,7 @@
 				</label>
 				<select name="s" id="s" bind:value={subject}>
 					{#if class_selected}
-						 {#each class_selected?.expand?.subjects  as subjectObj}
+						 {#each class_selected?.expand?.subjects ?? []  as subjectObj}
 							  <option value={subjectObj?.id}>{subjectObj?.name}</option>
 						 {/each}
 					{/if}
@@ -199,7 +199,7 @@
 			</Field>
 			{/if}
 			<div class="list picker-list m-b-base">
-				{#each students as record, i (record?.id)}
+				{#each students ?? [] as record, i (record?.id)}
 					{@const selected = record.present == true}
 					<Draggable bind:list={students} index={i} let:dragging let:dragover>
 						<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
