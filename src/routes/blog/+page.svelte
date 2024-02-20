@@ -10,8 +10,8 @@
   import RecordUpsertPanel from '$lib/components/records/RecordUpsertPanel.svelte';
 	
 
-  // @type {import('./$types').PageData} */
-	export let data;
+  /** @type {import('./$types').PageData} */
+  export let data;
 	
 	let collection = $page?.data?.tables?.find((t)=> t?.name=="blog");
 	let collectionUpsert = $page?.data?.tables?.find((t)=> t?.name=="blog");
@@ -32,7 +32,7 @@
 					</button>
 				{/if}
   <div class="grid relative md:grid-cols-3 gap-6">
-    {#each data?.articles?.items as article (article.id)}
+    {#each data?.articles?.items ?? [] as article (article?.id)}
     <Card>
       <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{article?.title}</h5>
       <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 leading-tight">
