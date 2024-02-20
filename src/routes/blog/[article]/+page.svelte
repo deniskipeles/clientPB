@@ -14,9 +14,7 @@
 	<meta name="description" content={data?.decription ?? 'Prime School Online Resources'} />
 </svelte:head>
 <div class="pt-20">
-	<P class="px-6 py-2">
-    {@html data?.article?.title}
-	</P>
+	<h4 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{data?.article?.title}</h4>
 	<TinyMce
 		cssClass="tinymce-preview custom-scrollbar"
 		conf={{
