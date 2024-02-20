@@ -5,9 +5,16 @@
     Breadcrumb,
     BreadcrumbItem
   } from 'flowbite-svelte';
+  import { invalidateAll } from '$app/navigation';
+  import RecordUpsertPanel from '$lib/components/records/RecordUpsertPanel.svelte';
+	
 
   // @type {import('./$types').PageData} */
-	export let data
+	export let data;
+	
+	let collection = $page?.data?.tables?.find((t)=> t?.name=="blog");
+	let collectionUpsert = $page?.data?.tables?.find((t)=> t?.name=="blog");
+	let recordUpsertPanel;
 </script>
 
 <Breadcrumb class="pt-20 py-8">
@@ -15,7 +22,14 @@
   <BreadcrumbItem>Articles</BreadcrumbItem>
 </Breadcrumb>
 
+
 <div>
+  {#if $page?.data?.user && !$page?.data?.user.roles?.includes('blogger')}
+					<button type="button" class="btn btn-expanded" on:click={() => recordUpsertPanel?.show()}>
+						<i class="ri-add-line" />
+						<span class="txt">New record</span>
+					</button>
+				{/if}
   <div class="grid relative md:grid-cols-3 gap-6">
     {#each data?.articles?.items as article (article.id)}
     <Card>
@@ -30,3 +44,17 @@
     {/each}
   </div>
 </div>
+
+<RecordUpsertPanel
+	bind:this={recordUpsertPanel}
+	collection={collectionUpsert}
+	on:hide={() => {
+	 recordUpsertPanel?.hide()
+	}}
+	on:save={(e) => {
+		invalidateAll();
+	}}
+	on:delete={(e) => {
+		invalidateAll();
+	}}
+/>
