@@ -6,6 +6,7 @@
     BreadcrumbItem
   } from 'flowbite-svelte';
   import { invalidateAll } from '$app/navigation';
+  import { page } from '$app/stores';
   import RecordUpsertPanel from '$lib/components/records/RecordUpsertPanel.svelte';
 	
 
