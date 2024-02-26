@@ -9,6 +9,7 @@ export const schemaHiddenColumnsStore       = writable([]);
 export const activeCollection               = writable({});
 export const isCollectionsLoading           = writable(false);
 export const view_cards                     = writable(false);
+export const transparent                    = writable(false);
 export const protectedFilesCollectionsCache = writable({});
 
 export function changeActiveCollectionById(collectionId) {
