@@ -131,7 +131,7 @@
 	}
 
 	import { page, page as storePage } from '$app/stores';
-	import { recordsStore, schemaHiddenColumnsStore, view_cards } from '$lib/stores/collections';
+	import { recordsStore, schemaHiddenColumnsStore, view_cards, transparent } from '$lib/stores/collections';
 	import { Card, Label, Range } from 'flowbite-svelte';
 	import AnswersPreview from '../base/AnswersPreview.svelte';
 	// import { afterNavigate } from "$app/navigation";
@@ -308,9 +308,7 @@
 	$: opacity = `opacity-${arr[minmaxValue]}`;
 </script>
 
-<Label>Opacity of checkboxes and edit buttons</Label>
-	<Range id="range-minmax" min="0" max="{arr.length}" bind:value={minmaxValue} size='sm' />
-<p>Value: {minmaxValue}</p>
+
 
 <Scroller bind:this={scrollWrapper} class="table-wrapper">
 	<svelte:fragment slot="before">
@@ -533,7 +531,7 @@
 						}}
 					>
 						{#if isView}
-							<td class="bulk-select-col min-width {opacity}">
+							<td class="bulk-select-col min-width {$transparent ? 5 : 0}">
 								<!-- svelte-ignore a11y-click-events-have-key-events -->
 								<!-- svelte-ignore a11y-no-static-element-interactions -->
 								<div class="form-field" on:click|stopPropagation>
@@ -613,7 +611,7 @@
 							</td>
 						{/if}
 
-						<td class="col-type-action {opacity} gap-4 min-width">
+						<td class="col-type-action {$transparent ? 5 : 0} gap-4 min-width">
 							<i class="ri-arrow-right-line" />
 							<!-- <button type="button" on:click={() => dispatch("select", record)}>
 								 <i class="ri-eye-line" />
