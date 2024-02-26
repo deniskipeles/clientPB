@@ -1,10 +1,10 @@
 {
-    "short_name": "k-schools",
-    "name": "kenyan prime schools",
+    "short_name": "kschool",
+    "name": "kenyan prime schools 🏫 ✨⭐",
     "start_url": "/",
     "icons": [
       {
-        "src": "logo_512.png",
+        "src": "/logo_512.png",
         "type": "image/png",
         "sizes": "512x512"
       }
@@ -12,21 +12,14 @@
     "background_color": "#3367D6",
     "display": "standalone",
     "scope": "/",
-    "theme_color": "#3367D6",
+    "theme_color": "#abf4ff",
     "shortcuts": [
       {
-        "name": "ktechs school management system?",
+        "name": "ktechs school blog",
         "short_name": "ktechs",
-        "description": "View weather information for today",
-        "url": "/today?source=pwa",
-        "icons": [{ "src": "/icons/logo_192.png", "sizes": "192x192" }]
-      },
-      {
-        "name": "How's weather tomorrow?",
-        "short_name": "Tomorrow",
-        "description": "View weather information for tomorrow",
-        "url": "/tomorrow?source=pwa",
-        "icons": [{ "src": "/icons/logo_192.png", "sizes": "192x192" }]
+        "description": "views information for today",
+        "url": "/blog",
+        "icons": [{ "src": "/favicon.png", "sizes": "712x712" }]
       }
     ],
     "description": "k-schools is a school management system web application developed and maintained by ktechs"
