@@ -176,9 +176,13 @@
 					<input
 						type="checkbox"
 						id={uniqueId}
-						checked={$transparent}
+						checked={$transparent == 5}
 						on:change={(e) => {
-							transparent.set(!$transparent);
+  						if($transparent == 5){
+  							transparent.set(0);
+  						}else{
+  							transparent.set(5);
+  						}
 						}}
 					/>
 					<label for={uniqueId}>{'transparent controls'}</label>
