@@ -8,7 +8,8 @@
 		isCollectionsLoading,
 		loadCollections,
 		changeActiveCollectionById,
-		view_cards
+		view_cards,
+		transparent
 	} from '$lib/stores/collections';
 	import tooltip from '$lib/actions/tooltip';
 	import { pageTitle, hideControls } from '$lib/stores/app';
@@ -167,6 +168,20 @@
 						}}
 					/>
 					<label for={uniqueId}>{$view_cards ? 'Table View' : 'Cards View'}</label>
+				</Field>
+			</div>
+			
+			<div class="inline-flex gap-5">
+				<Field class="form-field form-field-sm form-field-toggle m-0 p-5" let:uniqueId>
+					<input
+						type="checkbox"
+						id={uniqueId}
+						checked={$transparent}
+						on:change={(e) => {
+							transparent.set(!$transparent);
+						}}
+					/>
+					<label for={uniqueId}>{'transparent controls'}</label>
 				</Field>
 			</div>
 
