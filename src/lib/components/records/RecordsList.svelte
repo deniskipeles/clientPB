@@ -305,7 +305,7 @@
 	}
 	let arr = [0,5,10,20,25,30,40,50,60,75,80,90,95,100]
 	let minmaxValue = 5;
-	$: opacity = `opacity-${arr[minmaxValue]}`;
+	$: opacity = `opacity-${arr[$transparent]}`;
 </script>
 
 
@@ -531,7 +531,7 @@
 						}}
 					>
 						{#if isView}
-							<td class="bulk-select-col min-width opacity-{$transparent}">
+							<td class="bulk-select-col min-width {opacity}">
 								<!-- svelte-ignore a11y-click-events-have-key-events -->
 								<!-- svelte-ignore a11y-no-static-element-interactions -->
 								<div class="form-field" on:click|stopPropagation>
@@ -611,7 +611,7 @@
 							</td>
 						{/if}
 
-						<td class="col-type-action opacity-{$transparent} gap-4 min-width">
+						<td class="col-type-action {opacity} gap-4 min-width">
 							<i class="ri-arrow-right-line" />
 							<!-- <button type="button" on:click={() => dispatch("select", record)}>
 								 <i class="ri-eye-line" />
