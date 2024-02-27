@@ -196,6 +196,7 @@
 
 <div class="page-header">
 	<div class="flex gap-3 text-center dark:text-white">
+<!--
 		<button
 			use:tooltip={`Click here to edit the content you are viewing now and download. Remember this edit cannot be
         applied into system data.`}
@@ -204,6 +205,7 @@
 		>
 			<PencilSquare />{contenteditable ? 'block editing' : 'edit to download'}
 		</button>
+-->
 		<button
 			use:tooltip={`Click here to download pdf of the content you are viewing currently.(${filds} fields)`}
 			class={`flex ${loadingPDF ? 'animate-ping' : ''}`}
@@ -220,7 +222,7 @@
 				}, 2000);
 			}}
 		>
-			<CloudArrowDown />{`single pdf`}
+			<CloudArrowDown />{`download pdf`}
 		</button>
 		<!--<button
 			use:tooltip={`Click here to create a long pdf from this current table to the next data table. eg questions and attendance in one table`}
