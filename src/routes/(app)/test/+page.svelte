@@ -58,6 +58,7 @@
     {/each}
   </div>
 </div>
+{JSON.stringify(data)}
 
 <RecordUpsertPanel
   bind:this={recordUpsertPanel}
