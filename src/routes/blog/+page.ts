@@ -2,7 +2,7 @@ import { pb } from '$lib/pocketbase';
 
 export async function load({ params, url, parent }) {
   try {
-    // const parentData = await parent();
+    const parentData = await parent();
     // fetch a paginated records list
     const perPage = Number(url.searchParams.get('perPage') ?? 30);
     const page = Number(url.searchParams.get('page') ?? 1);
@@ -19,7 +19,7 @@ export async function load({ params, url, parent }) {
         fields: `*:excerpt(${200},${true})`
       });
 
-    return { articles };
+    return { articles, parentData };
   } catch (error) {
     return { error };
   }
