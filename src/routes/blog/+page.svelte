@@ -16,7 +16,9 @@
   let collectionUpsert = $page?.data?.tables?.find((t)=> t?.name=="blog");
   let recordUpsertPanel;
 
-  $: categories = collection?.schema?.find(field => field?.name === 'category')?.options?.values || [];
+  $: categories = [];
+  const categoryField = collection?.schema?.find(field => field?.name === 'category');
+  categories = categoryField?.options?.values ?? [];
 </script>
 
 <Breadcrumb class="pt-20 py-8">
@@ -32,12 +34,12 @@
     </button>
   {/if}
 
-  <ul class="flex space-x-2">
+  <ul class="flex flex-wrap gap-2 mt-4">
     {#each categories as category (category)}
       <li>
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <a href={`/blog?category=${encodeURIComponent(category)}`} class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
           {category}
-        </button>
+        </a>
       </li>
     {/each}
   </ul>
