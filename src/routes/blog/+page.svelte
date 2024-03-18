@@ -16,6 +16,11 @@
 	let collection = $page?.data?.tables?.find((t)=> t?.name=="blog");
 	let collectionUpsert = $page?.data?.tables?.find((t)=> t?.name=="blog");
 	let recordUpsertPanel;
+	
+	
+    $: categories = [];
+    const categoryField = collection?.schema?.find(field => field?.name === 'category');
+    categories = categoryField?.options?.values ?? [];
 </script>
 
 <Breadcrumb class="pt-20 py-8">
@@ -31,6 +36,12 @@
 						<span class="txt">New record</span>
 					</button>
 				{/if}
+	
+<ul>
+  {#each categories as category (category)}
+    <li><button class="bg-blue-500 text-white px-4 py-2 rounded">{category}</button></li>
+  {/each}
+</ul>
   <div class="grid relative md:grid-cols-3 gap-6">
     {#each data?.articles?.items ?? [] as article (article?.id)}
     <Card>
@@ -59,3 +70,5 @@
 		invalidateAll();
 	}}
 />
+
+
