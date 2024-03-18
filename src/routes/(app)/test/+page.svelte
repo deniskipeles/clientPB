@@ -32,10 +32,10 @@
     </button>
   {/if}
 
-  <ul class="flex flex-wrap gap-2 mt-4">
+  <ul class="flex flex-wrap gap-2 m-4">
     {#each categories as category (category)}
       <li>
-        <a href={`/blog?category=${encodeURIComponent(category)}`} class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+        <a href={`/blog?category=${encodeURIComponent(category)}`} class="bg-blue-500 text-white px-4 py-2 m-2 rounded hover:bg-blue-600 transition">
           {category}
         </a>
       </li>
