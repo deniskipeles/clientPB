@@ -16,9 +16,7 @@
   let collectionUpsert = $page?.data?.tables?.find((t)=> t?.name=="blog");
   let recordUpsertPanel;
 
-  $: categories = [];
-  const categoryField = collection?.schema?.find(field => field?.name === 'category');
-  categories = categoryField?.options?.values ?? [];
+  $: categories = collection?.schema?.find(field => field?.name === 'category')?.options?.values ?? [];
 </script>
 
 <Breadcrumb class="pt-20 py-8">
