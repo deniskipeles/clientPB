@@ -9,12 +9,12 @@ export async function load({ params, url, locals:{pb} }) {
     const category = (url.searchParams.get('category') ?? '');
     const search = (url.searchParams.get('search') ?? '');
     
-    const filter = `category ~ "${category}" || title ~ "${search}"`;
+    const filter = `category ~ "${category}" && title ~ "${search}"`;
     
     const articles= await pb
       .collection('blog')
       .getList(page, perPage, {
-        //filter,
+        filter,
         sort: '-created',
         fields: `*:excerpt(${200},${true})`
       });
