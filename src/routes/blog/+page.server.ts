@@ -14,7 +14,7 @@ export async function load({ params, url, locals:{pb} }) {
     const articles= await pb
       .collection('blog')
       .getList(page, perPage, {
-        filter,
+        //filter,
         sort: '-created',
         fields: `*:excerpt(${200},${true})`
       });
