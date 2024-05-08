@@ -33,7 +33,7 @@
     </button>
   {/if}
 
-  <div class="grid grid-cols-2 gap-6">
+  <div class="mt-2 mb-2 gap-2">
       {#each categories ?? [] as category}
         <Button
           pill
@@ -46,16 +46,6 @@
         </Button>
       {/each}
     </div>
-    
-  <ul class="flex flex-wrap gap-2 m-4">
-    {#each categories as category (category)}
-      <li>
-        <a href={`/blog?category=${encodeURIComponent(category)}`} class="bg-blue-500 text-white px-4 py-2 m-2 rounded hover:bg-blue-600 transition">
-          {category}
-        </a>
-      </li>
-    {/each}
-  </ul>
 
   <div class="grid relative md:grid-cols-3 gap-6">
     {#each data?.articles?.items ?? [] as article (article?.id)}

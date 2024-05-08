@@ -4,6 +4,7 @@
 	import {
 		Card,
 		Button,
+		GradientButton
 	} from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 
@@ -32,15 +33,17 @@
 
 {#if authData?.authProviders.length > 0}
   <h2 class="text-lg font-bold mb-4">{head} with:</h2>
-    <div class="grid grid-cols-2 gap-6">
+    <div class="gap-4">
       {#each authData?.authProviders ?? [] as provider}
-        <Button 
+        <GradientButton
           pill
+          outline 
+          color="purpleToBlue"
           type="button"
           on:click={() => handleOAuthLogin(provider)}
         >
           {provider.displayName}
-        </Button>
+        </GradientButton>
       {/each}
     </div>
 {/if}
