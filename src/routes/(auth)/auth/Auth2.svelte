@@ -15,7 +15,7 @@
     isLoading = true;
     // Simulate login process
     try{
-      const authData = await pb.collection(users_collection).authWithOAuth2({ provider: provider?.name });
+      const authData = await pb.collection(auth_collection).authWithOAuth2({ provider: provider?.name });
       if(authData.token){
         goto('/account', { replaceState: true });
         isLoading=false;

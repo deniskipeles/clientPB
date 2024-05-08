@@ -15,6 +15,15 @@
 	import Scroller from '$lib/components/base/Scroller.svelte';
 	import RecordFieldValue from '$lib/components/records/RecordFieldValue.svelte';
 	import { pb as ApiClient } from '$lib/pocketbase';
+	
+	
+	import { page as storePage } from '$app/stores';
+	import { recordsStore, schemaHiddenColumnsStore, view_cards, transparent } from '$lib/stores/collections';
+	import { Card, Label, Range } from 'flowbite-svelte';
+	import AnswersPreview from '../base/AnswersPreview.svelte';
+	// import { afterNavigate } from "$app/navigation";
+	
+	
 
 	const dispatch = createEventDispatcher();
 	const sortRegex = /^([\+\-])?(\w+)$/;
@@ -130,11 +139,7 @@
 		}
 	}
 
-	import { page as storePage } from '$app/stores';
-	import { recordsStore, schemaHiddenColumnsStore, view_cards, transparent } from '$lib/stores/collections';
-	import { Card, Label, Range } from 'flowbite-svelte';
-	import AnswersPreview from '../base/AnswersPreview.svelte';
-	// import { afterNavigate } from "$app/navigation";
+	
 	// afterNavigate(()=>load(1))
 
 	export async function load(page = 1, breakTasks = true) {
@@ -308,9 +313,9 @@
 	$: opacity = `opacity-${arr[$transparent]}`;
 	
 	$: unlimited_user = false
-	$:if($page.data.user){
-	  const controls=$page.data?.roots?.find(obj=>obj.name=="controls") ?? {}
-	  unlimited_user=controls?.data?.unlimited_users?.includes($page.data.user.collectionName)
+	$:if($storePage.data.user){
+	  const controls=$storePage.data?.roots?.find(obj=>obj.name=="controls") ?? {}
+	  unlimited_user=controls?.data?.unlimited_users?.includes($storePage.data.user.collectionName)
 	}
 </script>
 
