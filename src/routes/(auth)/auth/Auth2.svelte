@@ -33,17 +33,16 @@
 
 {#if authData?.authProviders.length > 0}
   <h2 class="text-lg font-bold mb-4">{head} with:</h2>
-    <div class="gap-4">
+    <div class="flex flex-wrap gap-2">
       {#each authData?.authProviders ?? [] as provider}
-        <GradientButton
+        <Button
           pill
           outline 
-          color="purpleToBlue"
           type="button"
           on:click={() => handleOAuthLogin(provider)}
         >
           {provider.displayName}
-        </GradientButton>
+        </Button>
       {/each}
     </div>
 {/if}

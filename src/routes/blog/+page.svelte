@@ -33,7 +33,7 @@
     </button>
   {/if}
 
-  <div class="mt-2 mb-2 gap-2">
+  <div class="flex flex-wrap gap-2 mt-2 mb-2">
       {#each categories ?? [] as category}
         <Button
           pill
