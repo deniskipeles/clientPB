@@ -2,6 +2,7 @@
 	import { applyAction, enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { ErrorComp } from '$lib/components';
+	import Auth2 from '../Auth2.svelte';
 	import { pb } from '$lib/pocketbase';
 	import {
 		Card,
@@ -27,12 +28,13 @@
 	export let form;
 
 	let loading = false;
-	let group = 'student';
+	let group = data.authTables[0];
+	$: authData = data.auth2[group]
 </script>
 
 <svelte:head>
 	<title>Registration Form</title>
-	<meta name="description" content="Add Questions And Answers Form" />
+	<meta name="description" content="User Registration Form" />
 </svelte:head>
 
 <Breadcrumb class="pt-16 py-8">
@@ -44,6 +46,7 @@
 	<ErrorComp error={form?.error} />
 {/if}
 
+<Auth2 {authData}/>
 <Card>
 	<form
 		class="flex flex-col space-y-6"

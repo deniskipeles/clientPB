@@ -3,43 +3,6 @@ import { pb } from '$lib/pocketbase';
 import { serializeNonPOJOs } from '$lib/utils';
 import type { RecordModel } from 'pocketbase';
 
-export async function loadSchool() {
-	let record: RecordModel;
-	try {
-		record = await pb
-			.collection('z_roots')
-			.getFirstListItem('name~"school"', {
-				expand: 'photos'
-			})
-			.then(async (value) => {
-				try {
-					await pb
-						.collection('z_roots')
-						.getFirstListItem('name~"ai_key" || name~"aiKey" || name~"ai-key" || name~"ai key"', {})
-						.then((val) => {
-							var ai_key = '';
-							if (typeof val.data == 'string') {
-								ai_key = val.data;
-							}
-							if (typeof val.data == 'object' && !Array.isArray(val?.data)) {
-								ai_key = val.data['ai_key'] ?? val.data['ai-key'] ?? val.data['aiKey'];
-							}
-							value.ai_key = ai_key;
-							value.aiKey = ai_key;
-							value['ai-key'] = ai_key;
-							value['ai key'] = ai_key;
-						});
-					return value;
-				} catch (error) {
-					return value;
-				}
-			});
-		record = serializeNonPOJOs(record);
-	} catch (error) {
-		record = { id: '', collectionId: '', collectionName: '', created: '', updated: '' };
-	}
-	return record;
-}
 
 export const createRecord = async (formData: FormData) => {
 	try {
@@ -47,9 +10,7 @@ export const createRecord = async (formData: FormData) => {
 		const array = await view.split('_');
 		const table = array[array.length - 1];
 		let record = await pb.collection(table).create(formData);
-		// let record = await pb.collection(view).getOne(rec?.id, {
-		// 	// expand: 'relField1,relField2.subRelField',
-		// });
+		
 		record = serializeNonPOJOs(record);
 		return { record };
 	} catch (error) {
@@ -92,9 +53,9 @@ export const listRootsRecords = async () => {
 	let records: RecordModel[] = [];
 	try {
 		// you can also fetch all records at once via getFullList
-		records = await pb.collection('z_roots').getFullList({
+		records = await pb.collection('root').getFullList({
 			sort: '-created',
-			expand: 'z_roots_images'
+			expand: 'root_images'
 		});
 		records = serializeNonPOJOs(records);
 		return records;

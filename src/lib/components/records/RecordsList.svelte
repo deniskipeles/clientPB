@@ -130,7 +130,7 @@
 		}
 	}
 
-	import { page, page as storePage } from '$app/stores';
+	import { page as storePage } from '$app/stores';
 	import { recordsStore, schemaHiddenColumnsStore, view_cards, transparent } from '$lib/stores/collections';
 	import { Card, Label, Range } from 'flowbite-svelte';
 	import AnswersPreview from '../base/AnswersPreview.svelte';
@@ -306,6 +306,12 @@
 	let arr = [0,5,10,20,25,30,40,50,60,75,80,90,95,100]
 	let minmaxValue = 5;
 	$: opacity = `opacity-${arr[$transparent]}`;
+	
+	$: unlimited_user = false
+	$:if($page.data.user){
+	  const controls=$page.data?.roots?.find(obj=>obj.name=="controls") ?? {}
+	  unlimited_user=controls?.data?.unlimited_users?.includes($page.data.user.collectionName)
+	}
 </script>
 
 
@@ -353,7 +359,7 @@
 						>
 							<i class="ri-eye-line" />
 						</button>
-						{#if $page.data.user && !$page.data.user.collectionName?.includes('student')}
+						{#if unlimited_user}
 							&nbsp;
 							<button
 								type="button"
@@ -616,7 +622,7 @@
 							<!-- <button type="button" on:click={() => dispatch("select", record)}>
 								 <i class="ri-eye-line" />
 							 </button> -->
-							{#if $page.data.user && !$page.data.user.collectionName?.includes('student')}
+							{#if unlimited_user}
 								&nbsp;
 								<button
 									type="button"

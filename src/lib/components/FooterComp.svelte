@@ -10,25 +10,25 @@
 	} from 'flowbite-svelte';
 	import { AcademicCap } from 'svelte-heros-v2';
 	// import { FacebookSolid, GithubSolid, DiscordSolid, TwitterSolid } from 'flowbite-svelte-icons';
-	export let school: any;
+	export let app: any;
 	$: logo =
-		school?.photos && Array.isArray(school?.photos)
-			? school?.photos[school?.data?.logo ?? 0]
+		app?.photos && Array.isArray(app?.photos)
+			? app?.photos[app?.data?.logo ?? 0]
 			: null;
 </script>
 
 <Footer footerType="socialmedia">
 	<div class="md:flex md:justify-between">
 		<div class="mb-6 md:mb-0">
-			{#if school?.photos?.length == 0}
+			{#if app?.photos?.length == 0}
 				<AcademicCap />
 			{:else}
-				{#await getPbImageUrl(school, logo, undefined) ?? '/favicon.svg' then value}
+				{#await getPbImageUrl(app, logo, undefined) ?? '/favicon.svg' then value}
 					<FooterBrand
 						href="/"
 						src={value ?? ''}
-						alt={school?.data?.name ?? 'Prime School'}
-						name={school?.data?.name ?? 'Prime School'}
+						alt={app?.data?.name ?? 'ClientPB'}
+						name={app?.data?.name ?? 'ClientPB'}
 					/>
 				{/await}
 			{/if}
@@ -65,21 +65,7 @@
 	<div class="sm:flex sm:items-center sm:justify-between">
 		<FooterCopyright target="www.ketchs.xyz" href="https://ktechs.xyz" by="Ktechs™" />
 		<div class="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
-			<!-- <FooterIcon href="/">
-          <FacebookSolid class="w-4 h-4 text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white" />
-        </FooterIcon>
-        <FooterIcon href="/">
-          <DiscordSolid class="w-4 h-4 text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white" />
-        </FooterIcon>
-        <FooterIcon href="/">
-          <TwitterSolid class="w-4 h-4 text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white" />
-        </FooterIcon>
-        <FooterIcon href="/">
-          <GithubSolid class="w-4 h-4 text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white" />
-        </FooterIcon>
-        <FooterIcon href="/">
-          <Dribble />
-        </FooterIcon> -->
+		  <!--links-->
 		</div>
 	</div>
 </Footer>

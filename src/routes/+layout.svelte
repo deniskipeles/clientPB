@@ -63,9 +63,9 @@
 	const toggleDrawer = () => {
 		drawerHidden = false;
 	};
-	$: school = $page.data?.roots?.find((i: any) => i?.name?.includes('school')) ?? {};
+	$: app = $page.data?.app ?? {};
 
-	$: roots_ = $page.data?.roots?.filter((i: any) => i?.html_data != null && i?.html_data != '' && !i?.name?.includes('school') && !i?.name?.includes('home')) ?? [];
+	$: roots_ = $page.data?.roots?.filter((i: any) => i?.html_data != null && i?.html_data != '' && !i?.name?.includes('app')&& !i?.name?.includes('website')&& !i?.name?.includes('page') && !i?.name?.includes('home')) ?? [];
 	
 	$: activeUrl = $page.url.pathname;
 	let spanClass = 'pl-2 self-center text-md text-gray-900 whitespace-nowrap dark:text-white';
@@ -77,8 +77,8 @@
 </script>
 
 <svelte:head>
-	<title>{school?.data?.name ?? 'Prime School'}</title>
-	<meta name="description" content={school?.data?.decription ?? 'Prime School Online Resources'} />
+	<title>{app?.data?.name ?? 'ClientPB'}</title>
+	<meta name="description" content={app?.data?.decription ?? 'ClientPB interactive page'} />
 </svelte:head>
 
 <svelte:window bind:innerWidth={width} />
@@ -91,7 +91,7 @@
 		<NavBrand href="/" class="lg:ml-0 gap-1">
 			<AcademicCap />
 			<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-				{school?.data?.name ?? 'Prime School'}
+				{app?.data?.name ?? 'ClientPB'}
 			</span>
 		</NavBrand>
 		<NavUl
@@ -210,5 +210,5 @@
 	<Confirmation />
 {/if}
 <div class="dark:bg-slate-900 mx-auto mb-4 pt-4 lg:pl-64">
-	<FooterComp {school} />
+	<FooterComp {app} />
 </div>

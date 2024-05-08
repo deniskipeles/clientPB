@@ -7,7 +7,7 @@ export async function load({ params, url, parent }) {
 	let table = {};
 	try {
 		const parentData = await parent();
-		table = parentData.tables.find((i: any) => i?.name == params.slug);
+		table = parentData.tables.find((i: any) => i?.name == params.slug || i?.id == params.slug);
 		activeCollection.set(table)
 		// fetch a paginated records list
 		const perPage = Number(url.searchParams.get('perPage') ?? 30);

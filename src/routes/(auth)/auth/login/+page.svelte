@@ -12,6 +12,8 @@
 	} from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	
+	import Auth2 from '../Auth2.svelte';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -27,7 +29,8 @@
 	import { applyAction, enhance } from '$app/forms';
 	import { pb } from '$lib/pocketbase';
 	import { ErrorComp } from '$lib/components';
-	let group = 'students';
+	let group = data.authTables[0];
+	$: authData = data.auth2[group]
 </script>
 
 <svelte:head>
@@ -45,6 +48,7 @@
 {/if}
 
 <div class="text-center">
+	<Auth2 {authData}/>
 	<Card>
 		<form
 			class="flex flex-col space-y-6"

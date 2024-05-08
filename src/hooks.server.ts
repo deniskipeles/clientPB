@@ -23,7 +23,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// this are page builders and are necessary else it return an error page
 		event.locals.tables = await listTablesRecords();
 		event.locals.roots = await listRootsRecords();
-		event.locals.school = await loadSchool();
+		event.locals.app = event.locals.roots.find(root=>root?.name=="app"||root?.name=="page"||root?.name=="website");
 	} catch (err) {
 		error(404, { message: `${err}` });
 	}

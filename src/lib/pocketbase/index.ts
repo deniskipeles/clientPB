@@ -5,7 +5,6 @@ import {
 	createRecord,
 	listRootsRecords,
 	listTablesRecords,
-	loadSchool,
 	updateRecord
 } from './logic';
 import { setErrors } from '$lib/stores/errors';
@@ -99,7 +98,6 @@ pb.authStore.onChange((auth) => {
 export {
 	pb,
 	currentUser,
-	loadSchool,
 	createRecord,
 	updateRecord,
 	listTablesRecords,

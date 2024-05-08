@@ -3,18 +3,14 @@
 	import TinyMce from '$lib/components/base/TinyMCE.svelte';
 	import { P } from 'flowbite-svelte';
 
-	$: home_page = $page.data?.roots?.find((i) => i?.name?.includes('home page')) ?? {};
-	$: school = $page.data?.roots?.find((i) => i?.name?.includes('school')) ?? {};
+	$: app = $page.data?.app ?? {};
 </script>
 
 <svelte:head>
-	<title>{school?.data?.name ?? 'Prime School'}</title>
-	<meta name="description" content={school?.data?.decription ?? 'Prime School Online Resources'} />
+	<title>{app?.data?.name ?? 'ClientPB'}</title>
+	<meta name="description" content={app?.data?.decription ?? 'ClientPB for user interaction with pocketbase'} />
 </svelte:head>
 <div class="pt-20">
-	<!-- <P class="px-8 py-4">
-		{@html home_page?.html_data}
-	</P> -->
 	<TinyMce
 		cssClass="tinymce-preview custom-scrollbar"
 		conf={{
@@ -31,7 +27,7 @@
 			toolbar: '',
 			plugins: ['autoresize']
 		}}
-		value={home_page?.html_data}
+		value={app?.html_data}
 		disabled
 	/>
 </div>

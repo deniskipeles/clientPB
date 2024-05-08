@@ -11,7 +11,7 @@ declare namespace App {
 		userid: string;
 		pb: import('pocketbase').default;
 		user: import('pocketbase').default['authStore']['model'];
-		school: import('pocketbase').RecordModel;
+		app: import('pocketbase').RecordModel|null;
 		tables: import('pocketbase').RecordModel[];
 		roots: import('pocketbase').RecordModel[];
 	}

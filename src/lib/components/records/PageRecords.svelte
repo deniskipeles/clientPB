@@ -136,7 +136,14 @@
 	}
 
 	let questionUpsertPanel;
+	//to be removed
 	$: is_student = $page.data?.user?.collectionName?.includes('student');
+	
+	$: unlimited_user = false
+	$:if($page.data.user){
+	  const controls=$page.data?.roots?.find(obj=>obj.name=="controls") ?? {}
+	  unlimited_user=controls?.data?.unlimited_users?.includes($page.data.user.collectionName)
+	}
 </script>
 
 {#if $isCollectionsLoading}
@@ -237,7 +244,7 @@
 
 					$activeCollection.name?.includes('tests') && is_student
 						? questionUpsertPanel.show(showModel)
-						: (e.detail.edit && !is_student)
+						: (e.detail.edit && unlimited_user)
 						? recordUpsertPanel?.show(showModel)
 						: recordPreviewPanel?.show(showModel);
 				}}

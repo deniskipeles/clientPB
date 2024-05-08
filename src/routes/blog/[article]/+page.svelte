@@ -3,15 +3,13 @@
 	import TinyMce from '$lib/components/base/TinyMCE.svelte';
 	import { P } from 'flowbite-svelte';
 
-	$: home_page = $page.data?.roots?.find((i) => i?.name?.includes('home page')) ?? {};
-	$: school = $page.data?.roots?.find((i) => i?.name?.includes('school')) ?? {};
-
-      export let data;
+	$: app = $page.data?.app ?? {};
+  export let data;
 </script>
 
 <svelte:head>
-	<title>{data?.article?.title ?? 'Prime School'}</title>
-	<meta name="description" content={data?.decription ?? 'Prime School Online Resources'} />
+	<title>{data?.article?.title ?? 'Article'}</title>
+	<meta name="description" content={data?.article?.content ?? 'Article content'} />
 </svelte:head>
 <div class="pt-20">
 	<h4 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{data?.article?.title}</h4>
@@ -31,7 +29,7 @@
 			toolbar: '',
 			plugins: ['autoresize']
 		}}
-		value={data?.article?.content ?? home_page?.html_data}
+		value={data?.article?.content ?? app?.html_data}
 		disabled
 	/>
 </div>

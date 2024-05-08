@@ -4,12 +4,19 @@ import { redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
 /** @type {import('./$types').PageServerLoad} */
-export async function load({ locals: { user, tables } }) {
+export async function load({ locals: { user, tables, pb } }) {
 	if (user?.id) {
 		throw redirect(301, '/account');
 	} else {
 		const authTables = tables?.filter((i) => i?.type == 'auth')?.map((i) => i.name);
-		return { authTables };
+		const auth2 = {}
+		for (const record of authTables) {
+		  const authDataResult = await pb.collection(record).listAuthMethods();
+		  if(authDataResult?.authProviders){
+		    auth2[record]=authDataResult
+		  }
+		}
+		return { authTables,auth2 };
 	}
 }
 
