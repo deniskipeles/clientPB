@@ -29,12 +29,11 @@
   }
 </script>
 
-{#if authData?.authProviders}
+{#if authData?.authProviders.length > 0}
   <h2 class="text-lg font-bold mb-4">Login with:</h2>
     <div class="mb-4">
       {#each authData?.authProviders ?? [] as provider}
         <Button 
-          color="alternative" 
           pill
           on:click={() => handleOAuthLogin(provider)}
         >
@@ -45,7 +44,7 @@
 {/if}
 
 {#if isLoading}
-  <div class="absolute z-50 z-index-50 inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+  <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999;" class="inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
     <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
   </div>
 {/if}
