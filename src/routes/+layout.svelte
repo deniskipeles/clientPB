@@ -45,7 +45,17 @@
 		activateClickOutside = true;
 	}
 	let showWhichHasOverlay = false;
+	
+	const loadEruda = () => {
+		let script = document.createElement('script');
+    script.src = "//cdn.jsdelivr.net/npm/eruda"
+    document.head.append(script);
+		script.onload = () => {
+      window.eruda.init();
+		};
+	};
 	onMount(() => {
+	  loadEruda()
 		showWhichHasOverlay = true;
 		if (width >= breakPoint) {
 			drawerHidden = false;
