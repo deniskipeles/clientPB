@@ -52,12 +52,13 @@
 
 <script>
     import { onMount, createEventDispatcher } from "svelte";
+    import { page } from '$app/stores';
     import CommonHelper from "$lib/utils/CommonHelper";
 
     export let id = "tinymce_svelte" + CommonHelper.randomString(7);
     export let inline = undefined;
     export let disabled = false;
-    export let scriptSrc = `${import.meta.env.BASE_URL}libs/tinymce/tinymce.min.js`;
+    export let scriptSrc = `${$page.url.origin}/libs/tinymce/tinymce.min.js`;
     export let conf = {};
     export let modelEvents = "change input undo redo";
     export let value = "";

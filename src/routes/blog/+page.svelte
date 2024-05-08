@@ -1,4 +1,5 @@
 <script>
+  import { goto } from '$app/navigation';
   import {
     Card,
     Button,
@@ -32,6 +33,20 @@
     </button>
   {/if}
 
+  <div class="grid grid-cols-2 gap-6">
+      {#each categories ?? [] as category}
+        <Button
+          pill
+          type="button"
+          on:click={() => {
+            goto(`/blog?category=${encodeURIComponent(category)}`, { replaceState: true });
+          }}
+        >
+          {category}
+        </Button>
+      {/each}
+    </div>
+    
   <ul class="flex flex-wrap gap-2 m-4">
     {#each categories as category (category)}
       <li>

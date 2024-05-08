@@ -27,14 +27,16 @@
       isLoading=false
     }
   }
+  export let head="Login"
 </script>
 
 {#if authData?.authProviders.length > 0}
-  <h2 class="text-lg font-bold mb-4">Login with:</h2>
-    <div class="mb-4">
+  <h2 class="text-lg font-bold mb-4">{head} with:</h2>
+    <div class="grid grid-cols-2 gap-6">
       {#each authData?.authProviders ?? [] as provider}
         <Button 
           pill
+          type="button"
           on:click={() => handleOAuthLogin(provider)}
         >
           {provider.displayName}

@@ -48,7 +48,6 @@
 {/if}
 
 <div class="text-center">
-	<Auth2 {authData} auth_collection={group}/>
 	<Card>
 		<form
 			class="flex flex-col space-y-6"
@@ -62,16 +61,18 @@
 				};
 			}}
 		>
-			<h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Sign in to our platform</h3>
-			<div class="grid grid-cols-2 gap-6">
-				{#each data?.authTables as item}
-					<div class="form-field">
-						<input name="user_type" type="radio" id="radio-{item}" bind:group value={item} />
-						<label for="radio-{item}">{item}</label>
-					</div>
-				{/each}
-			</div>
-			{group}
+			<h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Sign in to our platform{data.authTables.length > 1 ?" As:":":"}</h3>
+			{#if data.authTables.length >1}
+    		<div class="grid grid-cols-2 gap-6">
+    			{#each data?.authTables as item}
+    				<div class="form-field">
+    					<input name="user_type" type="radio" id="radio-{item}" bind:group value={item} />
+    					<label for="radio-{item}">{item}</label>
+    				</div>
+    			{/each}
+    		</div>
+  		{/if}
+    	<Auth2 {authData} auth_collection={group}/>
 			<Label class="space-y-2">
 				<span>Email / Staff No / ADM No</span>
 				<Input type="text" name="email" placeholder="user123" required />

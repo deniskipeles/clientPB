@@ -54,20 +54,24 @@
 		};
 	}}
 >
-<div class="grid grid-cols-2 gap-6">
-  {#each data?.authTables as item}
-    <div class="form-field">
-      <input name="user_type" type="radio" id="radio-{item}" bind:group value={item} />
-      <label for="radio-{item}">{item}</label>
-    </div>
-  {/each}
-</div>
-	<h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Password Reset</h3>
+	  
+<p>Reset Password{data.authTables.length > 1 ?" As:":":"}</p>
+{#if data.authTables.length >1}
+	<div class="grid grid-cols-2 gap-6">
+		{#each data?.authTables as item}
+			<div class="form-field">
+				<input name="user_type" type="radio" id="radio-{item}" bind:group value={item} />
+				<label for="radio-{item}">{item}</label>
+			</div>
+		{/each}
+	</div>
+{/if}
+
+	<h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Enter Email To Request Password Reset</h3>
 	<Label class="space-y-2">
 		<span>Email</span>
 		<Input type="email" name="email" placeholder="name@company.com" required />
 	</Label>
-{group}
 	{#if loading}
 		<Button id="b2" class="-mb-2">
 			<Spinner />loading...
