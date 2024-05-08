@@ -46,7 +46,7 @@
 	<ErrorComp error={form?.error} />
 {/if}
 
-<Auth2 {authData}/>
+<Auth2 {authData} auth_collection={group}/>
 <Card>
 	<form
 		class="flex flex-col space-y-6"
