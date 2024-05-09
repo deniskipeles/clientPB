@@ -2,8 +2,9 @@
 	import { page } from '$app/stores';
 	import TinyMce from '$lib/components/base/TinyMCE.svelte';
 	import { P } from 'flowbite-svelte';
+	import { html_data } from '$lib/stores/app';
 
-	$: app = $page.data?.app ?? {};
+	$: app = $page.data?.app ?? {html_data};
 </script>
 
 <svelte:head>

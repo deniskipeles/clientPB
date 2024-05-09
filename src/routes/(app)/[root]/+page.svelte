@@ -2,9 +2,10 @@
 	import { page } from '$app/stores';
 	import TinyMce from '$lib/components/base/TinyMCE.svelte';
 	import { P } from 'flowbite-svelte';
+	import { html_data } from '$lib/stores/app';
 
-	$: app = $page.data?.roots?.app ?? {};
-	$: root_page = $page.data?.roots?.find((i) => i?.id?.includes($page?.params?.root)) ?? {};
+	$: app = $page.data?.roots?.app ?? {html_data};
+	$: root_page = $page.data?.roots?.find((i) => i?.id?.includes($page?.params?.root)) ?? {html_data};
 </script>
 
 <svelte:head>
