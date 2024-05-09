@@ -8,7 +8,7 @@
 </script>
 
 <svelte:head>
-	<title>{app?.data?.name ?? 'ClientPB'}</title>
+	<title>{app?.data?.title ?? app?.data?.name ?? 'ClientPB'}</title>
 	<meta name="description" content={app?.data?.decription ?? 'ClientPB for user interaction with pocketbase'} />
 </svelte:head>
 <div class="pt-20">
@@ -28,7 +28,7 @@
 			toolbar: '',
 			plugins: ['autoresize']
 		}}
-		value={app?.html_data}
+		value={app?.html_data ?? html_data}
 		disabled
 	/>
 </div>
