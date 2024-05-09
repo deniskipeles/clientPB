@@ -11,6 +11,7 @@
   import { page } from '$app/stores';
   import RecordUpsertPanel from '$lib/components/records/RecordUpsertPanel.svelte';
   import Backdrop from '$lib/components/base/Backdrop.svelte';
+  import tooltip from '$lib/actions/tooltip';
 
   /** @type {import('./$types').PageData} */
   export let data;
@@ -72,7 +73,7 @@
 							<button
 								type="button"
 								class="btn btn-sm btn-circle btn-transparent btn-hint m-l-auto"
-								use:tooltip={'Edit'}
+								use:tooltip={'Edit this article'}
 								on:keydown|stopPropagation
 								on:click|stopPropagation={() => {
 									recordUpsertPanel?.show(article.id)
