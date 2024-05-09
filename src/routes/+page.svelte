@@ -5,6 +5,9 @@
 	import { html_data } from '$lib/stores/app';
 
 	$: app = $page.data?.app ?? {html_data};
+	$:if(!app.html_data || app.html_data==""){
+	  app.html_data=html_data
+	}
 </script>
 
 <svelte:head>

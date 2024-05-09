@@ -5,6 +5,9 @@
 	import { html_data } from '$lib/stores/app';
 
 	$: app = $page.data?.app ?? {};
+	$:if(!app.html_data || app.html_data==""){
+	  app.html_data=html_data
+	}
 	$: about_page = $page.data?.roots?.find((i) => i?.name?.includes('about-page')) ?? {};
 </script>
 
