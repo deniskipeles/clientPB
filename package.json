@@ -1,6 +1,6 @@
 {
 	"name": "sveltekit-pocketbase-school-system",
-	"version": "0.2.0",
+	"version": "0.0.1",
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
@@ -65,5 +65,8 @@
 		"jspdf": "^2.5.1",
 		"jspdf-autotable": "^3.7.0",
 		"pocketbase": "^0.20.1"
-	}
+	},
+	"engines": {
+    "node": ">=18.0.0 <20.0.0"
+  }
 }
