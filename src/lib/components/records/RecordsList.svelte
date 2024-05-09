@@ -698,7 +698,7 @@
 	{/if}
 </Scroller>
 
-{#if totalBulkSelected}
+{#if totalBulkSelected && unlimited_user}
 	<div class="bulkbar" transition:fly={{ duration: 150, y: 5 }}>
 		<div class="txt">
 			Selected <strong>{totalBulkSelected}</strong>

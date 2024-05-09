@@ -6,9 +6,11 @@
     Breadcrumb,
     BreadcrumbItem
   } from 'flowbite-svelte';
-  import { invalidateAll } from '$app/navigation';
+  import { invalidateAll,afterNavigate } from '$app/navigation';
+  
   import { page } from '$app/stores';
   import RecordUpsertPanel from '$lib/components/records/RecordUpsertPanel.svelte';
+  import Backdrop from '$lib/components/base/Backdrop.svelte';
 
   /** @type {import('./$types').PageData} */
   export let data;
@@ -18,6 +20,7 @@
   let recordUpsertPanel;
 
   $: categories = collection?.schema?.find(field => field?.name === 'category')?.options?.values ?? [];
+  $: isLoading = false;
 </script>
 
 <Breadcrumb class="pt-20 py-8">
@@ -39,6 +42,7 @@
           pill
           type="button"
           on:click={() => {
+            isLoading = true;
             goto(`/blog?category=${encodeURIComponent(category)}`, { replaceState: true });
           }}
         >
@@ -56,14 +60,31 @@
         <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 leading-tight">
           {article?.content}
         </p>
+        <div class="flex">
         <Button href={`/blog/${article?.id}`} class="w-fit">
           Read more
         </Button>
+          {#if $page.data?.user?.id == article?.by}
+							&nbsp;
+							<button
+								type="button"
+								class="btn btn-sm btn-circle btn-transparent btn-hint m-l-auto"
+								use:tooltip={'Edit'}
+								on:keydown|stopPropagation
+								on:click|stopPropagation={() => {
+									recordUpsertPanel?.show(article.id)
+								}}
+							>
+								<i class="ri-pencil-line" />
+							</button>
+						{/if}
+        </div>
       </Card>
     {/each}
   </div>
 </div>
 
+<Backdrop {isLoading}/>
 
 <RecordUpsertPanel
   bind:this={recordUpsertPanel}
