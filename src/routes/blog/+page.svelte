@@ -20,7 +20,10 @@
   let recordUpsertPanel;
 
   $: categories = collection?.schema?.find(field => field?.name === 'category')?.options?.values ?? [];
-  $: isLoading = false;
+  let isLoading = false;
+  $: if(data){
+    isLoading = false;
+  }
 </script>
 
 <Breadcrumb class="pt-20 py-8">
@@ -60,11 +63,11 @@
         <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 leading-tight">
           {article?.content}
         </p>
-        <div class="flex">
+        <div class="flex text-center">
         <Button href={`/blog/${article?.id}`} class="w-fit">
           Read more
         </Button>
-          {#if $page.data?.user?.id == article?.by}
+          {#if article?.by?.includes($page.data?.user?.id)}
 							&nbsp;
 							<button
 								type="button"
