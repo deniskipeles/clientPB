@@ -1,4 +1,5 @@
 import { listRootsRecords, pb } from '$lib/pocketbase';
+import { defaultData } from '$lib/stores/app';
 import { listTablesRecords, loadSchool } from '$lib/pocketbase';
 import { error, type Handle } from '@sveltejs/kit';
 
@@ -23,7 +24,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// this are page builders and are necessary else it return an error page
 		event.locals.tables = await listTablesRecords();
 		event.locals.roots = await listRootsRecords();
-		event.locals.app = event.locals.roots.find(root=>root?.name=="app"||root?.name=="page"||root?.name=="website");
+		event.locals.app = event.locals.roots.find(root=>root?.name=="app"||root?.name=="page"||root?.name=="website") ?? defaultData;
 	} catch (err) {
 		error(404, { message: `${err}` });
 	}

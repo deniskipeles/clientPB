@@ -7,7 +7,8 @@ export const appName = writable('');
 export const hideControls = writable(false);
 
 
-export const htmlString=`
+export const defaultData={
+  html_data : `
 <h1>Ktechs: Open Source Tech Solutions Powering Kenyan Businesses</h1>
 <p>In the heart of Kenya, a technological revolution is underway, driven by Ktechs, a pioneering company that is transforming the business landscape with its innovative open-source solutions. By harnessing the power of technology, Ktechs is empowering Kenyan businesses to thrive in today's fast-paced digital economy.</p>
 <h2>Breaking Down Language Barriers</h2>
@@ -34,4 +35,10 @@ export const htmlString=`
 <h2>Conclusion</h2>
 <p>Ktechs is revolutionizing the way Kenyan businesses operate, providing innovative open-source solutions that address the unique needs of the local market. By incorporating local languages and cultural nuances into their solutions, Ktechs is empowering businesses to thrive in today's digital economy.</p>
 <p>As a champion of technological innovation, Ktechs is driving economic growth, creating jobs, and stimulating innovation in Kenya. Their commitment to empowering local businesses is a testament to the power of technology to transform lives and communities.</p>
-`
+`,
+  data:{
+    name:"clientPB",
+    title:"open-source clientPB",
+    description:"Frontend for your pocketbase users"
+  }
+}
