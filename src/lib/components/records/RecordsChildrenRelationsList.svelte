@@ -152,7 +152,6 @@
                     </div>
                 {/if}-->
             </div>
-        {:else}
             {#if !isLoading}
                 <div class="list-item">
                     <span class="txt txt-hint">No records found.</span>
@@ -176,7 +175,6 @@
 
     <h5 class="section-title">
         Loaded ({list.length} of {totalItems})
-        {/if}
     </h5>
     
 
