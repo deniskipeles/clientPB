@@ -36,14 +36,16 @@
   <h2 class="text-lg font-bold mb-4">{head} with:</h2>
     <div class="flex flex-wrap gap-2">
       {#each authData?.authProviders ?? [] as provider}
-        <Button
-          pill
-          outline 
+        <button
           type="button"
+          class="btn btn-pill btn-expanded"
           on:click={() => handleOAuthLogin(provider)}
         >
-          {provider.displayName}
-        </Button>
+          <i class={`ri-${provider.name}-line`} />
+					<span class="txt">
+					  {provider.displayName}
+					</span>
+        </button>
       {/each}
     </div>
 {/if}

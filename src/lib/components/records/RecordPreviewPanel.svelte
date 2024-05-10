@@ -6,6 +6,7 @@
 	import FormattedDate from '$lib/components/base/FormattedDate.svelte';
 	import CopyIcon from '$lib/components/base/CopyIcon.svelte';
 	import RecordFieldValue from '$lib/components/records/RecordFieldValue.svelte';
+	import RecordsChildrenRelationsList from '$lib/components/records/RecordsChildrenRelationsList.svelte';
 	import { page } from '$app/stores';
 	import AnswersPreview from '../base/AnswersPreview.svelte';
 
@@ -63,6 +64,16 @@
 
 		return model;
 	}
+	
+	import CommonHelper from "$lib/utils/CommonHelper";
+	$: _collection = collection
+	$:if(collection){
+	  let c=collection?.name?.replace(($page?.data?.user?.collectionName+'_view_'),"")
+	  _collection=$page?.data?.tables?.find(i=>i?.name==c)
+	}
+	$: childrenRelations = CommonHelper.getRelatedCollections(_collection ?? {},$page?.data?.tables ?? []) ?? []
+	$: childCollection = null
+	let childrenRelationViewer;
 </script>
 
 <OverlayPanel
@@ -73,7 +84,7 @@
 >
 	<svelte:fragment slot="header">
 		<h4>
-			<strong>{collection?.name?.split('_view_')[1]?.split('_')?.join(' ')}</strong> record preview
+			<strong>{collection?.name?.replace(($page?.data?.user?.collectionName+'_view_')," ")}</strong> record preview
 		</h4>
 	</svelte:fragment>
 
@@ -124,6 +135,23 @@
 			{/if}
 		</tbody>
 	</table>
+	
+	{#each childrenRelations as child}
+	  <div class="list-item list-item-btn">
+        <button
+            type="button"
+            class="btn btn-transparent btn-sm btn-block"
+            on:click={() => {
+              childCollection=child
+              childrenRelationViewer?.show()
+            }}
+        >
+            <i class="ri-magic-line" />
+            <!-- <i class="ri-layout-line" /> -->
+            <span class="txt">View {child?.name} relations</span>
+        </button>
+    </div>
+	{/each}
 
 	<svelte:fragment slot="footer">
 		<button type="button" class="btn btn-transparent" on:click={() => hide()}>
@@ -131,6 +159,13 @@
 		</button>
 	</svelte:fragment>
 </OverlayPanel>
+
+
+<RecordsChildrenRelationsList
+    bind:this={childrenRelationViewer}
+    collection={childCollection}
+/>
+
 
 <style lang="scss">
 	.col-field {

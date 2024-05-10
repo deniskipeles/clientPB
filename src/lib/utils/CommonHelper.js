@@ -60,6 +60,40 @@ export default class CommonHelper {
 			return null;
 		}
 	}
+	
+	
+	/**
+	 * get Related Collections.
+	 *
+	 * @param  {RecordModel} collection
+	 * @param  {RecordModel[]} collections
+	 * @return {RecordModel[]?}
+	 */
+	static getRelatedCollections(collection, collections) {
+	  try{
+    const relatedCollections = [];
+  
+    for (const otherCollection of collections) {
+      if (otherCollection.id === collection.id) {
+        continue; // Skip the collection itself
+      }
+  
+      const relationFields = otherCollection.schema.filter(field => field.type === 'relation');
+  
+      for (const field of relationFields) {
+        if (field.options.collectionId === collection.id) {
+          relatedCollections.push(otherCollection);
+        }
+      }
+    }
+    return relatedCollections;
+	  }catch(e){
+	    return null
+	  }
+  }
+	
+	
+	
 	/**
 	 * Checks whether value is plain object.
 	 *
