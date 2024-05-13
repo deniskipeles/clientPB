@@ -50,6 +50,7 @@
         return
       }
         collection=model
+        collectionId = model?.id;
         filter = "";
         filterId = "";
         list = [];
