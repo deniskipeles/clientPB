@@ -23,12 +23,12 @@
     let filter = "";
     $: filterId = "";
     let list = [];
-    let selected = [];
+
     let currentPage = 1;
     let lastItemsCount = 0;
     let totalItems = 0;
     let isLoadingList = false;
-    let isLoadingSelected = false;
+    
 
     
 
@@ -40,33 +40,27 @@
 
     $: isView = false //collection?.type === "view";
 
-    $: isLoading = isLoadingList || isLoadingSelected;
+    $: isLoading = isLoadingList;
 
     $: canLoadMore = lastItemsCount == batchSize;
 
     export function show(parent=null,model=null) {
-      let filterFields=[]
-      if(!parent?.id && !model?.id){
+      if(!parent?.id || !model?.id){
         return
       }
         collection=model
-        filterFields = Array.from(model?.schema)
-        console.log(filterFields)
-        filterFields = Array.from(filterFields?.filter(i=>i?.type === "relation"))
-        console.log(filterFields)
-        filterFields=filterFields?.map(i=>`${i?.name} ~ "${parent?.id}"`)
-        console.log(filterFields)
-        
         filter = "";
         filterId = "";
         list = [];
-        selected = [];
         
+        
+        let filterFields= Array.from(collection?.schema)??[]
+        filterFields = Array.from(filterFields?.filter(i=>i?.type === "relation"))
+        filterFields=filterFields?.map(i=>`${i?.name} ~ "${parent?.id}"`)
         if(filterFields.length>0){
-          console.log(filterFields)
-          console.log(model)
           filterId = `(${filterFields.join("||")})`+filter.length > 0 ? "&&" :""
         }
+        
         loadList(true);
 
         return pickerPanel?.show();
@@ -77,16 +71,16 @@
     }
 
     async function loadList(reset = false) {
-        if (!collectionId) {
+        if (!collectionId || !filterId) {
             return;
         }
+        console.log(collectionId,filterId)
 
         isLoadingList = true;
 
         if (reset) {
             if (!filter.trim()) {
                 // prepend the loaded selected items
-                list = CommonHelper.toArray(selected).slice();
             } else {
                 list = [];
             }
