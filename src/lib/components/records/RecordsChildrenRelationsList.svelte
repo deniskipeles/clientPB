@@ -58,6 +58,7 @@
         filterFields = Array.from(filterFields?.filter(i=>i?.type === "relation"))
         filterFields=filterFields?.map(i=>`${i?.name} ~ "${parent?.id}"`)
         if(filterFields.length>0){
+          console.log(filterFields)
           filterId = `(${filterFields.join("||")})`+filter.length > 0 ? "&&" :""
         }
         
@@ -71,6 +72,7 @@
     }
 
     async function loadList(reset = false) {
+        console.log(collectionId,filterId)
         if (!collectionId || !filterId) {
             return;
         }
