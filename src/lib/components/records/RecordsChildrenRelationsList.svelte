@@ -50,11 +50,15 @@
         return
       }
         collection=model
-        filterFields = (model?.schema?.filter(i=>i?.options?.collectionId === targetParent.collectionId))?.map(i=>`${i?.name} = ${targetParent?.id}`)
+        filterFields = model?.schema?.filter(i=>i?.type === "relation")?.map(i=>`${i?.name} ~ ${targetParent?.id}`)
         filter = "";
         filterId = "";
         list = [];
         selected = [];
+        
+        if(filterFields.length>0){
+          filterId = `(${filterFields.join("||")}) && `
+        }
         loadList(true);
 
         return pickerPanel?.show();
@@ -84,13 +88,9 @@
             const page = reset ? 1 : currentPage + 1;
 
             const fallbackSearchFields = CommonHelper.getAllCollectionIdentifiers(collection);
-            
-            if(filterFields.length>0){
-              filterId = `(${filterFields.join("||")}) && `
-            }
 
             const result = await ApiClient.collection(collectionId).getList(page, batchSize, {
-                filter: `${filterId}(${CommonHelper.normalizeSearchFilter(filter, fallbackSearchFields)})`,
+                filter: `${filterId}${CommonHelper.normalizeSearchFilter(filter, fallbackSearchFields)}`,
                 sort: !isView ? "-created" : "",
                 fields: "*:excerpt(200)",
                 skipTotal: 0,
