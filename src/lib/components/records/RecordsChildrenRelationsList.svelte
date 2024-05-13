@@ -32,7 +32,7 @@
 
     
 
-    $: collectionId = collection?.id;
+    let collectionId = collection?.id;
 
     $: if (typeof filter !== "undefined" && pickerPanel?.isActive()) {
         loadList(true); // reset list on filter change
