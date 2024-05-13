@@ -73,7 +73,7 @@
         console.log(1,collectionId,filterId)
         if(filterFields.length>0){
           console.log(filterFields)
-          filterId = `(${filterFields.join("||")})`+filter.length > 0 ? "&&" :"";
+          filterId = `(${filterFields.join("||")}) ${filter.length > 0 ? "&&" :""}`;
           console.log(90,filterId)
         }
         console.log(2,collectionId,filterId)
