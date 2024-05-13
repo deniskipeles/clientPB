@@ -44,6 +44,7 @@
 
     $: canLoadMore = lastItemsCount == batchSize;
 
+    let filterFields=[]
     export function show(parent=null,model=null) {
       if(!parent?.id || !model?.id){
         return
@@ -54,13 +55,10 @@
         list = [];
         
         
-        let filterFields= Array.from(collection?.schema)??[]
+        filterFields= Array.from(collection?.schema)??[]
         filterFields = Array.from(filterFields?.filter(i=>i?.type === "relation"))
         filterFields=filterFields?.map(i=>`${i?.name} ~ "${parent?.id}"`)
-        if(filterFields.length>0){
-          console.log(filterFields)
-          filterId = `(${filterFields.join("||")})`+filter.length > 0 ? "&&" :""
-        }
+        
         
         loadList(true);
 
@@ -72,11 +70,17 @@
     }
 
     async function loadList(reset = false) {
-        console.log(collectionId,filterId)
+        console.log(1,collectionId,filterId)
+        if(filterFields.length>0){
+          console.log(filterFields)
+          filterId = `(${filterFields.join("||")})`+filter.length > 0 ? "&&" :"";
+          console.log(90,filterId)
+        }
+        console.log(2,collectionId,filterId)
         if (!collectionId || !filterId) {
             return;
         }
-        console.log(collectionId,filterId)
+        console.log(3,collectionId,filterId)
 
         isLoadingList = true;
 
