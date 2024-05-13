@@ -49,6 +49,8 @@
       if(!targetParent?.id && !model?.id){
         return
       }
+      console.log(targetParent)
+      console.log(model)
         collection=model
         filterFields = model?.schema?.filter(i=>i?.type === "relation")?.map(i=>`${i?.name} ~ "${targetParent?.id}"`)
         filter = "";
