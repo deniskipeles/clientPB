@@ -71,17 +71,12 @@
     }
 
     async function loadList(reset = false) {
-        console.log(1,collectionId,filterId)
         if(filterFields.length>0){
-          console.log(filterFields)
           filterId = `(${filterFields.join("||")}) ${filter.length > 0 ? "&&" :""}`;
-          console.log(90,filterId)
         }
-        console.log(2,collectionId,filterId)
         if (!collectionId || !filterId) {
             return;
         }
-        console.log(3,collectionId,filterId)
 
         isLoadingList = true;
 

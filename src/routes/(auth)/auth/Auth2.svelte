@@ -34,11 +34,11 @@
 
 {#if authData?.authProviders.length > 0}
   <h2 class="text-lg font-bold mb-4">{head} with:</h2>
-    <div class="flex flex-wrap gap-2">
+    <div class="flex flex-wrap gap-0">
       {#each authData?.authProviders ?? [] as provider}
         <button
           type="button"
-          class="btn btn-pill btn-expanded"
+          class="btn btn-pill btn-outline"
           on:click={() => handleOAuthLogin(provider)}
         >
           <i class={`ri-${provider.name}-line`} />
@@ -48,5 +48,7 @@
         </button>
       {/each}
     </div>
+    <h1 class="text-xl font-bold mb-2 mt-2">OR</h1>
+    <hr/>
 {/if}
 <Backdrop {isLoading}/>
