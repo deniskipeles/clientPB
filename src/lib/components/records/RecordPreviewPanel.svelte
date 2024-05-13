@@ -72,6 +72,7 @@
 	  let c=collection?.name?.replace(($page?.data?.user?.collectionName+'_view_'),"")
 	  _collection=$page?.data?.tables?.find(i=>i?.name==c&&(i?.type=="base" || i?.type == "auth"))
 	  childrenRelations = CommonHelper.getRelatedCollections(_collection ?? {},$page?.data?.tables ?? []) ?? []
+	  childrenRelations=childrenRelations.filter(i=>i.type!="view")
 	}
 	$: childrenRelations = []
 	

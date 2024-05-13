@@ -21,7 +21,7 @@
     let pickerPanel;
     let upsertPanel;
     let filter = "";
-    let filterId = "";
+    $: filterId = "";
     let list = [];
     let selected = [];
     let currentPage = 1;
@@ -44,21 +44,27 @@
 
     $: canLoadMore = lastItemsCount == batchSize;
 
-    $: filterFields=[]
-    export function show(targetParent=null,model=null) {
-      if(!targetParent?.id && !model?.id){
+    export function show(parent=null,model=null) {
+      let filterFields=[]
+      if(!parent?.id && !model?.id){
         return
       }
-      console.log(targetParent)
-      console.log(model)
         collection=model
-        filterFields = model?.schema?.filter(i=>i?.type === "relation")?.map(i=>`${i?.name} ~ "${targetParent?.id}"`)
+        filterFields = Array.from(model?.schema)
+        console.log(filterFields)
+        filterFields = Array.from(filterFields?.filter(i=>i?.type === "relation"))
+        console.log(filterFields)
+        filterFields=filterFields?.map(i=>`${i?.name} ~ "${parent?.id}"`)
+        console.log(filterFields)
+        
         filter = "";
         filterId = "";
         list = [];
         selected = [];
         
         if(filterFields.length>0){
+          console.log(filterFields)
+          console.log(model)
           filterId = `(${filterFields.join("||")})`+filter.length > 0 ? "&&" :""
         }
         loadList(true);
