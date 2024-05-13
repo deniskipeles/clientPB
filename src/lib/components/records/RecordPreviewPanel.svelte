@@ -65,14 +65,16 @@
 		return model;
 	}
 	
+	
 	import CommonHelper from "$lib/utils/CommonHelper";
-	$: _collection = collection
 	$:if(collection){
+	  let _collection = collection
 	  let c=collection?.name?.replace(($page?.data?.user?.collectionName+'_view_'),"")
-	  _collection=$page?.data?.tables?.find(i=>i?.name==c)
+	  _collection=$page?.data?.tables?.find(i=>i?.name==c&&(i?.type=="base" || i?.type == "auth"))
+	  childrenRelations = CommonHelper.getRelatedCollections(_collection ?? {},$page?.data?.tables ?? []) ?? []
 	}
-	$: childrenRelations = CommonHelper.getRelatedCollections(_collection ?? {},$page?.data?.tables ?? []) ?? []
-	$: childCollection = null
+	$: childrenRelations = []
+	
 	let childrenRelationViewer;
 </script>
 
@@ -136,20 +138,19 @@
 		</tbody>
 	</table>
 	
-	{#each childrenRelations as child}
-	  <div class="list-item list-item-btn">
+	{#each childrenRelations as childCollection}
+	  <div class="list picker-list m-b-base">
+	    <div class="list-item handle">
         <button
             type="button"
             class="btn btn-transparent btn-sm btn-block"
-            on:click={() => {
-              childCollection=child
-              childrenRelationViewer?.show()
-            }}
+            on:click={() => childrenRelationViewer?.show(record,childCollection)}
         >
             <i class="ri-magic-line" />
             <!-- <i class="ri-layout-line" /> -->
-            <span class="txt">View {child?.name} relations</span>
+            <span class="txt">View {childCollection?.name} relations</span>
         </button>
+      </div>
     </div>
 	{/each}
 
@@ -163,7 +164,6 @@
 
 <RecordsChildrenRelationsList
     bind:this={childrenRelationViewer}
-    collection={childCollection}
 />
 
 

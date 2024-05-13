@@ -17,11 +17,11 @@
     const uniqueId = "picker_" + CommonHelper.randomString(5);
     const batchSize = 50;
 
-    export let collection;
-
+    let collection;
     let pickerPanel;
     let upsertPanel;
     let filter = "";
+    let filterId = "";
     let list = [];
     let selected = [];
     let currentPage = 1;
@@ -44,9 +44,15 @@
 
     $: canLoadMore = lastItemsCount == batchSize;
 
-    
-    export function show() {
+    $: filterFields=[]
+    export function show(targetParent=null,model=null) {
+      if(!targetParent?.id && !model?.id){
+        return
+      }
+        collection=model
+        filterFields = (model?.schema?.filter(i=>i?.options?.collectionId === targetParent.collectionId))?.map(i=>`${i?.name} = ${targetParent?.id}`)
         filter = "";
+        filterId = "";
         list = [];
         selected = [];
         loadList(true);
@@ -78,12 +84,16 @@
             const page = reset ? 1 : currentPage + 1;
 
             const fallbackSearchFields = CommonHelper.getAllCollectionIdentifiers(collection);
+            
+            if(filterFields.length>0){
+              filterId = `(${filterFields.join("||")}) && `
+            }
 
             const result = await ApiClient.collection(collectionId).getList(page, batchSize, {
-                filter: CommonHelper.normalizeSearchFilter(filter, fallbackSearchFields),
+                filter: `${filterId}(${CommonHelper.normalizeSearchFilter(filter, fallbackSearchFields)})`,
                 sort: !isView ? "-created" : "",
                 fields: "*:excerpt(200)",
-                skipTotal: 1,
+                skipTotal: 0,
                 requestKey: uniqueId + "loadList",
             });
 
@@ -152,7 +162,9 @@
                     </div>
                 {/if}-->
             </div>
-            {#if !isLoading}
+        {/each}
+        
+        {#if !isLoading}
                 <div class="list-item">
                     <span class="txt txt-hint">No records found.</span>
                     {#if filter?.length}
@@ -161,8 +173,7 @@
                         </button>
                     {/if}
                 </div>
-            {/if}
-        {/each}
+        {/if}
 
         {#if isLoading}
             <div class="list-item">
