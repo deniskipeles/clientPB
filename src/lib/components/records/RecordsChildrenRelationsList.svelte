@@ -50,14 +50,14 @@
         return
       }
         collection=model
-        filterFields = model?.schema?.filter(i=>i?.type === "relation")?.map(i=>`${i?.name} ~ ${targetParent?.id}`)
+        filterFields = model?.schema?.filter(i=>i?.type === "relation")?.map(i=>`${i?.name} ~ "${targetParent?.id}"`)
         filter = "";
         filterId = "";
         list = [];
         selected = [];
         
         if(filterFields.length>0){
-          filterId = `(${filterFields.join("||")}) && `
+          filterId = `(${filterFields.join("||")})`+filter.length > 0 ? "&&" :""
         }
         loadList(true);
 
