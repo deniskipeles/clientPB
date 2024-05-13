@@ -21,7 +21,7 @@
     let pickerPanel;
     let upsertPanel;
     let filter = "";
-    $: filterId = "";
+    let filterId = "";
     let list = [];
 
     let currentPage = 1;
