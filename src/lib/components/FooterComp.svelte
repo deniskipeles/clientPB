@@ -21,7 +21,12 @@
 	<div class="md:flex md:justify-between">
 		<div class="mb-6 md:mb-0">
 			{#if app?.photos?.length == 0}
-				<AcademicCap />
+				<FooterBrand
+						href="/"
+						src="/favicon.svg"
+						alt={app?.data?.name ?? 'ClientPB'}
+						name={app?.data?.name ?? 'ClientPB'}
+					/>
 			{:else}
 				{#await getPbImageUrl(app, logo, undefined) ?? '/favicon.svg' then value}
 					<FooterBrand
@@ -40,7 +45,7 @@
 				</h2>
 				<FooterLinkGroup>
 					<FooterLink liClass="mb-4" href="https://ktechs.xyz">ketchs</FooterLink>
-					<FooterLink liClass="mb-4" href="https://www.ktechs.xyz/projects/pricing/1/c9y54kz8o6enaqz/">Founders Edition</FooterLink>
+					<FooterLink liClass="mb-4" href="https://github.com/deniskipeles/clientPB/blob/master/LICENSE">License</FooterLink>
 				</FooterLinkGroup>
 			</div>
 			<div>

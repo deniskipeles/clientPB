@@ -84,6 +84,13 @@
 		'flex flex-col  lg:flex-row lg:my-0 text-sm font-medium gap-4 dark:lg:bg-transparent lg:bg-white lg:border-0';
 	let navDivClass =
 		'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700 divide-gray-200 dark:divide-gray-700 flex items-center justify-between w-full mx-auto py-1.5 px-4';
+		
+		
+	import { getPbImageUrl } from '$lib/utils';
+	$: logo =
+		app?.photos && Array.isArray(app?.photos)
+			? app?.photos[app?.data?.logo ?? 0]
+			: null;
 </script>
 
 <svelte:head>
@@ -99,7 +106,15 @@
 			btnClass="focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 m-0 mr-3 lg:hidden"
 		/>
 		<NavBrand href="/" class="lg:ml-0 gap-1">
-			<AcademicCap />
+		  
+			{#if app?.photos?.length == 0}
+			  <img alt={app?.data?.name ?? 'ClientPB'} class="w-12 h-12" src='/favicon.svg' /> 
+			{:else}
+				{#await getPbImageUrl(app, logo, undefined) ?? '/favicon.svg' then value}
+			    <img alt={app?.data?.name ?? 'ClientPB'} class="w-12 h-12" src={`${value}`} />
+				{/await}
+			{/if}
+			
 			<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
 				{app?.data?.name ?? 'ClientPB'}
 			</span>

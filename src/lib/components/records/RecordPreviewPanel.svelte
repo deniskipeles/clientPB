@@ -77,6 +77,12 @@
 	$: childrenRelations = []
 	
 	let childrenRelationViewer;
+	
+	$: view_many_relations = false
+	$:if($page.data.user){
+	  const controls=$page.data?.roots?.find(obj=>obj.name=="controls") ?? {}
+	  view_many_relations=(controls?.data?.view_many_relations ?? false)
+	}
 </script>
 
 <OverlayPanel
@@ -139,6 +145,7 @@
 		</tbody>
 	</table>
 	
+	{#if view_many_relations}
 	{#each childrenRelations as childCollection}
 	  <div class="list picker-list m-b-base">
 	    <div class="list-item handle">
@@ -154,6 +161,7 @@
       </div>
     </div>
 	{/each}
+	{/if}
 
 	<svelte:fragment slot="footer">
 		<button type="button" class="btn btn-transparent" on:click={() => hide()}>
