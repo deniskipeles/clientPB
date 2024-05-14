@@ -55,7 +55,7 @@
 		};
 	};
 	onMount(() => {
-	  loadEruda()
+	  //loadEruda()
 		showWhichHasOverlay = true;
 		if (width >= breakPoint) {
 			drawerHidden = false;
