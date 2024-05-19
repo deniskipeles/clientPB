@@ -55,7 +55,7 @@
 		};
 	};
 	onMount(() => {
-	  loadEruda()
+	  //loadEruda()
 		showWhichHasOverlay = true;
 		if (width >= breakPoint) {
 			drawerHidden = false;
@@ -91,6 +91,7 @@
 		app?.photos && Array.isArray(app?.photos)
 			? app?.photos[app?.data?.logo ?? 0]
 			: null;
+	$: controls=$storePage.data?.roots?.find(obj=>obj.name=="controls") ?? {}
 </script>
 
 <svelte:head>
@@ -108,10 +109,10 @@
 		<NavBrand href="/" class="lg:ml-0 gap-1">
 		  
 			{#if app?.photos?.length == 0}
-			  <img alt={app?.data?.name ?? 'ClientPB'} class="w-12 h-12" src='/favicon.svg' /> 
+			  <img alt={app?.data?.name ?? 'ClientPB'} class="me-3 h-6 sm:h-9" src='/favicon.svg' /> 
 			{:else}
 				{#await getPbImageUrl(app, logo, undefined) ?? '/favicon.svg' then value}
-			    <img alt={app?.data?.name ?? 'ClientPB'} class="w-12 h-12" src={`${value}`} />
+			    <img alt={app?.data?.name ?? 'ClientPB'} class="me-3 h-6 sm:h-9" src={`${value}`} />
 				{/await}
 			{/if}
 			
@@ -144,12 +145,14 @@
 		</NavUl>
 		<NavHamburger on:click={toggle} btnClass="lg:hidden" />
 	</Navbar>
+	{#if controls?.data?.dark_mode}
 	<div class="absolute z-50 lg:right-2 lg:top-4">
 		<DarkMode
 			btnClass="dark:bg-gray-100 text-gray-500 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
 			class="inline-block  dark:hover:text-white hover:text-gray-900"
 		/>
 	</div>
+	{/if}
 </header>
 
 <Drawer

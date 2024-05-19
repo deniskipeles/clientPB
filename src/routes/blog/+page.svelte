@@ -73,7 +73,7 @@
   {/if}
 
   <div class="flex flex-wrap gap-2 mt-2 mb-2">
-      <Button pill type="button" href="/blog">All</Button>
+      <Button pill type="button" href="/blog" on:click={() => isLoading=true}>All</Button>
       {#each categories ?? [] as category}
         <Button
           pill
