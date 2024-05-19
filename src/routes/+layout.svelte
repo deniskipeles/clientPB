@@ -91,7 +91,7 @@
 		app?.photos && Array.isArray(app?.photos)
 			? app?.photos[app?.data?.logo ?? 0]
 			: null;
-	$: controls=$storePage.data?.roots?.find(obj=>obj.name=="controls") ?? {}
+	$: controls=$page.data?.roots?.find(obj=>obj.name=="controls") ?? {}
 </script>
 
 <svelte:head>
