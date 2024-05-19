@@ -26,15 +26,15 @@
   $: if(data){
     isLoading = false;
   }
-  $: canLoadMore = $page?.data?.articles?.totalItems > $page?.data?.articles?.items?.length;
+  $: canLoadMore = data?.articles?.totalItems > data?.articles?.items?.length;
   let isLoadingMore = false;
   
   import { pb } from '$lib/pocketbase';
   async function loadMore() {
     isLoadingMore=true
     try {
-      const perPage = Number($page.url.searchParams.get('perPage') ?? $page.data.articles.perPage ?? 30);
-      const page = Number($page.url.searchParams.get('page') ?? ($page.data.articles.page+1) ?? 2);
+      const perPage = Number($page.url.searchParams.get('perPage') ?? data.articles.perPage ?? 30);
+      const pagge = Number($page.url.searchParams.get('page') ?? (data.articles.page+1) ?? 2);
       const category = ($page.url.searchParams.get('category') ?? '');
       const search = ($page.url.searchParams.get('search') ?? '');
       
@@ -42,15 +42,17 @@
       
       const articles= await pb
         .collection('blog')
-        .getList(page, perPage, {
+        .getList(pagge, perPage, {
           filter,
           sort: '-created',
           fields: `*:excerpt(${200},${true})`
         });
   
-      $page.data.articles.items = [...$page?.data?.articles?.items,...articles?.items]
-      $page.data.articles.page = articles?.page
+      data.articles.items = [...data?.articles?.items,...articles?.items]
+      data.articles.page = articles?.page
+      isLoadingMore=false
     } catch (error) {
+      isLoadingMore=false
       console.log(error);
     }
   }
@@ -118,7 +120,7 @@
     {/each}
   </div>
 </div>
-{#if $page?.data?.articles?.items.length && canLoadMore}
+{#if data?.articles?.items.length && canLoadMore}
 	<tr>
 		<td colspan="99" class="txt-center">
 			<button
