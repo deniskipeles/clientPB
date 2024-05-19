@@ -20,11 +20,41 @@
   let collectionUpsert = $page?.data?.tables?.find((t)=> t?.name=="blog");
   let recordUpsertPanel;
 
-  $: categories = collection?.schema?.find(field => field?.name === 'category')?.options?.values ?? [];
+  let categories = collection?.schema?.find(field => field?.name === 'category')?.options?.values ?? [];
+  
   let isLoading = false;
   $: if(data){
     isLoading = false;
   }
+  $: canLoadMore = $page?.data?.articles?.totalItems > $page?.data?.articles?.items?.length;
+  let isLoadingMore = false;
+  
+  import { pb } from '$lib/pocketbase';
+  async function loadMore() {
+    isLoadingMore=true
+    try {
+      const perPage = Number($page.url.searchParams.get('perPage') ?? $page.data.articles.perPage ?? 30);
+      const page = Number($page.url.searchParams.get('page') ?? ($page.data.articles.page+1) ?? 2);
+      const category = ($page.url.searchParams.get('category') ?? '');
+      const search = ($page.url.searchParams.get('search') ?? '');
+      
+      const filter = `category ~ "${category}" && title ~ "${search}"`;
+      
+      const articles= await pb
+        .collection('blog')
+        .getList(page, perPage, {
+          filter,
+          sort: '-created',
+          fields: `*:excerpt(${200},${true})`
+        });
+  
+      $page.data.articles.items = [...$page?.data?.articles?.items,...articles?.items]
+      $page.data.articles.page = articles?.page
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 </script>
 
 <Breadcrumb class="pt-20 py-8">
@@ -41,6 +71,7 @@
   {/if}
 
   <div class="flex flex-wrap gap-2 mt-2 mb-2">
+      <Button pill type="button" href="/blog">All</Button>
       {#each categories ?? [] as category}
         <Button
           pill
@@ -87,6 +118,22 @@
     {/each}
   </div>
 </div>
+{#if $page?.data?.articles?.items.length && canLoadMore}
+	<tr>
+		<td colspan="99" class="txt-center">
+			<button
+				class="btn btn-expanded-lg btn-secondary btn-horizontal-sticky"
+				disabled={isLoadingMore}
+				class:btn-loading={isLoadingMore}
+				on:click|preventDefault={() => loadMore()}
+			>
+				<span class="txt">Load more</span>
+			</button>
+		</td>
+	</tr>
+{/if}
+
+
 
 <Backdrop {isLoading}/>
 

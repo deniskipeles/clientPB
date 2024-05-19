@@ -19,7 +19,10 @@
 	export let data;
 	onMount(() => {
 		if (data?.user) {
-			goto('/account', { replaceState: true });
+			goto('/account', { 
+			  replaceState: true,
+        invalidateAll: true
+			});
 		}
 	});
 	/** @type {import('./$types').ActionData} */

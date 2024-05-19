@@ -19,7 +19,10 @@
     try{
       const authData = await pb.collection(auth_collection).authWithOAuth2({ provider: provider?.name });
       if(authData.token){
-        goto('/account', { replaceState: true });
+        goto('/account', { 
+          replaceState: true,
+          invalidateAll: true
+        });
         isLoading=false;
       }else{
         isLoading=false;
