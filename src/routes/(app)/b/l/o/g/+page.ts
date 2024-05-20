@@ -2,7 +2,7 @@ import { pb } from '$lib/pocketbase';
 import { serializeNonPOJOs } from '$lib/utils';
 
 /** @type {import('./$types').PageLoad} */
-export async function load({ params,parent url }) {
+export async function load({ params,parent, url }) {
   let articles:any={}
   let error:any={}
   let parentData:any={}
