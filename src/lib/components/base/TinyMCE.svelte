@@ -212,6 +212,7 @@
     }
 
     onMount(() => {
+        loadMarked();
         if (getTinymce() !== null) {
             init();
         } else {
@@ -231,12 +232,124 @@
             } catch (_) {}
         };
     });
+
+
+
+
+
+
+
+  let marked
+  const loadMarked = () => {
+    let script = document.createElement('script');
+    script.src = "https://cdn.jsdelivr.net/npm/marked@12.0.2/lib/marked.umd.min.js";
+    document.head.append(script);
+
+    script.onload = () => {
+      marked = window.marked.marked;
+      console.log("marked loaded");
+    };
+  };
+
+  
+  let inputText = '';
+  let isLoading = false; // Initialize with boolean value
+  
+  let completion = '';
+  let apiKey = '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';
+  
+
+  const data = {
+    "messages": [],
+    "model": "llama3-8b-8192"
+  };
+
+  async function handleSubmit() {
+    isLoading = true;
+    const url = 'https://api.groq.com/openai/v1/chat/completions';
+    const headers = {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json'
+    };
+    const obj = {"role": "user", "content": inputText}
+    data.messages.push(obj)
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      console.log(result);
+      const updates = (result.choices[0].message.content)
+      const resObj = {"role": "assistant", "content": updates}
+      data.messages.push(resObj)
+      value = marked(updates);
+      isLoading = false;
+    } catch (error) {
+      console.error(error);
+      isLoading = false;
+    }
+  }
 </script>
+
+
+
 
 <div bind:this={container} class={cssClass}>
     {#if inline}
         <div {id} bind:this={element} />
     {:else}
+    <div class="flex flex-col items-center md:justify-center min-w-full py-10 grow">
         <textarea {id} bind:this={element} style="visibility: hidden" />
+        {#if !disabled}
+        <div class="z-50 rounded-full drop-shadow-sm bg-gray-100 border border-gray-200 -mt-5 dark:bg-gray-900 dark:border-gray-800 flex focus-within:border-blue-300 dark:focus:border-blue-700 transition-colors">
+          <input
+            class="bg-transparent rounded-full py-1 px-4 focus:outline-none"
+            placeholder="Prompt AI..."
+            bind:value={inputText}
+            aria-label="Prompt"
+            required
+          />
+      
+          <button
+            aria-label="Submit"
+            type="button"
+            class="rounded-full bg-blue-600 hover:bg-blue-500 active:bg-blue-700 transition-colors text-white size-8 md:size-10 flex items-center justify-center"
+            on:click={handleSubmit}
+          >
+            {#if isLoading}
+              <div class="ai-loader"></div>
+            {:else}
+              &nbsp;&#x2728;&nbsp;
+            {/if}
+          </button>
+        </div>
+        {/if}
+    </div>
     {/if}
 </div>
+
+
+
+
+
+
+
+<style>
+  .ai-loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    /*width: 120px;
+    height: 120px;*/
+    animation: spin 0.1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
+
