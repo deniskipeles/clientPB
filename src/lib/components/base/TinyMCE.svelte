@@ -304,9 +304,9 @@
       {#if disabled}
         <textarea {id} bind:this={element} style="visibility: hidden" />
       {:else}
-        <div class="flex flex-col items-center md:justify-center min-w-full py-10 grow">
-            <div class="z-50 rounded-full drop-shadow-sm bg-gray-100 border border-gray-200 -mt-5 dark:bg-gray-900 dark:border-gray-800 flex focus-within:border-blue-300 dark:focus:border-blue-700 transition-colors">
+        <div class="py-10 grow">
             <textarea {id} bind:this={element} style="visibility: hidden" />
+            <div class="z-50 rounded-full drop-shadow-sm bg-gray-100 border border-gray-200 -mt-5 dark:bg-gray-900 dark:border-gray-800 flex focus-within:border-blue-300 dark:focus:border-blue-700 transition-colors">
               <input
                 class="bg-transparent rounded-full py-1 px-4 focus:outline-none"
                 placeholder="Prompt AI..."
