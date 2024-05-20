@@ -301,11 +301,9 @@
 		setInput,
 	} = useCompletion({
 		//body: { text },
-		onFinish: (prompt, completion) => setText(completion.trim()),
+		onFinish: (prompt, completion) => $input="",
 		onError: (error) => console.log(error.message),
-	  //api:"/api/completion/google"
 	  api:"https://aik-bice.vercel.app/api/completion/google"
-	  
 	});
 	$:if($completion && $isLoading){
 	  if(marked) value = marked($completion);
