@@ -303,10 +303,11 @@
 		//body: { text },
 		onFinish: (prompt, completion) => setText(completion.trim()),
 		onError: (error) => console.log(error.message),
-	  api:"https://aik-bice.vercel.app/api/completion/google"
+	  api:"/api/completion/google"
+	  //api:"https://aik-bice.vercel.app/api/completion/google"
 	  
 	});
-	$:if($completion && isLoading){
+	$:if($completion && $isLoading){
 	  if(marked) value = marked($completion);
 	  if(!marked) value = $completion;
 	}
@@ -343,7 +344,7 @@
           				setInput("");
           			}}
               >
-                {#if isLoading}
+                {#if $isLoading}
                   <div class="ai-loader"></div>
                 {:else}
                   &nbsp;&#x2728;&nbsp;
