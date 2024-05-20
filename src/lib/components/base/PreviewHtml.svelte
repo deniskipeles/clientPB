@@ -18,14 +18,18 @@
 		loadMathjax()
 	})
 	const loadMarked = () => {
-		let script = document.createElement('script');
-    script.src = "https://cdn.jsdelivr.net/npm/marked@12.0.2/lib/marked.umd.min.js";
-    document.head.append(script);
-		
-		script.onload = () => {
-      marked = window.marked.marked
-			console.log("marked loaded")
-		};
+	  if(!window.marked){
+  		let script = document.createElement('script');
+      script.src = "https://cdn.jsdelivr.net/npm/marked@12.0.2/lib/marked.umd.min.js";
+      document.head.append(script);
+  		
+  		script.onload = () => {
+        marked = window.marked.marked
+  			console.log("marked loaded")
+  		};
+	  }else{
+        marked = window.marked.marked
+	  }
 	}
 	const loadMathjax = () => {
 		let script = document.createElement('script');
