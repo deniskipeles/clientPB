@@ -301,33 +301,35 @@
     {#if inline}
         <div {id} bind:this={element} />
     {:else}
-    <div class="flex flex-col items-center md:justify-center min-w-full py-10 grow">
+      {#if disabled}
         <textarea {id} bind:this={element} style="visibility: hidden" />
-        {#if !disabled}
-        <div class="z-50 rounded-full drop-shadow-sm bg-gray-100 border border-gray-200 -mt-5 dark:bg-gray-900 dark:border-gray-800 flex focus-within:border-blue-300 dark:focus:border-blue-700 transition-colors">
-          <input
-            class="bg-transparent rounded-full py-1 px-4 focus:outline-none"
-            placeholder="Prompt AI..."
-            bind:value={inputText}
-            aria-label="Prompt"
-            required
-          />
-      
-          <button
-            aria-label="Submit"
-            type="button"
-            class="rounded-full bg-blue-600 hover:bg-blue-500 active:bg-blue-700 transition-colors text-white size-8 md:size-10 flex items-center justify-center"
-            on:click={handleSubmit}
-          >
-            {#if isLoading}
-              <div class="ai-loader"></div>
-            {:else}
-              &nbsp;&#x2728;&nbsp;
-            {/if}
-          </button>
+      {:else}
+        <div class="flex flex-col items-center md:justify-center min-w-full py-10 grow">
+            <div class="z-50 rounded-full drop-shadow-sm bg-gray-100 border border-gray-200 -mt-5 dark:bg-gray-900 dark:border-gray-800 flex focus-within:border-blue-300 dark:focus:border-blue-700 transition-colors">
+            <textarea {id} bind:this={element} style="visibility: hidden" />
+              <input
+                class="bg-transparent rounded-full py-1 px-4 focus:outline-none"
+                placeholder="Prompt AI..."
+                bind:value={inputText}
+                aria-label="Prompt"
+                required
+              />
+          
+              <span
+                aria-label="Submit"
+                type="button"
+                class="rounded-full bg-blue-600 hover:bg-blue-500 active:bg-blue-700 transition-colors text-white size-8 md:size-10 flex items-center justify-center"
+                on:click={handleSubmit}
+              >
+                {#if isLoading}
+                  <div class="ai-loader"></div>
+                {:else}
+                  &nbsp;&#x2728;&nbsp;
+                {/if}
+              </span>
+            </div>
         </div>
-        {/if}
-    </div>
+      {/if}
     {/if}
 </div>
 
