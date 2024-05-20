@@ -315,10 +315,10 @@
                 required
               />
           
-              <span
+              <button
                 aria-label="Submit"
                 type="button"
-                class="rounded-full bg-blue-600 hover:bg-blue-500 active:bg-blue-700 transition-colors text-white size-8 md:size-10 flex items-center justify-center"
+                class="bg-blue-600 hover:bg-blue-500 active:bg-blue-700 transition-colors text-white size-8 md:size-10 btn btn-sm btn-circle btn-hint m-l-auto"
                 on:click={handleSubmit}
               >
                 {#if isLoading}
@@ -326,7 +326,7 @@
                 {:else}
                   &nbsp;&#x2728;&nbsp;
                 {/if}
-              </span>
+              </button>
             </div>
         </div>
       {/if}
