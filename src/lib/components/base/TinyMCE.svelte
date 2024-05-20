@@ -304,7 +304,7 @@
       {#if disabled}
         <textarea {id} bind:this={element} style="visibility: hidden" />
       {:else}
-        <div class="py-10 grow">
+        <div class="grow">
             <textarea {id} bind:this={element} style="visibility: hidden" />
             <div class="z-50 rounded-full drop-shadow-sm bg-gray-100 border border-gray-200 -mt-5 dark:bg-gray-900 dark:border-gray-800 flex focus-within:border-blue-300 dark:focus:border-blue-700 transition-colors">
               <input
