@@ -327,10 +327,9 @@
             <div class="z-50 rounded-full drop-shadow-sm bg-gray-100 border border-gray-200 -mt-5 dark:bg-gray-900 dark:border-gray-800 flex focus-within:border-blue-300 dark:focus:border-blue-700 transition-colors">
               <input
                 class="bg-transparent rounded-full py-1 px-4 focus:outline-none"
-                placeholder="Prompt AI..."
+                placeholder="Generate with AI..."
                 bind:value={$input}
                 aria-label="Prompt"
-                required
               />
           
               <button
