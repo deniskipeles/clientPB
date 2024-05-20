@@ -57,7 +57,8 @@
     }
   }
   $: if(data){
-    console.log(JSON.stringify(data))
+    console.log(data)
+    console.log($page.data)
   }
 
 </script>

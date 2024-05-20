@@ -2,7 +2,7 @@ import { pb } from '$lib/pocketbase';
 import { serializeNonPOJOs } from '$lib/utils';
 
 /** @type {import('./$types').PageLoad} */
-export async function load({ params,parent, url }) {
+export const load = async({ params,parent, url }) =>{
   let articles:any={}
   let error:any=null
   let parentData:any={}
@@ -16,12 +16,14 @@ export async function load({ params,parent, url }) {
     
     const filter = `category ~ "${category}" && title ~ "${search}"`;
     
-    articles = await pb.collection('blog')
+    const results = await pb.collection('blog')
       .getList(page, perPage, {
         filter,
         sort: '-created',
         fields: `*:excerpt(${200},${true})`
       })
+    results["items"]=Array.from(results?.items)
+    articles = results
       
     return {
       ...parentData,
