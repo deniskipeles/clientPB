@@ -303,8 +303,8 @@
 		//body: { text },
 		onFinish: (prompt, completion) => setText(completion.trim()),
 		onError: (error) => console.log(error.message),
-	  api:"/api/completion/google"
-	  //api:"https://aik-bice.vercel.app/api/completion/google"
+	  //api:"/api/completion/google"
+	  api:"https://aik-bice.vercel.app/api/completion/google"
 	  
 	});
 	$:if($completion && $isLoading){
