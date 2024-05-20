@@ -272,13 +272,6 @@
 
 
   let marked
-  $: if(marked){
-    try{
-      value=marked(value)
-    }catch(err){
-      console.log(err)
-    }
-  }
   const loadMarked = () => {
     let script = document.createElement('script');
     script.src = "https://cdn.jsdelivr.net/npm/marked@12.0.2/lib/marked.umd.min.js";
@@ -287,50 +280,24 @@
     script.onload = () => {
       marked = window.marked.marked;
       console.log("marked loaded");
+      
+      if(marked){
+        try{
+          value=marked(value)
+        }catch(err){
+          console.log(err)
+        }
+      }
     };
   };
 
   
-  let inputText = '';
-  let isLoading = false; // Initialize with boolean value
-  
-  let completion = '';
-  let apiKey = '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';
-  
-
-  const data = {
-    "messages": [],
-    "model": "llama3-8b-8192"
-  };
-
-  async function handleSubmit() {
-    isLoading = true;
-    const url = 'https://api.groq.com/openai/v1/chat/completions';
-    const headers = {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json'
-    };
-    const obj = {"role": "user", "content": inputText}
-    data.messages.push(obj)
-
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(data)
-      });
-      const result = await response.json();
-      console.log(result);
-      const updates = (result.choices[0].message.content)
-      const resObj = {"role": "assistant", "content": updates}
-      data.messages.push(resObj)
-      value = marked(updates);
-      isLoading = false;
-    } catch (error) {
-      console.error(error);
-      isLoading = false;
-    }
-  }
+  import { useCompletion } from 'ai/svelte'
+	const { completion, input,isLoading, handleSubmit, data } = useCompletion({api:"https://aik-bice.vercel.app/api/completion/google"});
+	$:if($completion){
+	  if(marked) value = marked($completion);
+	  if(!marked) value = $completion;
+	}
 </script>
 
 
@@ -350,7 +317,7 @@
               <input
                 class="bg-transparent rounded-full py-1 px-4 focus:outline-none"
                 placeholder="Prompt AI..."
-                bind:value={inputText}
+                bind:value={$input}
                 aria-label="Prompt"
                 required
               />
