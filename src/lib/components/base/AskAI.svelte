@@ -38,7 +38,7 @@
 	}
 	
 	import { useCompletion } from 'ai/svelte'
-	$: body = { context: context }; // Reactive statement, updates body when selectedAgent changes
+	//$: body = { context: context }; // Reactive statement, updates body when selectedAgent changes
 	const storeContext = writable("storeContext")
 	const {
 		completion,
@@ -47,7 +47,7 @@
 		handleSubmit,
 		setInput,
 	} = useCompletion({
-		body:{context,test:"hard string",body,context1,$storeContext},
+		body:{context,test:"hard string",context1,storeContext:$storeContext},
 		onFinish: (prompt, completion) => $input="",
 		onError: (error) => console.log(error.message),
 	  api:"https://aik-bice.vercel.app/api/completion/google"
@@ -103,6 +103,8 @@
 	  
 	  
 		{#if viewContext}
+		<input bind:value={context1}/>
+		<input bind:value={$storeContext}/>
 		<Field class="form-field" name={'context'} let:uniqueId>
 			<label for={uniqueId}>
 				<i class={CommonHelper.getFieldTypeIcon('text')} />
