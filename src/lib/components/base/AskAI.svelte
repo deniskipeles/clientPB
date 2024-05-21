@@ -28,6 +28,12 @@
 	export let field = { name: 'AI prompt' };
 	export let context = null;
 	
+	$: if(Array.isArray(context) && context?.length>2){
+	  context = CommonHelper.transformData(context)
+	}else{
+	  context = JSON.stringify(context)
+	}
+	
 	import { useCompletion } from 'ai/svelte'
 	const {
 		completion,
@@ -36,7 +42,7 @@
 		handleSubmit,
 		setInput,
 	} = useCompletion({
-		body: { context:JSON.stringify(context) },
+		body: { context },
 		onFinish: (prompt, completion) => $input="",
 		onError: (error) => console.log(error.message),
 	  api:"https://aik-bice.vercel.app/api/completion/google"

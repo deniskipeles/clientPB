@@ -166,6 +166,60 @@ export default class CommonHelper {
 		}
 	}
 	/**
+	 * transformData object to csv String.
+	 *
+	 * @param  {Mixed} data
+	 * @return {String}
+	 */
+	static transformData(data) {
+    const headers = [];
+    const rows = [];
+  
+    // Get headers from the first object
+    Object.keys(data[0]).forEach((key) => {
+      if (typeof data[0][key] === 'object') {
+        if (Array.isArray(data[0][key])) {
+          data[0][key].forEach((item, index) => {
+            Object.keys(item).forEach((subKey) => {
+              headers.push(`${key}/${index}/${subKey}`);
+            });
+          });
+        } else {
+          Object.keys(data[0][key]).forEach((subKey) => {
+            headers.push(`${key}/${subKey}`);
+          });
+        }
+      } else {
+        headers.push(key);
+      }
+    });
+    // Create rows
+    data.forEach((item) => {
+      const row = [];
+      headers.forEach((header) => {
+        const [key, index, subKey] = header.split('/');
+        let value;
+        if (index) {
+          if (item[key] && item[key][index]) {
+            value = item[key][index][subKey];
+          }
+        } else if (subKey) {
+          if (item[key]) {
+            value = item[key][subKey];
+          }
+        } else {
+          value = item[header];
+        }
+        row.push(value || '');
+      });
+      rows.push(row.join(','));
+    });
+  
+    return [headers.join(','), ...rows].join('\n');
+  }
+
+	
+	/**
 	 * Checks whether value is plain object.
 	 *
 	 * @param  {Mixed} value
