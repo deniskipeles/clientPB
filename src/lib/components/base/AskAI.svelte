@@ -37,6 +37,7 @@
 	}
 	
 	import { useCompletion } from 'ai/svelte'
+	$: body = { context: context }; // Reactive statement, updates body when selectedAgent changes
 	const {
 		completion,
 		input,
@@ -44,7 +45,7 @@
 		handleSubmit,
 		setInput,
 	} = useCompletion({
-		body: { context },
+		body,
 		onFinish: (prompt, completion) => $input="",
 		onError: (error) => console.log(error.message),
 	  api:"https://aik-bice.vercel.app/api/completion/google"
