@@ -2,10 +2,11 @@
 	import { onMount } from 'svelte';
 	import AutoExpandTextarea from './AutoExpandTextarea.svelte';
 	import OverlayPanel from './OverlayPanel.svelte';
-	import { writable } from 'svelte/store';
+	
 	import { addErrorToast, addSuccessToast } from '$lib/stores/toasts';
 	import Field from './Field.svelte';
 	import CommonHelper from '$lib/utils/CommonHelper';
+	import {arrayToCsv} from '$lib/utils/json_to_csv';
 	import JsonField from '../records/fields/JsonField.svelte';
 	import { page } from '$app/stores';
 	const request_id = CommonHelper.randomString(8);
@@ -27,10 +28,10 @@
 	
 	export let field = { name: 'AI prompt' };
 	export let context = null;
-	let context1 = "context1";
+	
 	
 	$: if(Array.isArray(context) && context?.length>2){
-	  context = CommonHelper.transformData(context)
+	  context = arrayToCsv(context)
 	}else{
 	  if(typeof context != "string"){
 	    context = JSON.stringify(context)
@@ -38,8 +39,7 @@
 	}
 	
 	import { useCompletion } from 'ai/svelte'
-	//$: body = { context: context }; // Reactive statement, updates body when selectedAgent changes
-	const storeContext = writable("storeContext")
+	
 	const {
 		completion,
 		complete,
@@ -48,7 +48,7 @@
 		handleSubmit,
 		setInput,
 	} = useCompletion({
-		body:{context,test:"hard string",context1,storeContext:$storeContext},
+		body:{context},
 		onFinish: (prompt, completion) => $input="",
 		onError: (error) => console.log(error.message),
 	  api:"https://aik-bice.vercel.app/api/completion/google"
@@ -104,8 +104,6 @@
 	  
 	  
 		{#if viewContext}
-		<input bind:value={context1}/>
-		<input bind:value={$storeContext}/>
 		<Field class="form-field" name={'context'} let:uniqueId>
 			<label for={uniqueId}>
 				<i class={CommonHelper.getFieldTypeIcon('text')} />
