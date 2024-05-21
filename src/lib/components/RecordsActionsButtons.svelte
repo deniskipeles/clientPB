@@ -186,16 +186,14 @@
         }) ?? [];
     }) ?? [];
     
-    $: data={
-      headerData:schema?.map((i) => i?.name?.replaceAll('_', ' ')) ?? [],
-      bodyData:tableData
-    }
-
 </script>
 
 <div class="page-header">
     <div class="flex gap-3 text-center dark:text-white">
-        <AskAI context={data}/>
+        <AskAI context={{
+          headerData:schema?.map((i) => i?.name?.replaceAll('_', ' ')) ?? [],
+          bodyData:tableData
+        }}/>
         <button
             use:tooltip={`Click here to download pdf of the content you are viewing currently.(${filds} fields)`}
             class={`flex ${loadingPDF ? 'animate-ping' : ''}`}

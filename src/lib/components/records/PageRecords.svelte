@@ -145,8 +145,7 @@
 	  unlimited_user=controls?.data?.unlimited_users?.includes($page.data.user.collectionName)
 	}
 	
-	import AskAI from '$lib/components/base/AskAI.svelte';
-	import { recordsStore } from '$lib/stores/collections';
+	
 </script>
 
 {#if $isCollectionsLoading}
@@ -224,7 +223,6 @@
 						<span class="txt">New record</span>
 					</button>
 				{/if}
-				<AskAI context={$recordsStore}/>
 			</div>
 		</header>
 
