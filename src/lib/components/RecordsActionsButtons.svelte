@@ -30,7 +30,7 @@
         } catch (_) {}
         schema = $activeCollection?.schema?.filter(
             (i) =>
-                !schemaHiddenColumnsStore?.includes(i?.id) && !schemaHiddenColumnsStore?.includes(i?.name)
+                (typeof schemaHiddenColumnsStore?.name == "string" || Array.isArray(schemaHiddenColumnsStore?.name)) && !schemaHiddenColumnsStore?.includes(i?.id) && !schemaHiddenColumnsStore?.includes(i?.name)
         );
     }
 
@@ -102,7 +102,7 @@
                 images?.forEach((image) => {
                     if (
                         data.section === 'body' &&
-                        data.cell.text[0]?.includes(image?.imageLink) &&
+                        data.cell?.text[0]?.includes(image?.imageLink) &&
                         data.row.index === image.row &&
                         image.base64
                     ) {
@@ -165,7 +165,7 @@
                 // return item[schema_item?.name] ?? '';
             } else if (schema_item.type == 'json' && typeof item[schema_item?.name] == 'object') {
                 let json = item[schema_item?.name];
-                if (schema_item?.name?.includes('answers') && Array.isArray(json)) {
+                if ((typeof schema_item?.name == "string" || Array.isArray(schema_item?.name)) && schema_item?.name?.includes('answers') && Array.isArray(json)) {
                     const answers =
                         json?.map((ans: any) => {
                             if (ans?.correct) {
