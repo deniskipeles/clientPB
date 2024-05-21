@@ -108,8 +108,8 @@
       </tr>
 
 			{#each collection?.schema as field}
-			  {@const rawValue = JSON.stringify(record?.[field.name])}
-				{#if field?.type == 'editor' || rawValue.length > 200 || (field?.name == 'questions' && record?.expand?.questions)}
+			  {@const rawValue = JSON.stringify(record?.[field?.name])}
+				{#if field?.type == 'editor' || rawValue?.length > 200 || (field?.name == 'questions' && record?.expand?.questions)}
   				<tr>
             <td colspan="2">
   					<span class="min-width1 txt-hint txt-bold capitalize">{field.name?.split('_')?.join(' ')} :</span><br/>
