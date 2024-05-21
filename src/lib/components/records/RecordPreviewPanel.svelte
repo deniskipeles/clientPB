@@ -110,23 +110,44 @@
             </tr> -->
 
 			{#each collection?.schema as field}
-				<tr>
-					<td class="min-width txt-hint txt-bold capitalize">{field.name?.split('_')?.join(' ')}</td
-					>
-					<td class="col-field">
-						{#if field?.name == 'questions' && record?.expand?.questions}
-							{#each record?.expand?.questions ?? [] as item, pos}
-								<tr>
-									<p class="text-base">{pos + 1} {item?.question?.question}</p>
-									<AnswersPreview answers={item?.question?.answers ?? []} />
-								</tr>
-								<hr />
-							{/each}
-						{:else}
-							<RecordFieldValue {field} {record} />
-						{/if}
-					</td>
-				</tr>
+				{#if field?.type == 'editor'}
+  				<tr>
+            <td colspan="2">
+  					<span class="min-width1 txt-hint txt-bold capitalize">{field.name?.split('_')?.join(' ')} :</span><br/>
+  					<span class="col-field1">
+  						{#if field?.name == 'questions' && record?.expand?.questions}
+  							{#each record?.expand?.questions ?? [] as item, pos}
+  								<tr>
+  									<p class="text-base">{pos + 1} {item?.question?.question}</p>
+  									<AnswersPreview answers={item?.question?.answers ?? []} />
+  								</tr>
+  								<hr />
+  							{/each}
+  						{:else}
+  							<RecordFieldValue {field} {record} />
+  						{/if}
+  					</span>
+  					</td>
+  				</tr>
+  			{:else}
+  				<tr>
+  					<td class="min-width txt-hint txt-bold capitalize">{field.name?.split('_')?.join(' ')}</td
+  					>
+  					<td class="col-field">
+  						{#if field?.name == 'questions' && record?.expand?.questions}
+  							{#each record?.expand?.questions ?? [] as item, pos}
+  								<tr>
+  									<p class="text-base">{pos + 1} {item?.question?.question}</p>
+  									<AnswersPreview answers={item?.question?.answers ?? []} />
+  								</tr>
+  								<hr />
+  							{/each}
+  						{:else}
+  							<RecordFieldValue {field} {record} />
+  						{/if}
+  					</td>
+  				</tr>
+  			{/if}
 			{/each}
 
 			{#if record.created}
@@ -145,6 +166,8 @@
 		</tbody>
 	</table>
 	
+	<br/>
+	<hr/>
 	{#if view_many_relations}
 	{#each childrenRelations as childCollection}
 	  <div class="list picker-list m-b-base">
