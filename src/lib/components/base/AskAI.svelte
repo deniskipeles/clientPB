@@ -27,6 +27,7 @@
 	
 	export let field = { name: 'AI prompt' };
 	export let context = null;
+	let context1 = "context1";
 	
 	$: if(Array.isArray(context) && context?.length>2){
 	  context = CommonHelper.transformData(context)
@@ -38,6 +39,7 @@
 	
 	import { useCompletion } from 'ai/svelte'
 	$: body = { context: context }; // Reactive statement, updates body when selectedAgent changes
+	const storeContext = writable("storeContext")
 	const {
 		completion,
 		input,
@@ -45,7 +47,7 @@
 		handleSubmit,
 		setInput,
 	} = useCompletion({
-		body,
+		body:{context,test:"hard string",body,context1,$storeContext},
 		onFinish: (prompt, completion) => $input="",
 		onError: (error) => console.log(error.message),
 	  api:"https://aik-bice.vercel.app/api/completion/google"
