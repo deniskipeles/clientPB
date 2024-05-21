@@ -42,6 +42,7 @@
 	const storeContext = writable("storeContext")
 	const {
 		completion,
+		complete,
 		input,
 		isLoading,
 		handleSubmit,
@@ -144,7 +145,7 @@
 					type="button"
 					title="Prompt ai"
 					class="btn btn-hint btn-xs"
-					on:click={handleSubmit}
+					on:click={()=>complete($input,{body:{context}})}
 				>
 					<i class="ri-message-line" />
 					{$isLoading ? 'loading...' : 'Send'}
