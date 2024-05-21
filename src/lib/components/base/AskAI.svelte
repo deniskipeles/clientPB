@@ -31,7 +31,7 @@
 	
 	
 	$: if(Array.isArray(context) && context?.length>2){
-	  context = arrayToCsv(context)
+	  context = JSON.stringify(context)
 	}else{
 	  if(typeof context != "string"){
 	    context = JSON.stringify(context)

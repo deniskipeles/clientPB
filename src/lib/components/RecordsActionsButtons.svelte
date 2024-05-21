@@ -123,7 +123,7 @@
             loadingPDF = false;
         }
     }
-    $: filds = (Number(schema.length) - Number($schemaHiddenColumnsStore.length)) + 2;
+    $: filds = ((Number(schema.length) - Number($schemaHiddenColumnsStore.length)) + 2);
 
     $: tableData = $recordsStore.map((item, row) => {
         return schema?.map((schema_item, col) => {
