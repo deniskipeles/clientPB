@@ -31,7 +31,9 @@
 	$: if(Array.isArray(context) && context?.length>2){
 	  context = CommonHelper.transformData(context)
 	}else{
-	  context = JSON.stringify(context)
+	  if(typeof context != "string"){
+	    context = JSON.stringify(context)
+	  }
 	}
 	
 	import { useCompletion } from 'ai/svelte'
@@ -71,6 +73,7 @@
       }
     };
   };
+  let viewContext=false
 </script>
 
 
@@ -94,13 +97,32 @@
 				Prompting <strong>ai</strong> for help.
 			</h4>
 		</svelte:fragment>
-
-		<JsonField
-			isJson={false}
-			field={{ name: 'Context or Notes or Url', type: 'text' }}
-			bind:value={context}
-		/>
-
+	  
+	  
+		{#if viewContext}
+		<Field class="form-field" name={'context'} let:uniqueId>
+			<label for={uniqueId}>
+				<i class={CommonHelper.getFieldTypeIcon('text')} />
+				<span class="txt">Context or Notes</span>
+			</label>
+			<div class="flex">
+				<AutoExpandTextarea
+					id={uniqueId}
+					required={false}
+					bind:value={context}
+					placeholder=""
+				/>
+			</div>
+		</Field>
+		{/if}
+		<button
+			type="button"
+			title="Prompt ai"
+			class="btn btn-hint btn-xs"
+			on:click={() => (viewContext = !viewContext)}
+		>
+			<i class="ri-send-line ri-send" />{viewContext ? 'hide context' : 'view context'}
+		</button>
 		<Field class="form-field" name={'answer'} let:uniqueId>
 			<label for={uniqueId}>
 				<i class={CommonHelper.getFieldTypeIcon('text')} />
