@@ -5,6 +5,7 @@
 	import { pb } from '$lib/pocketbase';
 	import FormattedDate from '$lib/components/base/FormattedDate.svelte';
 	import CopyIcon from '$lib/components/base/CopyIcon.svelte';
+	import AskAI from '$lib/components/base/AskAI.svelte';
 	import RecordFieldValue from '$lib/components/records/RecordFieldValue.svelte';
 	import RecordsChildrenRelationsList from '$lib/components/records/RecordsChildrenRelationsList.svelte';
 	import { page } from '$app/stores';
@@ -83,6 +84,7 @@
 	  const controls=$page.data?.roots?.find(obj=>obj.name=="controls") ?? {}
 	  view_many_relations=(controls?.data?.view_many_relations ?? false)
 	}
+	$: collectionName = collection?.name?.replace(($page?.data?.user?.collectionName+'_view_')," ")
 </script>
 
 <OverlayPanel
@@ -93,24 +95,21 @@
 >
 	<svelte:fragment slot="header">
 		<h4>
-			<strong>{collection?.name?.replace(($page?.data?.user?.collectionName+'_view_')," ")}</strong> record preview
+			<strong>{collectionName}</strong> record preview
 		</h4>
 	</svelte:fragment>
 
 	<table class="table-border preview-table" class:table-loading={isLoading}>
 		<tbody>
-			<!-- <tr>
-                <td class="min-width txt-hint txt-bold">id</td>
-                <td class="col-field">
-                    <div class="label">
-                        <CopyIcon value={record.id} />
-                        <span class="txt">{record.id || "..."}</span>
-                    </div>
-                </td>
-            </tr> -->
+			<tr>
+        <td colspan="2" class="">
+          <AskAI context={record}/>
+        </td>
+      </tr>
 
 			{#each collection?.schema as field}
-				{#if field?.type == 'editor'}
+			  {@const rawValue = JSON.stringify(record?.[field.name])}
+				{#if field?.type == 'editor' || rawValue.length > 200 || (field?.name == 'questions' && record?.expand?.questions)}
   				<tr>
             <td colspan="2">
   					<span class="min-width1 txt-hint txt-bold capitalize">{field.name?.split('_')?.join(' ')} :</span><br/>
@@ -179,7 +178,7 @@
         >
             <i class="ri-magic-line" />
             <!-- <i class="ri-layout-line" /> -->
-            <span class="txt">View {childCollection?.name} relations</span>
+            <span class="txt">View {childCollection?.name} related records</span>
         </button>
       </div>
     </div>
