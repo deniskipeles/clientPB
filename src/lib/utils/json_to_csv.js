@@ -13,14 +13,14 @@ export function toString(s) {
 export function reduceItem(key, value, reducedItem) {
     if (Array.isArray(value)) {
         value.forEach((subItem, i) => {
-            reduceItem(key + '_' + toString(i), subItem, reducedItem);
+            reduceItem(key + '/' + toString(i), subItem, reducedItem);
         });
     }
     else if (typeof value === 'object') {
       //console.log(value)
         Object.keys(value).forEach(subKey => {
           try{
-            reduceItem(key + (key&&key.length?'_':"") + toString(subKey), value[subKey], reducedItem);
+            reduceItem(key + (key&&key.length?'/':"") + toString(subKey), value[subKey], reducedItem);
           }catch(e){
             //console.log(e)
           }
