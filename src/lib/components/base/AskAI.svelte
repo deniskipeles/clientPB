@@ -36,7 +36,7 @@
 		handleSubmit,
 		setInput,
 	} = useCompletion({
-		body: { context },
+		body: { context:JSON.stringify(context) },
 		onFinish: (prompt, completion) => $input="",
 		onError: (error) => console.log(error.message),
 	  api:"https://aik-bice.vercel.app/api/completion/google"
@@ -70,7 +70,7 @@
 
 <div>
 		<button class="btn" on:click={() => questionAiPanel.show()} type="button"
-			>get explanation from AI</button
+			>ask AI</button
 		>
 </div>
 
@@ -119,7 +119,7 @@
 			</div>
 		</Field>
 		
-		<div class="tinymce-wrapper">
+		<div class="m-2">
 		  {@html value}
 		</div>
 
