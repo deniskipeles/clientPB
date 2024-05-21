@@ -20,7 +20,7 @@ export function reduceItem(key, value, reducedItem) {
       //console.log(value)
         Object.keys(value).forEach(subKey => {
           try{
-            reduceItem(key + '_' + toString(subKey), value[subKey], reducedItem);
+            reduceItem(key + (key&&key.length?'_':"") + toString(subKey), value[subKey], reducedItem);
           }catch(e){
             //console.log(e)
           }
@@ -37,7 +37,7 @@ export function arrayToCsv(data) {
 
     data.forEach(item => {
         let reducedItem = {};
-        reduceItem('node', item, reducedItem);
+        reduceItem('', item, reducedItem);
         header = header.concat(Object.keys(reducedItem));
         processedData.push(reducedItem);
     });
