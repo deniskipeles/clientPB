@@ -35,9 +35,9 @@
     }
 
     export let collection = $activeCollection;
-    $: schema = collection?.schema;
     export let contenteditable = false;
 
+    let schema = collection?.schema;
     let printingPDF = false;
 
     import jsPDF from 'jspdf';
@@ -185,12 +185,17 @@
             }
         }) ?? [];
     }) ?? [];
+    
+    $: data={
+      headerData:schema?.map((i) => i?.name?.replaceAll('_', ' ')) ?? [],
+      bodyData:tableData
+    }
 
 </script>
 
 <div class="page-header">
     <div class="flex gap-3 text-center dark:text-white">
-        <AskAI context={tableData}/>
+        <AskAI context={data}/>
         <button
             use:tooltip={`Click here to download pdf of the content you are viewing currently.(${filds} fields)`}
             class={`flex ${loadingPDF ? 'animate-ping' : ''}`}
