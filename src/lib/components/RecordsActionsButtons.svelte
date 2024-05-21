@@ -45,6 +45,7 @@
 	import tooltip from '$lib/actions/tooltip';
 	import { addErrorToast } from '$lib/stores/toasts';
 	import CommonHelper from '$lib/utils/CommonHelper';
+	import AskAI from '$lib/components/base/AskAI.svelte';
 
 	$: loadingPDF = false;
 	// $: images = []
@@ -92,13 +93,45 @@
 			doc = new jsPDF()
 		}
 		loadingPDF = true;
-		// It can parse html:
-		// <table id="my-table"><!-- ... --></table>
-		// autoTable(doc, { html: '#printable' });
+		
 		const table = schema?.map((i) => i?.name?.replaceAll('_', ' ')) ?? [];
 
-		const tableData =
-			$recordsStore.map((item, row) => {
+		
+			
+		autoTable(doc, {
+			head: [table],
+			body: tableData,
+			didDrawCell: (data) => {
+				images.forEach((image) => {
+					if (
+						data.section === 'body' &&
+						data.cell.text[0]?.includes(image.imageLink) &&
+						data.row.index === image.row &&
+						image.base64
+					) {
+						// var base64Img = 'data:image/jpeg;base64,iVBORw0KGgoAAAANS...';
+						var type = image.base64.split(';')[0]?.split('/')[1]?.toUpperCase();
+						// console.log(data.cell.text,type,image);
+						// data.cell.text = []
+						if (type == 'JPG' || type == 'JPEG' || type == 'PNG') {
+							doc.addImage(image.base64, type, data.cell.x + 2, data.cell.y + 2, 10, 10);
+						}
+					}
+				});
+			}
+		});
+		try {
+			doc.save(`table_${Date.now()}.pdf`);
+			setTimeout(() => {}, 1000);
+		} catch (error) {
+			console.log(error);
+		} finally {
+			loadingPDF = false;
+		}
+	}
+	$: filds = Number(schema.length) - Number($schemaHiddenColumnsStore.length) + 2;
+	
+	let tableData =	$recordsStore.map((item, row) => {
 				const dt =
 					schema?.map((schema_item, col) => {
 						if (schema_item.type == 'relation') {
@@ -160,52 +193,11 @@
 					}) ?? [];
 				return dt;
 			}) ?? [];
-		autoTable(doc, {
-			head: [table],
-			body: tableData,
-			didDrawCell: (data) => {
-				images.forEach((image) => {
-					if (
-						data.section === 'body' &&
-						data.cell.text[0]?.includes(image.imageLink) &&
-						data.row.index === image.row &&
-						image.base64
-					) {
-						// var base64Img = 'data:image/jpeg;base64,iVBORw0KGgoAAAANS...';
-						var type = image.base64.split(';')[0]?.split('/')[1]?.toUpperCase();
-						// console.log(data.cell.text,type,image);
-						// data.cell.text = []
-						if (type == 'JPG' || type == 'JPEG' || type == 'PNG') {
-							doc.addImage(image.base64, type, data.cell.x + 2, data.cell.y + 2, 10, 10);
-						}
-					}
-				});
-			}
-		});
-		try {
-			doc.save(`table_${Date.now()}.pdf`);
-			setTimeout(() => {}, 1000);
-		} catch (error) {
-			console.log(error);
-		} finally {
-			loadingPDF = false;
-		}
-	}
-	$: filds = Number(schema.length) - Number($schemaHiddenColumnsStore.length) + 2;
 </script>
 
 <div class="page-header">
 	<div class="flex gap-3 text-center dark:text-white">
-<!--
-		<button
-			use:tooltip={`Click here to edit the content you are viewing now and download. Remember this edit cannot be
-        applied into system data.`}
-			class="flex"
-			on:click={() => contenteditableFxn(!contenteditable)}
-		>
-			<PencilSquare />{contenteditable ? 'block editing' : 'edit to download'}
-		</button>
--->
+<AskAI context={tableData}/>
 		<button
 			use:tooltip={`Click here to download pdf of the content you are viewing currently.(${filds} fields)`}
 			class={`flex ${loadingPDF ? 'animate-ping' : ''}`}
@@ -224,24 +216,6 @@
 		>
 			<CloudArrowDown />{`download pdf`}
 		</button>
-		<!--<button
-			use:tooltip={`Click here to create a long pdf from this current table to the next data table. eg questions and attendance in one table`}
-			class={`flex ${loadingPDF ? 'animate-ping' : ''}`}
-			on:click={() => {
-				getLocal();
-				loadingPDF = true;
-				if (filds <= 10) {
-					downloadFxn('big');
-				} else {
-					addErrorToast('The table fields should be less than or equal to 10.');
-				}
-				setTimeout(() => {
-					loadingPDF = false;
-				}, 2000);
-			}}
-		>
-			<CloudArrowDown />{`continuous pdf`}
-		</button>-->
 		<button
 			use:tooltip={`Click here to download or print what you see in this table in pdf format.`}
 			class={`flex ${printingPDF ? 'animate-ping' : ''}`}
@@ -253,3 +227,4 @@
 		</button>
 	</div>
 </div>
+
