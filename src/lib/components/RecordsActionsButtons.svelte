@@ -30,7 +30,7 @@
         } catch (_) {}
         schema = $activeCollection?.schema?.filter(
             (i) =>
-                !schemaHiddenColumnsStore.includes(i?.id) && !schemaHiddenColumnsStore?.includes(i?.name)
+                !schemaHiddenColumnsStore?.includes(i?.id) && !schemaHiddenColumnsStore?.includes(i?.name)
         );
     }
 
@@ -99,10 +99,10 @@
             head: [table],
             body: tableData,
             didDrawCell: (data) => {
-                images.forEach((image) => {
+                images?.forEach((image) => {
                     if (
                         data.section === 'body' &&
-                        data.cell.text[0]?.includes(image.imageLink) &&
+                        data.cell.text[0]?.includes(image?.imageLink) &&
                         data.row.index === image.row &&
                         image.base64
                     ) {
