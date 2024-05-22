@@ -78,11 +78,10 @@
     function contextFxn() {
         const schemaCopy=schema
         const td =tableDataFxn();
-        context={
+        return {
             headerData:schemaCopy?.map((i) => i?.name?.replaceAll('_', ' ')) ?? [],
             bodyData:td,
         }
-        return context;
     }
 
     

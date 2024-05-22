@@ -262,6 +262,10 @@
 
   
   import { useCompletion } from 'ai/svelte'
+  function onFinish(prompt, completion){
+		    $input="";
+		    console.log(prompt,completion),
+	}
 	const {
 		completion,
 		input,
@@ -270,10 +274,7 @@
 		setInput,
 	} = useCompletion({
 		//body: { text },
-		onFinish: (prompt, completion) => {
-		    $input="";
-		    console.log(prompt,completion)
-		  },
+		onFinish: (prompt, completion) => onFinish(prompt,completion),
 		onError: (error) => console.log(error.message),
 	  api:"https://aik-bice.vercel.app/api/completion/google"
 	});
