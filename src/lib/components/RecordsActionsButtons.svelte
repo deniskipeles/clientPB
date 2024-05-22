@@ -62,7 +62,10 @@
         getLocal();
         getBase64();
     });
+    
+    let loadTable=0
     afterNavigate(() => {
+      loadTable=0
       if(fullyLoaded){
         getLocal()
         images = [];
@@ -70,6 +73,17 @@
         contenteditable=false
       }
     });
+    
+    function wait(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    while ((!$recordsStore || $recordsStore.length === 0) && loadTable<5) {
+      await wait(100);
+      loadTable += 1
+      tableData = tableDataFxn()
+    }
+    
     const getBase64 = () => {
         $recordsStore.forEach((item, row) => {
             schema?.forEach((schema_item, col) => {
@@ -219,7 +233,6 @@
         <AskAI context={{
           headerData:schema?.map((i) => i?.name?.replaceAll('_', ' ')) ?? [],
           bodyData:tableData,
-          loadData:tableDataFxn()
         }}/>
         <button
             use:tooltip={`Click here to download pdf of the content you are viewing currently.(${filds} fields)`}
