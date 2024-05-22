@@ -207,7 +207,7 @@
         }) ?? [];
     }) ?? [];
     
-    let tableData=[]
+    $: tableData=[]
     $: if(fullyLoaded&&schema?.length){
       tableData=tableDataFxn()
     }
