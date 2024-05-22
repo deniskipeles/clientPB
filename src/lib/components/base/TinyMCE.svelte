@@ -197,7 +197,7 @@
                     editor.on(modelEvents, () => {
                         lastVal = editor.getContent();
                         if (lastVal !== value) {
-                            value = marked? marked(lastVal) : lastVal;
+                            value = lastVal;
                             text = editor.getContent({ format: "text" });
                         }
                     });
