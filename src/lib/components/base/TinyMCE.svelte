@@ -54,7 +54,7 @@
     import { onMount, createEventDispatcher } from "svelte";
     import { page } from '$app/stores';
     import CommonHelper from "$lib/utils/CommonHelper";
-    import PreviewHtml from "$lib/components/base/PreviewHtml.svelte";
+    
 
     export let id = "tinymce_svelte" + CommonHelper.randomString(7);
     export let inline = undefined;
@@ -67,38 +67,7 @@
     export let cssClass = "tinymce-wrapper";
     
     
-    function countLatexExpressions(htmlString) {
-      const latexRegex = /\$\$(.*?)\$\$/gms; // match $$latex code$$
-      const latexRegexAlt = /\\\[(.*?)\\\]/gms; // match \[latex code\]
-      const latexRegexSingle = /(?<!\\)\$(?!\\)(.*?)\$/gms; // match $latex code$
-      const latexRegexEscaped = /\\\((.*?)\\\)/gms; // match \(latex code\)
-      let count = 0;
-      // Count matches of the first regular expression
-      let match;
-      while ((match = latexRegex.exec(htmlString)) !== null) {
-        count++;
-      }
-      // Count matches of the second regular expression
-      match = null;
-      while ((match = latexRegexAlt.exec(htmlString)) !== null) {
-        count++;
-      }
-      // Count matches of the third regular expression
-      match = null;
-      while ((match = latexRegexSingle.exec(htmlString)) !== null) {
-        count++;
-      }
-      // Count matches of the fourth regular expression
-      match = null;
-      while ((match = latexRegexEscaped.exec(htmlString)) !== null) {
-        count++;
-      }
-      return count;
-    }
-    let c=countLatexExpressions(value)
-    $: if(value && disabled && c>0){
-      inline=true
-    }
+    
 
 
     // Events
@@ -313,21 +282,12 @@
 
 
 
-    {#if inline}
-<div class={cssClass}>
-        <!--div {id} bind:this={element} /-->
-        <PreviewHtml {id} markdown={value} />
-</div>
-    {:else}
-    
+
 
 <div bind:this={container} class={cssClass}>
-        <!--
     {#if inline}
-        div {id} bind:this={element} /
-        <PreviewHtml {id} markdown={value} />
+        <div {id} bind:this={element} />
     {:else}
-        -->
       {#if disabled}
         <textarea {id} bind:this={element} style="visibility: hidden" />
       {:else}
@@ -359,8 +319,8 @@
             </div>
         </div>
       {/if}
-</div>
     {/if}
+</div>
 
 
 

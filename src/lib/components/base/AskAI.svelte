@@ -29,7 +29,7 @@
 	
 	export let field = { name: 'AI prompt' };
 	export let context = null;
-	export let tableDataFxn = null;
+	export let tableDataFxn = ()=>{};
 	
 	
 	$: if(Array.isArray(context) && context?.length>2){
@@ -140,6 +140,7 @@
 			<div class="flex">
 				<AutoExpandTextarea
 					id={uniqueId}
+					on:input={(e)=>tableDataFxn()}
 					required={true}
 					bind:value={$input}
 					placeholder="Enter your prompt here"
@@ -148,7 +149,10 @@
 					type="button"
 					title="Prompt ai"
 					class="btn btn-hint btn-xs"
-					on:click={()=>complete($input,{body:{context}})}
+					on:click={()=>{
+					  tableDataFxn()
+					  return complete($input,{body:{context}})
+					}}
 				>
 					<i class="ri-message-line" />
 					{$isLoading ? 'loading...' : 'Send'}

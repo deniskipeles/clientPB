@@ -47,7 +47,7 @@
 </script>
 
 
-<div class="">
+<div class="tinymce-wrapper">
     {#key markdown}
 		 {@html markdown}
 		{/key}
