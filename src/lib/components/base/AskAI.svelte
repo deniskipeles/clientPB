@@ -31,7 +31,7 @@
 	
 	export let field = { name: 'AI prompt' };
 	export let context = null;
-	export let tableDataFxn = undefined;
+	export let tableDataFxn;
 	
 	
 	$: if(Array.isArray(context) && context?.length>2){
@@ -40,20 +40,6 @@
 	  if(typeof context != "string"){
 	    context = JSON.stringify(context)
 	  }
-	}
-	$:if(tableDataFxn){
-	  try{
-	  if(typeof context == "object"){
-	    context.bodyData=tableDataFxn()
-	  }
-	  if(typeof context == "string"){
-	    const temp=JSON.parse(context)
-	    if(temp.bodyData){
-  	    temp.bodyData=tableDataFxn()
-  	    context=temp
-  	  }
-	  }
-	  }catch(e){}
 	}
 	
 	import { useCompletion } from 'ai/svelte'
