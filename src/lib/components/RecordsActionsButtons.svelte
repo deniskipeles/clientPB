@@ -79,7 +79,7 @@
     }
 
     while ((!$recordsStore || $recordsStore.length === 0) && loadTable<5) {
-      await wait(100);
+      wait(100);
       loadTable += 1
       tableData = tableDataFxn()
     }
