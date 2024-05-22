@@ -264,7 +264,7 @@
   import { useCompletion } from 'ai/svelte'
   function onFinish(prompt, completion){
 		    $input="";
-		    console.log(prompt,completion),
+		    console.log(prompt,completion)
 	}
 	const {
 		completion,
