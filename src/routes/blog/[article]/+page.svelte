@@ -38,8 +38,8 @@
       }
       return count;
     }
-    let c=countLatexExpressions(value)
-    $: if(value && c>0){
+    let c=countLatexExpressions(data?.article?.content ?? app?.html_data ?? html_data)
+    $: if(c>0){
       inline=true
     }
 </script>
@@ -71,6 +71,6 @@
 		disabled
 	/>
 	{:else}
-	  <PreviewHtml markdown={value} />
+	  <PreviewHtml markdown={data?.article?.content ?? app?.html_data ?? html_data} />
 	{/if}
 </div>
