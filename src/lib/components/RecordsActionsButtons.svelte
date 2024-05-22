@@ -74,14 +74,15 @@
       }
     });
     
-    function wait(ms) {
+    async function wait(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     while ((!$recordsStore || $recordsStore.length === 0) && loadTable<5) {
-      wait(100);
-      loadTable += 1
-      tableData = tableDataFxn()
+      setTimeout(()=>{
+        loadTable += 1
+        tableData = tableDataFxn()
+      }, 100)
     }
     
     const getBase64 = () => {
