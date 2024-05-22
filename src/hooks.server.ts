@@ -8,7 +8,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	pb.authStore.loadFromCookie(event.request.headers.get('cookie') || '');
 	try {
 		// get an up-to-date auth store state by verifying and refreshing the loaded auth model (if any)
-		const collectionName = pb.authStore?.model?.collectionName;
+		const collectionName = pb.authStore?.model?.collectionName ?? pb.authStore?.model?.collectionId;
 		if (pb.authStore.isValid && collectionName) {
 			await pb.collection(collectionName)?.authRefresh();
 		}
@@ -19,6 +19,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// clear the auth store on failed refresh
 		pb.authStore.clear();
 	}
+	// const record = await pb.collection('personnel').getOne('RECORD_ID', {});
 
 	event.locals.pb = pb;
 	event.locals.user = structuredClone(pb.authStore.model);
