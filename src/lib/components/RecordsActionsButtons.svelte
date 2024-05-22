@@ -64,6 +64,7 @@
     });
     afterNavigate(() => {
       if(fullyLoaded){
+        getLocal()
         images = [];
         getBase64();
         contenteditable=false

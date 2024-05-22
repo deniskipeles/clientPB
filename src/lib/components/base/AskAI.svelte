@@ -151,7 +151,7 @@
 			</div>
 		</Field>
 		
-		<div class="m-2">
+		<div class="m-2 overflow-content">
 		  {@html value}
 		</div>
 
@@ -162,3 +162,11 @@
 		</svelte:fragment>
 	</OverlayPanel>
 {/if}
+
+
+<style>
+.overflow-content {
+    width: 100%; /* or any other fixed width */
+    overflow-x: auto;
+}
+</style>
