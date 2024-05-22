@@ -74,19 +74,20 @@
       
       tableData = tableDataFxn()
     });
-      setTimeout(()=>{
-        tableData = tableDataFxn()
-      }, 1000)
     
-    function wait(ms) {
-      let loadTable=0
-      //return new Promise(resolve => setTimeout(resolve, ms));
-      while ((!$recordsStore || $recordsStore.length === 0) && loadTable<5) {
+    function contextFxn() {
+        const schemaCopy=schema
+        schema.length = 0
+        let context={}
         setTimeout(()=>{
-          loadTable += 1
-          tableData = tableDataFxn()
+          schema = schemaCopy;
+          const td =tableDataFxn();
+          context={
+            headerData:schema?.map((i) => i?.name?.replaceAll('_', ' ')) ?? [],
+            bodyData:td,
+          }
         }, 100)
-      }
+        return context;
     }
 
     
@@ -240,7 +241,7 @@
         <AskAI context={{
           headerData:schema?.map((i) => i?.name?.replaceAll('_', ' ')) ?? [],
           bodyData:tableData,
-        }} {tableDataFxn} />
+        }} {contextFxn} />
         <button
             use:tooltip={`Click here to download pdf of the content you are viewing currently.(${filds} fields)`}
             class={`flex ${loadingPDF ? 'animate-ping' : ''}`}

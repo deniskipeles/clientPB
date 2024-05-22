@@ -20,9 +20,6 @@
 	}
 	
 	onMount(() => {
-	  if(typeof context == "object"){
-	    context.bodyData=tableDataFxn()
-	  }
 		showOverlay = true;
 		loadMarked()
 		$input = "Explain for me this record."
@@ -31,7 +28,7 @@
 	
 	export let field = { name: 'AI prompt' };
 	export let context = null;
-	export let tableDataFxn;
+	export let contextFxn=null;
 	
 	
 	$: if(Array.isArray(context) && context?.length>2){
@@ -86,7 +83,12 @@
 
 
 <div>
-		<button class="btn" on:click={() => questionAiPanel.show()} type="button"
+		<button class="btn" on:click={() =>{
+		  if(contextFxn){
+  	    context=contextFxn()
+  	  }
+		  return questionAiPanel.show()
+		}} type="button"
 			>ask AI</button
 		>
 </div>
