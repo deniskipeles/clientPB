@@ -313,12 +313,21 @@
 
 
 
-
-<div bind:this={container} class={cssClass}>
     {#if inline}
+<div class={cssClass}>
         <!--div {id} bind:this={element} /-->
         <PreviewHtml {id} markdown={value} />
+</div>
     {:else}
+    
+
+<div bind:this={container} class={cssClass}>
+        <!--
+    {#if inline}
+        div {id} bind:this={element} /
+        <PreviewHtml {id} markdown={value} />
+    {:else}
+        -->
       {#if disabled}
         <textarea {id} bind:this={element} style="visibility: hidden" />
       {:else}
@@ -350,8 +359,8 @@
             </div>
         </div>
       {/if}
-    {/if}
 </div>
+    {/if}
 
 
 
