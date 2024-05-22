@@ -28,6 +28,7 @@
         schema = $activeCollection?.schema?.filter(
             (i) => !$schemaHiddenColumnsStore?.includes(i?.id) && !$schemaHiddenColumnsStore?.includes(i?.name)
         );
+        tableData=tableDataFxn()
     }
     
     $: if($schemaHiddenColumnsStore && fullyLoaded){
@@ -128,7 +129,21 @@
             loadingPDF = false;
         }
     }
-    $: filds = ((Number(schema.length) - Number($schemaHiddenColumnsStore.length)) + 2);
+    let created=$schemaHiddenColumnsStore?.includes("created")
+    let updated=$schemaHiddenColumnsStore?.includes("updated")
+    let val= 0
+    $:if(updated && created){
+      val=2
+    } else if(updated && !created){
+      val=1
+    } else if(!updated && created){
+      val=1
+    } else if(!updated && !created){
+      val=0
+    }
+
+    $: filds = (Number(schema.length) - Number($schemaHiddenColumnsStore.length))-val;
+    
 
     const tableDataFxn =()=> $recordsStore.map((item, row) => {
         return schema?.map((schema_item, col) => {
