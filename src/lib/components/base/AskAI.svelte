@@ -20,7 +20,9 @@
 	}
 	
 	onMount(() => {
-	  tableDataFxn()
+	  if(typeof context == "object"){
+	    context.bodyData=tableDataFxn()
+	  }
 		showOverlay = true;
 		loadMarked()
 		$input = "Explain for me this record."
@@ -29,7 +31,7 @@
 	
 	export let field = { name: 'AI prompt' };
 	export let context = null;
-	export let tableDataFxn = ()=>{};
+	export let tableDataFxn = undefined;
 	
 	
 	$: if(Array.isArray(context) && context?.length>2){
@@ -40,7 +42,18 @@
 	  }
 	}
 	$:if(tableDataFxn){
-	  tableDataFxn()
+	  try{
+	  if(typeof context == "object"){
+	    context.bodyData=tableDataFxn()
+	  }
+	  if(typeof context == "string"){
+	    const temp=JSON.parse(context)
+	    if(temp.bodyData){
+  	    temp.bodyData=tableDataFxn()
+  	    context=temp
+  	  }
+	  }
+	  }catch(e){}
 	}
 	
 	import { useCompletion } from 'ai/svelte'
@@ -140,7 +153,7 @@
 			<div class="flex">
 				<AutoExpandTextarea
 					id={uniqueId}
-					on:input={(e)=>tableDataFxn()}
+					on:input={(e)=>{}}
 					required={true}
 					bind:value={$input}
 					placeholder="Enter your prompt here"
@@ -150,7 +163,6 @@
 					title="Prompt ai"
 					class="btn btn-hint btn-xs"
 					on:click={()=>{
-					  tableDataFxn()
 					  return complete($input,{body:{context}})
 					}}
 				>
