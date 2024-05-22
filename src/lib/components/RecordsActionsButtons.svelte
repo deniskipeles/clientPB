@@ -73,10 +73,10 @@
       }
       
       tableData = tableDataFxn()
+    });
       setTimeout(()=>{
         tableData = tableDataFxn()
-      }, 100)
-    });
+      }, 1000)
     
     function wait(ms) {
       let loadTable=0
@@ -240,7 +240,7 @@
         <AskAI context={{
           headerData:schema?.map((i) => i?.name?.replaceAll('_', ' ')) ?? [],
           bodyData:tableData,
-        }}/>
+        }} {tableDataFxn} />
         <button
             use:tooltip={`Click here to download pdf of the content you are viewing currently.(${filds} fields)`}
             class={`flex ${loadingPDF ? 'animate-ping' : ''}`}

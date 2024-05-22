@@ -20,6 +20,7 @@
 	}
 	
 	onMount(() => {
+	  tableDataFxn()
 		showOverlay = true;
 		loadMarked()
 		$input = "Explain for me this record."
@@ -28,6 +29,7 @@
 	
 	export let field = { name: 'AI prompt' };
 	export let context = null;
+	export let tableDataFxn = null;
 	
 	
 	$: if(Array.isArray(context) && context?.length>2){
@@ -36,6 +38,9 @@
 	  if(typeof context != "string"){
 	    context = JSON.stringify(context)
 	  }
+	}
+	$:if(tableDataFxn){
+	  tableDataFxn()
 	}
 	
 	import { useCompletion } from 'ai/svelte'
