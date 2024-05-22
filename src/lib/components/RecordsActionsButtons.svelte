@@ -71,7 +71,11 @@
         getBase64();
         contenteditable=false
       }
-      wait()
+      
+      tableData = tableDataFxn()
+      setTimeout(()=>{
+        tableData = tableDataFxn()
+      }, 100)
     });
     
     function wait(ms) {
