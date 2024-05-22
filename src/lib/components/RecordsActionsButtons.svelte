@@ -63,27 +63,29 @@
         getBase64();
     });
     
-    let loadTable=0
+    
     afterNavigate(() => {
-      loadTable=0
       if(fullyLoaded){
         getLocal()
         images = [];
         getBase64();
         contenteditable=false
       }
+      wait()
     });
     
-    async function wait(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
+    function wait(ms) {
+      let loadTable=0
+      //return new Promise(resolve => setTimeout(resolve, ms));
+      while ((!$recordsStore || $recordsStore.length === 0) && loadTable<5) {
+        setTimeout(()=>{
+          loadTable += 1
+          tableData = tableDataFxn()
+        }, 100)
+      }
     }
 
-    while ((!$recordsStore || $recordsStore.length === 0) && loadTable<5) {
-      setTimeout(()=>{
-        loadTable += 1
-        tableData = tableDataFxn()
-      }, 100)
-    }
+    
     
     const getBase64 = () => {
         $recordsStore.forEach((item, row) => {
