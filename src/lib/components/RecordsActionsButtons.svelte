@@ -13,13 +13,10 @@
     export let contenteditableFxn: Function;
     let data = { resultList: { items: $recordsStore }, table: $activeCollection };
 
-    let hiddenColumns: string[] = $schemaHiddenColumnsStore;
-    afterNavigate(() => {
-        getLocal();
-        contenteditable = false;
-    });
+    
 
     function getLocal() {
+        let hiddenColumns: string[] = $schemaHiddenColumnsStore;
         try {
             const hiddenColumnsKey = $activeCollection?.id + '@hiddenColumns';
             const encoded = localStorage.getItem(hiddenColumnsKey);
@@ -29,13 +26,17 @@
             }
         } catch (_) {}
         schema = $activeCollection?.schema?.filter(
-            (i) =>
-                (typeof schemaHiddenColumnsStore?.name == "string" || Array.isArray(schemaHiddenColumnsStore?.name)) && !schemaHiddenColumnsStore?.includes(i?.id) && !schemaHiddenColumnsStore?.includes(i?.name)
+            (i) => !$schemaHiddenColumnsStore?.includes(i?.id) && !$schemaHiddenColumnsStore?.includes(i?.name)
         );
+    }
+    
+    $: if($schemaHiddenColumnsStore && fullyLoaded){
+      getLocal()
     }
 
     export let collection = $activeCollection;
     export let contenteditable = false;
+    export let fullyLoaded = false;
 
     let schema = collection?.schema;
     let printingPDF = false;
@@ -56,12 +57,16 @@
     }[] = [];
     $: images = imagesType;
     onMount(() => {
+        fullyLoaded=true
         getLocal();
         getBase64();
     });
     afterNavigate(() => {
+      if(fullyLoaded){
         images = [];
         getBase64();
+        contenteditable=false
+      }
     });
     const getBase64 = () => {
         $recordsStore.forEach((item, row) => {
@@ -125,7 +130,7 @@
     }
     $: filds = ((Number(schema.length) - Number($schemaHiddenColumnsStore.length)) + 2);
 
-    $: tableData = $recordsStore.map((item, row) => {
+    const tableDataFxn =()=> $recordsStore.map((item, row) => {
         return schema?.map((schema_item, col) => {
             if (schema_item.type == 'relation') {
                 let table = data.table;
@@ -165,7 +170,7 @@
                 // return item[schema_item?.name] ?? '';
             } else if (schema_item.type == 'json' && typeof item[schema_item?.name] == 'object') {
                 let json = item[schema_item?.name];
-                if ((typeof schema_item?.name == "string" || Array.isArray(schema_item?.name)) && schema_item?.name?.includes('answers') && Array.isArray(json)) {
+                if (schema_item?.name?.includes('answers') && Array.isArray(json)) {
                     const answers =
                         json?.map((ans: any) => {
                             if (ans?.correct) {
@@ -185,6 +190,11 @@
             }
         }) ?? [];
     }) ?? [];
+    
+    let tableData=[]
+    $: if(fullyLoaded&&schema?.length){
+      tableData=tableDataFxn()
+    }
     
 </script>
 
