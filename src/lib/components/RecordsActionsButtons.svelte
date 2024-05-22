@@ -77,16 +77,11 @@
     
     function contextFxn() {
         const schemaCopy=schema
-        schema.length = 0
-        let context={}
-        setTimeout(()=>{
-          schema = schemaCopy;
-          const td =tableDataFxn();
-          context={
-            headerData:schema?.map((i) => i?.name?.replaceAll('_', ' ')) ?? [],
+        const td =tableDataFxn();
+        context={
+            headerData:schemaCopy?.map((i) => i?.name?.replaceAll('_', ' ')) ?? [],
             bodyData:td,
-          }
-        }, 100)
+        }
         return context;
     }
 
