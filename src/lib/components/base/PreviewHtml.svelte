@@ -9,8 +9,8 @@
 	let marked;
 	const dispatch = createEventDispatcher();
 
-	$: if (marked) {
-		markdown = marked.parse(markdown)
+	$: if (markdown) {
+		if(marked)markdown = marked.parse(markdown);
 	}
 	
 	onMount(()=>{

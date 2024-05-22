@@ -197,7 +197,7 @@
                     editor.on(modelEvents, () => {
                         lastVal = editor.getContent();
                         if (lastVal !== value) {
-                            value = lastVal;
+                            value = marked? marked(lastVal) : lastVal;
                             text = editor.getContent({ format: "text" });
                         }
                     });
@@ -264,7 +264,7 @@
   import { useCompletion } from 'ai/svelte'
   function onFinish(prompt, completion){
 		    $input="";
-		    console.log(prompt,completion)
+		    //console.log(prompt,completion)
 	}
 	const {
 		completion,
