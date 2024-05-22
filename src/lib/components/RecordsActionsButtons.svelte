@@ -218,7 +218,7 @@
     <div class="flex gap-3 text-center dark:text-white">
         <AskAI context={{
           headerData:schema?.map((i) => i?.name?.replaceAll('_', ' ')) ?? [],
-          bodyData:tableDataFxn()
+          bodyData:()=>tableDataFxn()
         }}/>
         <button
             use:tooltip={`Click here to download pdf of the content you are viewing currently.(${filds} fields)`}
