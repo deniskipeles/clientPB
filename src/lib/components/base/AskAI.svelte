@@ -79,6 +79,18 @@
     };
   };
   let viewContext=false
+  
+  import { Printer } from 'svelte-heros-v2';
+  const printPDF = () => {
+        const content = value;
+        const printWindow = window.open('', '', 'height=600,width=800');
+        printWindow.document.write('<html><head><title>Print</title>');
+        printWindow.document.write('</head><body >');
+        printWindow.document.write(content);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+    };
 </script>
 
 
@@ -165,6 +177,11 @@
 		</div>
 
 		<svelte:fragment slot="footer">
+			<button type="button" class="btn btn-transparent" on:click={() => printPDF()}>
+				<span class="txt">
+				  <Printer />{'print'}
+				</span>
+			</button>
 			<button type="button" class="btn btn-transparent" on:click={() => hide()}>
 				<span class="txt">Cancel</span>
 			</button>
