@@ -287,6 +287,16 @@
 	  if(marked) value = marked($completion);
 	  if(!marked) value = $completion;
 	}
+	const printPDF = () => {
+        const content = value;
+        const printWindow = window.open('', '', 'height=600,width=800');
+        printWindow.document.write('<html><head><title>Print</title>');
+        printWindow.document.write('</head><body >');
+        printWindow.document.write(content);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+    };
 </script>
 
 
@@ -331,13 +341,11 @@
     {/if}
 </div>
 
-{#if disabled}
+{#if disabled && value.length>250}
 <button
     use:tooltip={`Click here to download or print what you see in this table in pdf format.`}
     class={`flex ${printingPDF ? 'animate-ping' : ''}`}
-    on:click={() => {
-        printFxn('printable');
-    }}
+    on:click={() => printPDF()}
 >
     <Printer />{'print'}
 </button>
