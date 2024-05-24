@@ -55,6 +55,11 @@
     import { page } from '$app/stores';
     import CommonHelper from "$lib/utils/CommonHelper";
     
+    import { Printer } from 'svelte-heros-v2';
+  	import tooltip from '$lib/actions/tooltip';
+  	import { printFxn } from '$lib/utils';
+  	let printingPDF = false;
+    
 
     export let id = "tinymce_svelte" + CommonHelper.randomString(7);
     export let inline = undefined;
@@ -288,7 +293,7 @@
 
 
 
-<div bind:this={container} class={cssClass}>
+<div id="printable" bind:this={container} class={cssClass}>
     {#if inline}
         <div {id} bind:this={element} />
     {:else}
@@ -325,6 +330,18 @@
       {/if}
     {/if}
 </div>
+
+{#if disabled}
+<button
+    use:tooltip={`Click here to download or print what you see in this table in pdf format.`}
+    class={`flex ${printingPDF ? 'animate-ping' : ''}`}
+    on:click={() => {
+        printFxn('printable');
+    }}
+>
+    <Printer />{'print'}
+</button>
+{/if}
 
 
 

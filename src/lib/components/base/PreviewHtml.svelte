@@ -1,6 +1,10 @@
 <script>
 	import { createEventDispatcher, onMount } from 'svelte';
 	import CommonHelper from "$lib/utils/CommonHelper";
+	import { Printer } from 'svelte-heros-v2';
+	import tooltip from '$lib/actions/tooltip';
+	import { printFxn } from '$lib/utils';
+	let printingPDF = false;
 	
 	
 	export let markdown;
@@ -47,11 +51,19 @@
 </script>
 
 
-<div class="tinymce-wrapper">
+<div id="printable" class="tinymce-wrapper">
     {#key markdown}
 		 {@html markdown}
 		{/key}
 </div>
 
-
+<button
+    use:tooltip={`Click here to download or print what you see in this table in pdf format.`}
+    class={`flex ${printingPDF ? 'animate-ping' : ''}`}
+    on:click={() => {
+        printFxn('printable');
+    }}
+>
+    <Printer />{'print'}
+</button>
 	
