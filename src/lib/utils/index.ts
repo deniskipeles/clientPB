@@ -178,7 +178,7 @@ interface GenPdfCallback {
   (result: { generating: boolean, file: any }): void;
 }
 
-export const genPdf = async (urlApi = 'https://aiwebapp-rwci.onrender.com/', content = '<h1>Hello World!</h1><br/>no content provided', callback: GenPdfCallback) => {
+export const genPDF = async (urlApi = 'https://aiwebapp-rwci.onrender.com/', content = '<h1>Hello World!</h1><br/>no content provided', callback: GenPdfCallback) => {
   let generating = true;
   callback({ generating: true, file: null });
   try {
