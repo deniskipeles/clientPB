@@ -267,10 +267,6 @@
 
   
   import { useCompletion } from 'ai/svelte'
-  function onFinish(prompt, completion){
-		    $input="";
-		    //console.log(prompt,completion)
-	}
 	const {
 		completion,
 		input,
@@ -279,13 +275,18 @@
 		setInput,
 	} = useCompletion({
 		//body: { text },
-		onFinish: (prompt, completion) => onFinish(prompt,completion),
+		onFinish: (prompt, completion) => $input="";,
 		onError: (error) => console.log(error.message),
 	  api:"https://aik-bice.vercel.app/api/completion/schools"
 	});
 	$:if($completion && $isLoading){
-	  if(marked) value = marked($completion);
-	  if(!marked) value = $completion;
+	  if(marked) {
+	    value = marked($completion);
+	  }
+	  if(!marked){
+	    value = $completion;
+	  } 
+	  console.log($completion)
 	}
 	
     
@@ -318,10 +319,7 @@
                 aria-label="Submit"
                 type="button"
                 class="bg-blue-600 hover:bg-blue-500 active:bg-blue-700 transition-colors text-white size-8 md:size-10 btn btn-sm btn-circle btn-hint m-l-auto"
-                on:click={(e) => {
-          				handleSubmit(e);
-          				setInput("");
-          			}}
+                on:click={!$isLoading?handleSubmit:()=>{}}
               >
                 {#if $isLoading}
                   <div class="ai-loader"></div>
