@@ -154,7 +154,7 @@ export function printFxn(divId: string, title = 'Document'): void {
 
 	if (mywindow) {
 		mywindow.document.write(`<html><head><title>${title}</title>`);
-		mywindow.document.write('</head><body>');
+		mywindow.document.write('<script src="//i.upmath.me/latex.js"></script></head><body>');
 
 		const divContent = document.getElementById(divId)?.innerHTML;
 
@@ -170,6 +170,48 @@ export function printFxn(divId: string, title = 'Document'): void {
 	} else {
 		console.error('Failed to open a new window for printing.');
 	}
+}
+
+
+
+interface GenPdfCallback {
+  (result: { generating: boolean, file: any }): void;
+}
+
+export const genPdf = async (urlApi = 'https://aiwebapp-rwci.onrender.com/', content = '<h1>Hello World!</h1><br/>no content provided', callback: GenPdfCallback) => {
+  let generating = true;
+  callback({ generating: true, file: null });
+  try {
+    const data = `<html><head></head><body>${content}</body></html>`
+    const response: Response = await fetch(urlApi, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/html'
+      },
+      body: data
+    })
+    
+    if (!response.ok) {
+      throw new Error('Network response was not ok.')
+    }
+
+    const blob: Blob = await response.blob()
+    const url: string = window.URL.createObjectURL(blob)
+    
+    const a: HTMLAnchorElement = document.createElement('a')
+    a.href = url
+    const fileName: string = `file-${Date.now()}.pdf`
+    a.download = fileName
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    window.URL.revokeObjectURL(url)
+    generating = false;
+    callback({ generating: false, file: fileName });
+  } catch (error) {
+    generating = false;
+    callback({ generating: false, file: null });
+  }
 }
 
 export function extractJSON(str: string) {

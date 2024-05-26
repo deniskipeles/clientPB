@@ -81,52 +81,14 @@
   let viewContext=false
   
   import { Printer, CloudArrowDown } from 'svelte-heros-v2';
-  const printPDF = () => {
-        const content = value;
-        const printWindow = window.open('', '', 'height=600,width=800');
-        printWindow.document.write('<html><head><title>Print</title>');
-        printWindow.document.write('</head><body >');
-        printWindow.document.write(content);
-        printWindow.document.write('</body></html>');
-        printWindow.document.close();
-        printWindow.print();
-    };
+  import { printFxn,genPDF } from '$lib/utils';
+  const uniqueDivId = "print" + CommonHelper.randomString(7);
   
   $: generating = false
-  const genPDF = async (urlApi = 'https://aiwebapp-rwci.onrender.com/',data = '<html><body><h1>Hello World!</h1></body></html>') => {
-    const content = value;
-    data = `<html><body>${content}</body></html>`
-    generating=true
-    try {
-      const response = await fetch(urlApi, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'text/html'
-        },
-        body: data
-      })
-			
-      if (!response.ok) {
-        throw new Error('Network response was not ok.')
-      }
-
-      const blob = await response.blob()
-      const url = window.URL.createObjectURL(blob)
-			
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `file-${Date.now()}.pdf`
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      window.URL.revokeObjectURL(url)
-      generating = false
-			console.log("file gen complete")
-    } catch (error) {
-      generating = false
-      console.error(error)
-    }
-  }
+  const genPDF_fxn = async()=> await genPDF(urlApi = 'https://aiwebapp-rwci.onrender.com/',value,(options)=>{
+    generating=options.generating;
+    // file=options.file;
+  })
 </script>
 
 
@@ -208,17 +170,17 @@
 			</div>
 		</Field>
 		
-		<div class="m-2 overflow-content">
+		<div id={uniqueDivId} class="m-2 overflow-content">
 		  {@html value}
 		</div>
 
 		<svelte:fragment slot="footer">
-		  <button type="button" class="btn btn-transparent" on:click={() => genPDF()}>
+		  <button type="button" class="btn btn-transparent" on:click={genPDF_fxn}>
 				<span class="txt {generating ? 'animate-ping' : ''}">
 				  <CloudArrowDown /> {'pdf'}
 				</span>
 			</button>|
-			<button type="button" class="btn btn-transparent" on:click={() => printPDF()}>
+			<button type="button" class="btn btn-transparent" on:click={() => printFxn(uniqueDivId)}>
 				<span class="txt">
 				  <Printer />{'print'}
 				</span>

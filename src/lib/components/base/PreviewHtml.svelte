@@ -1,10 +1,9 @@
 <script>
 	import { createEventDispatcher, onMount } from 'svelte';
 	import CommonHelper from "$lib/utils/CommonHelper";
-	import { Printer } from 'svelte-heros-v2';
 	import tooltip from '$lib/actions/tooltip';
-	import { printFxn } from '$lib/utils';
-	let printingPDF = false;
+	
+	
 	
 	
 	export let markdown;
@@ -48,22 +47,38 @@
 		};
 		console.log("mathjax loaded")
 	}
+	import { Printer, CloudArrowDown } from 'svelte-heros-v2';
+  import { printFxn,genPDF } from '$lib/utils';
+  const uniqueDivId = "print" + CommonHelper.randomString(7);
+  
+  $: generating = false
+  let printingPDF = false;
+  
+  const genPDF_fxn = async()=> await genPDF(urlApi = 'https://aiwebapp-rwci.onrender.com/',markdown,(options)=>{
+    generating=options.generating;
+    // file=options.file;
+  })
 </script>
 
 
-<div id="printable" class="tinymce-wrapper">
+<div id={uniqueDivId} class="tinymce-wrapper">
     {#key markdown}
 		 {@html markdown}
 		{/key}
 </div>
-
-<button
-    use:tooltip={`Click here to download or print what you see in this table in pdf format.`}
-    class={`flex ${printingPDF ? 'animate-ping' : ''}`}
-    on:click={() => {
-        printFxn('printable');
-    }}
->
-    <Printer />{'print'}
-</button>
-	
+<div>
+	<button type="button" class="btn btn-transparent" on:click={genPDF_fxn}>
+		<span class="txt {generating ? 'animate-ping' : ''}">
+		  <CloudArrowDown /> {'pdf'}
+		</span>
+	</button>|
+  <button
+      use:tooltip={`Click here to download or print what you see in this table in pdf format.`}
+      class={`flex ${printingPDF ? 'animate-ping' : ''}`}
+      on:click={() => {
+          printFxn(uniqueDivId);
+      }}
+  >
+      <Printer />{'print'}
+  </button>
+</div>
