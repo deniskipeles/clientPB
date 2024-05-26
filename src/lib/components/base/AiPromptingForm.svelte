@@ -127,7 +127,8 @@
 		} catch (error) {}
 	};
 
-	let responseText = `
+	let responseText = ``
+	let responseText1 = `
 		This is part of response text
 		{
 		"title": "Bard Knowledge Quiz",

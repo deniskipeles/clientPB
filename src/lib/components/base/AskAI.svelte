@@ -52,7 +52,7 @@
 		body:{context},
 		onFinish: (prompt, completion) => $input="",
 		onError: (error) => console.log(error.message),
-	  api:"https://aik-bice.vercel.app/api/completion/google"
+	  api:"https://aik-bice.vercel.app/api/completion/schools"
 	});
 	$:if($completion && $isLoading){
 	  if(marked) value = marked($completion);

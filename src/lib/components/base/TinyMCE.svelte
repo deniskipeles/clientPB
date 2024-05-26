@@ -281,29 +281,23 @@
 		//body: { text },
 		onFinish: (prompt, completion) => onFinish(prompt,completion),
 		onError: (error) => console.log(error.message),
-	  api:"https://aik-bice.vercel.app/api/completion/google"
+	  api:"https://aik-bice.vercel.app/api/completion/schools"
 	});
 	$:if($completion && $isLoading){
 	  if(marked) value = marked($completion);
 	  if(!marked) value = $completion;
 	}
-	const printPDF = () => {
-        const content = value;
-        const printWindow = window.open('', '', 'height=600,width=800');
-        printWindow.document.write('<html><head><title>Print</title>');
-        printWindow.document.write('</head><body >');
-        printWindow.document.write(content);
-        printWindow.document.write('</body></html>');
-        printWindow.document.close();
-        printWindow.print();
-    };
+	
+    
+  import { printFxn,genPDF } from '$lib/utils';
+  const uniqueDivId = "print" + CommonHelper.randomString(7);
 </script>
 
 
 
 
 
-<div id="printable" bind:this={container} class={cssClass}>
+<div id={printFxn} bind:this={container} class={cssClass}>
     {#if inline}
         <div {id} bind:this={element} />
     {:else}
@@ -345,9 +339,11 @@
 <button
     use:tooltip={`Click here to download or print what you see in this table in pdf format.`}
     class={`flex ${printingPDF ? 'animate-ping' : ''}`}
-    on:click={() => printPDF()}
+    on:click={() => printFxn(uniqueDivId)}
 >
+  <span class="txt">
     <Printer />{'print'}
+  </span>
 </button>
 {/if}
 
