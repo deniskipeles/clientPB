@@ -289,7 +289,7 @@
 	}
 	
     
-  import { printFxn,genPDF } from '$lib/utils';
+  import { printFxn } from '$lib/utils';
   const uniqueDivId = "print" + CommonHelper.randomString(7);
 </script>
 
@@ -297,7 +297,7 @@
 
 
 
-<div id={printFxn} bind:this={container} class={cssClass}>
+<div id={uniqueDivId} bind:this={container} class={cssClass}>
     {#if inline}
         <div {id} bind:this={element} />
     {:else}
