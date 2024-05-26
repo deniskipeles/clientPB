@@ -115,7 +115,7 @@
 			
       const a = document.createElement('a')
       a.href = url
-      a.download = 'file.pdf'
+      a.download = `file-${Date.now()}.pdf`
       document.body.appendChild(a)
       a.click()
       document.body.removeChild(a)
@@ -213,12 +213,12 @@
 		</div>
 
 		<svelte:fragment slot="footer">
-		  <button type="button" class="btn btn-transparent" on:click={() => printPDF()}>
+		  <button type="button" class="btn btn-transparent" on:click={() => genPDF()}>
 				<span class="txt {generating ? 'animate-ping' : ''}">
 				  <CloudArrowDown /> {'pdf'}
 				</span>
 			</button>|
-			<button type="button" class="btn btn-transparent" on:click={() => genPDF()}>
+			<button type="button" class="btn btn-transparent" on:click={() => printPDF()}>
 				<span class="txt">
 				  <Printer />{'print'}
 				</span>
