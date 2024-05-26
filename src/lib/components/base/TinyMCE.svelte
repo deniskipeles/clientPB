@@ -284,7 +284,7 @@
 	  }else{
 	    value = $completion;
 	  } 
-	  console.log($completion)
+	  //console.log($completion)
 	}
 	
     
