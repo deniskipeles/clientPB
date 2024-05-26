@@ -18,7 +18,7 @@
 	
 	onMount(()=>{
 		loadMarked()
-		loadMathjax()
+		setTimeout(() => {()=>loadMathjax()},5000)
 	})
 	const loadMarked = () => {
 	  if(!window.marked){
@@ -54,7 +54,7 @@
   $: generating = false
   let printingPDF = false;
   
-  const genPDF_fxn = async()=> await genPDF(urlApi = 'https://aiwebapp-rwci.onrender.com/',markdown,(options)=>{
+  const genPDF_fxn = async()=> await genPDF('https://aiwebapp-rwci.onrender.com/',markdown,(options)=>{
     generating=options.generating;
     // file=options.file;
   })

@@ -85,7 +85,7 @@
   const uniqueDivId = "print" + CommonHelper.randomString(7);
   
   $: generating = false
-  const genPDF_fxn = async()=> await genPDF(urlApi = 'https://aiwebapp-rwci.onrender.com/',value,(options)=>{
+  const genPDF_fxn = async()=> await genPDF('https://aiwebapp-rwci.onrender.com/',value,(options)=>{
     generating=options.generating;
     // file=options.file;
   })
