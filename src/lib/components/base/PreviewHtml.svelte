@@ -1,6 +1,7 @@
 <script>
 	import { createEventDispatcher, onMount } from 'svelte';
 	import CommonHelper from "$lib/utils/CommonHelper";
+	import LatexImage from "$lib/components/base/LatexImage.svelte";
 	import tooltip from '$lib/actions/tooltip';
 	
 	
@@ -18,7 +19,6 @@
 	
 	onMount(()=>{
 		loadMarked()
-		loadUpmath()
 		//setTimeout(() => {()=>loadMathjax()},5000)
 	})
 	const loadMarked = () => {
@@ -34,16 +34,6 @@
 	  }else{
         marked = window.marked.marked
 	  }
-	}
-	const loadUpmath = () => {
-		let script = document.createElement('script');
-    script.src = "https://i.upmath.me/latex.js";
-    document.head.append(script);
-		
-		script.onload = () => {
-      marked = window.marked.marked
-			console.log("upmath loaded")
-		};
 	}
 	
 	const loadMathjax = () => {
@@ -71,15 +61,14 @@
     // file=options.file;
   })
 </script>
-<svelte:head>
-  <script src="//i.upmath.me/latex.js"></script>
-</svelte:head>
 
+<LatexImage>
 <div id={uniqueDivId} class="tinymce-wrapper">
     {#key markdown}
 		 {@html markdown}
 		{/key}
 </div>
+</LatexImage>
 <div>
 	<button type="button" class="btn btn-transparent" on:click={genPDF_fxn}>
 		<span class="txt {generating ? 'animate-ping' : ''}">
