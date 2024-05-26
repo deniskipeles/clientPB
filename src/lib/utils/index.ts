@@ -5,6 +5,7 @@ export const serializeNonPOJOs = (obj: any) => {
 	return JSON.parse(JSON.stringify(obj));
 };
 
+
 export const getPbImageUrl = (doc: any, img: string | null, dim: string | undefined) => {
 	let logo = (img ? pb.files.getUrl(doc, img, { thumb: dim ?? '100x100' }) : null) ?? null;
 	return logo;
