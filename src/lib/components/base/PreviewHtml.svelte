@@ -18,6 +18,7 @@
 	
 	onMount(()=>{
 		loadMarked()
+		loadUpmath()
 		//setTimeout(() => {()=>loadMathjax()},5000)
 	})
 	const loadMarked = () => {
@@ -34,6 +35,17 @@
         marked = window.marked.marked
 	  }
 	}
+	const loadUpmath = () => {
+		let script = document.createElement('script');
+    script.src = "https://i.upmath.me/latex.js";
+    document.head.append(script);
+		
+		script.onload = () => {
+      marked = window.marked.marked
+			console.log("upmath loaded")
+		};
+	}
+	
 	const loadMathjax = () => {
 		let script = document.createElement('script');
     script.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js";
@@ -59,7 +71,9 @@
     // file=options.file;
   })
 </script>
-
+<svelte:head>
+  <script src="//i.upmath.me/latex.js"></script>
+</svelte:head>
 
 <div id={uniqueDivId} class="tinymce-wrapper">
     {#key markdown}

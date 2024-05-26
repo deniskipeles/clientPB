@@ -97,7 +97,6 @@
 <svelte:head>
 	<title>{app?.data?.name ?? 'ClientPB'}</title>
 	<meta name="description" content={app?.data?.decription ?? 'ClientPB interactive page'} />
-	<script src="//i.upmath.me/latex.js"></script>
 </svelte:head>
 
 <svelte:window bind:innerWidth={width} />
