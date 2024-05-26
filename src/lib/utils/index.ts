@@ -182,7 +182,7 @@ export const genPDF = async (urlApi = 'https://aiwebapp-rwci.onrender.com/', con
   let generating = true;
   callback({ generating: true, file: null });
   try {
-    const data = `<html><head></head><body>${content}</body></html>`
+    const data = `<html><head><script src="//i.upmath.me/latex.js"></script></head><body>${content}</body></html>`
     const response: Response = await fetch(urlApi, {
       method: 'POST',
       headers: {
