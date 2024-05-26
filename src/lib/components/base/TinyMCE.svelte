@@ -274,16 +274,14 @@
 		handleSubmit,
 		setInput,
 	} = useCompletion({
-		//body: { text },
-		onFinish: (prompt, completion) => $input="";,
+		onFinish: (prompt, completion) => $input="",
 		onError: (error) => console.log(error.message),
 	  api:"https://aik-bice.vercel.app/api/completion/schools"
 	});
 	$:if($completion && $isLoading){
 	  if(marked) {
 	    value = marked($completion);
-	  }
-	  if(!marked){
+	  }else{
 	    value = $completion;
 	  } 
 	  console.log($completion)
