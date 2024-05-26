@@ -18,7 +18,7 @@
 	
 	onMount(()=>{
 		loadMarked()
-		setTimeout(() => {()=>loadMathjax()},5000)
+		//setTimeout(() => {()=>loadMathjax()},5000)
 	})
 	const loadMarked = () => {
 	  if(!window.marked){
