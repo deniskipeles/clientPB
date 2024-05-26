@@ -36,19 +36,6 @@
 	  }
 	}
 	
-	const loadMathjax = () => {
-		let script = document.createElement('script');
-    script.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js";
-    document.head.append(script);
-		
-		script.onload = () => {
-      MathJax = {
-        tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
-        svg: {fontCache: 'global'}
-      };
-		};
-		console.log("mathjax loaded")
-	}
 	import { Printer, CloudArrowDown } from 'svelte-heros-v2';
   import { printFxn,genPDF } from '$lib/utils';
   const uniqueDivId = "print" + CommonHelper.randomString(7);
@@ -63,12 +50,11 @@
 </script>
 
 <LatexImage>
-<div id={uniqueDivId} class="tinymce-wrapper">
-    {#key markdown}
-		 {@html markdown}
-		{/key}
-</div>
+  <div id={uniqueDivId} class="tinymce-wrapper">
+  		{@html markdown}
+  </div>
 </LatexImage>
+
 <div>
 	<button type="button" class="btn btn-transparent" on:click={genPDF_fxn}>
 		<span class="txt {generating ? 'animate-ping' : ''}">
