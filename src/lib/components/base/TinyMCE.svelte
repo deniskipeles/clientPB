@@ -57,7 +57,7 @@
     
     import { Printer } from 'svelte-heros-v2';
   	import tooltip from '$lib/actions/tooltip';
-  	import { printFxn } from '$lib/utils';
+  	
   	let printingPDF = false;
     
 
