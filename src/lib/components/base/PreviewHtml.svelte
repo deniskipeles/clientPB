@@ -69,8 +69,19 @@
   		{@html markdown}
   	{/key}
 </div>
-  ============
-<div class="no-tailwind" bind:innerHTML={markdown}/>
+  ============initial
+<div class="no-tailwind">
+    {#key markdown}
+  		{@html markdown}
+  	{/key}
+</div>
+  ============unset
+<div class="no-tailwind2">
+    {#key markdown}
+  		{@html markdown}
+  	{/key}
+</div>
+  ============unset
   </div>
 <!--LatexImage/-->
 
@@ -98,6 +109,9 @@
 <style>
   .no-tailwind {
       all: initial;
+  }
+  .no-tailwind2 {
+      all: unset;
   }
 </style>
 
