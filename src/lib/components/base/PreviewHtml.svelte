@@ -63,13 +63,13 @@
   })
 </script>
 
-<div id="preview">
   <div id={uniqueDivId} class="tinymce-wrapper">
+<div id="preview">
     {#key markdown}
   		{@html markdown}
   	{/key}
-  </div>
 </div>
+  </div>
 <!--LatexImage/-->
 
 <div class="flex">
