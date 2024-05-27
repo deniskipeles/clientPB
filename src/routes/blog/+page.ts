@@ -16,7 +16,7 @@ export async function load({ params, url }) {
       .getList(page, perPage, {
         filter,
         sort: '-created',
-        fields: `*:excerpt(${200},${true})`
+        fields: `*:excerpt(${250},${true})`
       });
 
     return { articles };

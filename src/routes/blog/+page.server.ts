@@ -1,4 +1,4 @@
-import { pb as PB } from '$lib/pocketbase';
+//import { pb as PB } from '$lib/pocketbase';
 
 export async function load({ params, url, locals:{pb} }) {
   try {
@@ -11,12 +11,12 @@ export async function load({ params, url, locals:{pb} }) {
     
     const filter = `category ~ "${category}" && title ~ "${search}"`;
     
-    const articles= await pb
+    const articles = await pb
       .collection('blog')
       .getList(page, perPage, {
         filter,
         sort: '-created',
-        fields: `*:excerpt(${200},${true})`
+        fields: `*:excerpt(${250},${true})`
       });
 
     return { articles };
