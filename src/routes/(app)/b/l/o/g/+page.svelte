@@ -1,4 +1,5 @@
-<!--script>
+
+<script>
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
   import {
@@ -9,29 +10,60 @@
   } from 'flowbite-svelte';
   import { invalidateAll,afterNavigate } from '$app/navigation';
   
+  import { page } from '$app/stores';
   import RecordUpsertPanel from '$lib/components/records/RecordUpsertPanel.svelte';
   import Backdrop from '$lib/components/base/Backdrop.svelte';
   import tooltip from '$lib/actions/tooltip';
 
   /** @type {import('./$types').PageData} */
   export let data;
-  $: dt = data??{};
-  $: results = data?.results ?? [];
 
-  let collection = data?.tables?.find((t)=> t?.name=="blog") ?? [];
-  let collectionUpsert = data?.tables?.find((t)=> t?.name=="blog") ?? [];
+  let collection = data?.tables?.find((t)=> t?.name=="blog");
+  let collectionUpsert = data?.tables?.find((t)=> t?.name=="blog");
   let recordUpsertPanel;
 
   let categories = collection?.schema?.find(field => field?.name === 'category')?.options?.values ?? [];
   
   let isLoading = false;
-
+  $: if(data){
+    isLoading = false;
+  }
   $: canLoadMore = data?.results?.totalItems > data?.results?.items?.length;
   let isLoadingMore = false;
   
   import { pb } from '$lib/pocketbase';
+  async function loadMore() {
+    isLoadingMore=true
+    try {
+      const perPage = Number($page.url.searchParams.get('perPage') ?? data.results.perPage ?? 30);
+      const pagge = Number($page.url.searchParams.get('page') ?? (data.results.page+1) ?? 2);
+      const category = ($page.url.searchParams.get('category') ?? '');
+      const search = ($page.url.searchParams.get('search') ?? '');
+      
+      const filter = `category ~ "${category}" && title ~ "${search}"`;
+      
+      const results= await pb
+        .collection('blog')
+        .getList(pagge, perPage, {
+          filter,
+          sort: '-created',
+          fields: `*:excerpt(${200},${true})`
+        });
   
-</script-->
+      data.results.items = [...data?.results?.items,...results?.items]
+      data.results.page = results?.page
+      isLoadingMore=false
+    } catch (error) {
+      isLoadingMore=false
+      console.log(error);
+    }
+  }
+  
+let schowOverlay=false
+onMount(()=>{
+  schowOverlay=true
+})
+</script>
 
 <Breadcrumb class="pt-20 py-8">
   <BreadcrumbItem href="/" home>Home</BreadcrumbItem>
@@ -97,65 +129,37 @@
 
 
 
-<script>
-  import { goto } from '$app/navigation';
-  import {
-    Card,
-    Button,
-    Breadcrumb,
-    BreadcrumbItem
-  } from 'flowbite-svelte';
-  import { invalidateAll,afterNavigate } from '$app/navigation';
-  
-  import { page } from '$app/stores';
-  import RecordUpsertPanel from '$lib/components/records/RecordUpsertPanel.svelte';
-  import Backdrop from '$lib/components/base/Backdrop.svelte';
-  import tooltip from '$lib/actions/tooltip';
 
-  /** @type {import('./$types').PageData} */
-  export let data;
-
-  let collection = data?.tables?.find((t)=> t?.name=="blog");
-  let collectionUpsert = data?.tables?.find((t)=> t?.name=="blog");
-  let recordUpsertPanel;
-
-  let categories = collection?.schema?.find(field => field?.name === 'category')?.options?.values ?? [];
-  
-  let isLoading = false;
-  $: if(data){
-    isLoading = false;
-  }
-  $: canLoadMore = data?.results?.totalItems > data?.results?.items?.length;
-  let isLoadingMore = false;
-  
-  import { pb } from '$lib/pocketbase';
-  async function loadMore() {
-    isLoadingMore=true
-    try {
-      const perPage = Number($page.url.searchParams.get('perPage') ?? data.results.perPage ?? 30);
-      const pagge = Number($page.url.searchParams.get('page') ?? (data.results.page+1) ?? 2);
-      const category = ($page.url.searchParams.get('category') ?? '');
-      const search = ($page.url.searchParams.get('search') ?? '');
-      
-      const filter = `category ~ "${category}" && title ~ "${search}"`;
-      
-      const results= await pb
-        .collection('blog')
-        .getList(pagge, perPage, {
-          filter,
-          sort: '-created',
-          fields: `*:excerpt(${200},${true})`
-        });
-  
-      data.results.items = [...data?.results?.items,...results?.items]
-      data.results.page = results?.page
-      isLoadingMore=false
-    } catch (error) {
-      isLoadingMore=false
-      console.log(error);
-    }
-  }
-
-</script>
+{#if data?.results?.items.length && canLoadMore}
+	<tr>
+		<td colspan="99" class="txt-center">
+			<button
+				class="btn btn-expanded-lg btn-secondary btn-horizontal-sticky"
+				disabled={isLoadingMore}
+				class:btn-loading={isLoadingMore}
+				on:click|preventDefault={() => loadMore()}
+			>
+				<span class="txt">Load more</span>
+			</button>
+		</td>
+	</tr>
+{/if}
 
 
+
+<Backdrop {isLoading}/>
+{#if schowOverlay}
+<RecordUpsertPanel
+  bind:this={recordUpsertPanel}
+  collection={collectionUpsert}
+  on:hide={() => {
+    recordUpsertPanel?.hide()
+  }}
+  on:save={(e) => {
+    invalidateAll();
+  }}
+  on:delete={(e) => {
+    invalidateAll();
+  }}
+/>
+{/if}
