@@ -63,12 +63,13 @@
   })
 </script>
 
-
+<div id="preview">
   <div id={uniqueDivId} class="tinymce-wrapper">
     {#key markdown}
   		{@html markdown}
   	{/key}
   </div>
+</div>
 <!--LatexImage/-->
 
 <div class="flex">
@@ -89,3 +90,87 @@
     </span>
   </button>
 </div>
+
+
+
+
+
+<style>
+  /* Reset styles for the preview div */
+  #preview, #preview * {
+    all: unset;
+    display: block;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+    text-align: left;
+    text-decoration: none;
+    background: none;
+    border: none;
+    box-sizing: border-box;
+  }
+
+  /* Apply desired styles to the preview div */
+  #preview {
+    font-family: Arial, sans-serif;
+    font-size: 14pt;
+    line-height: 1.6;
+    color: #333;
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    overflow: auto;
+  }
+
+  /* Optional: Style specific elements within the preview div */
+  #preview h1, #preview h2, #preview h3, #preview h4, #preview h5, #preview h6 {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    font-weight: bold;
+  }
+
+  #preview p {
+    margin: 0 0 1em 0;
+  }
+
+  #preview a {
+    color: #0066cc;
+    text-decoration: underline;
+  }
+
+  #preview ul, #preview ol {
+    margin: 0 0 1em 1.5em;
+  }
+
+  #preview table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1em;
+  }
+
+  #preview th, #preview td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  #preview th {
+    background-color: #f2f2f2;
+  }
+
+  #preview img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  #preview code {
+    font-family: "Courier New", Courier, monospace;
+    background-color: #f5f5f5;
+    padding: 2px 4px;
+    border-radius: 4px;
+  }
+</style>
