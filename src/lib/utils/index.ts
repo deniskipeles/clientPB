@@ -1,6 +1,8 @@
 import { pb } from '$lib/pocketbase';
 import { addErrorToast } from '$lib/stores/toasts';
 
+const paperCSS=`<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.min.css" integrity="sha512-V+r0ugxPpGraMA2ubEWvqpfcZZAfMAbnSDPeu/6gYFfdxlgJGfCuNTNrZkrjQ0sJBoySdN6uoTVwJ+4P/BeTkg==" crossorigin="anonymous" referrerpolicy="no-referrer" />`
+
 export const serializeNonPOJOs = (obj: any) => {
 	return JSON.parse(JSON.stringify(obj));
 };
@@ -154,6 +156,7 @@ export function printFxn(divId: string, title = 'Document',content=""): void {
 
 	if (mywindow) {
 		mywindow.document.write(`<html><head><title>${title} ${fileName}</title>`);
+		mywindow.document.write(paperCSS);
 		mywindow.document.write('<script src="//i.upmath.me/latex.js"></script></head><body>');
 
 		const divContent = document.getElementById(divId)?.innerHTML ?? content;
@@ -182,7 +185,7 @@ export const genPDF = async (urlApi = 'https://aiwebapp-rwci.onrender.com/', con
   let generating = true;
   callback({ generating: true, file: null });
   try {
-    const data = `<html><head><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script><script src="https://i.upmath.me/latex.js"></script></head><body>${content}</body></html>`
+    const data = `<html><head>${paperCSS}<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script><script src="https://i.upmath.me/latex.js"></script></head><body>${content}</body></html>`
     const response: Response = await fetch(urlApi, {
       method: 'POST',
       headers: {
