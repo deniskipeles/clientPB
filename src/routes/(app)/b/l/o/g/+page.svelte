@@ -15,6 +15,8 @@
 
   /** @type {import('./$types').PageData} */
   export let data;
+  $: dt = data??{};
+  $: results = data?.results ?? [];
 
   let collection = data?.tables?.find((t)=> t?.name=="blog") ?? [];
   let collectionUpsert = data?.tables?.find((t)=> t?.name=="blog") ?? [];
@@ -34,7 +36,7 @@
 onMount(()=>{
   console.log("onMount",data)
 })
-console.log("not mount",data)
+console.log("results",results)
 </script>
 
 <Breadcrumb class="pt-20 py-8">
@@ -99,7 +101,7 @@ console.log("not mount",data)
   </div>
 </div>
 
-{data?.results}
+{JSON.stringify(dt)}
 
 
 
