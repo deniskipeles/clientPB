@@ -95,26 +95,24 @@
 
 
 
+
 <style>
-  /* Reset styles for the preview div */
+  /* General reset for all elements inside the preview */
   #preview, #preview * {
-    all: unset;
-    display: block;
-    width: auto;
+    all: initial;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
     font-family: inherit;
     font-size: inherit;
     line-height: inherit;
     color: inherit;
-    text-align: left;
-    text-decoration: none;
     background: none;
     border: none;
-    box-sizing: border-box;
+    text-decoration: none;
   }
 
-  /* Apply desired styles to the preview div */
+  /* Apply default styles for common elements */
   #preview {
     font-family: Arial, sans-serif;
     font-size: 14pt;
@@ -126,11 +124,29 @@
     overflow: auto;
   }
 
-  /* Optional: Style specific elements within the preview div */
   #preview h1, #preview h2, #preview h3, #preview h4, #preview h5, #preview h6 {
+    font-weight: bold;
     margin-top: 1em;
     margin-bottom: 0.5em;
-    font-weight: bold;
+  }
+
+  #preview h1 {
+    font-size: 2em;
+  }
+  #preview h2 {
+    font-size: 1.5em;
+  }
+  #preview h3 {
+    font-size: 1.17em;
+  }
+  #preview h4 {
+    font-size: 1em;
+  }
+  #preview h5 {
+    font-size: 0.83em;
+  }
+  #preview h6 {
+    font-size: 0.67em;
   }
 
   #preview p {
@@ -144,6 +160,19 @@
 
   #preview ul, #preview ol {
     margin: 0 0 1em 1.5em;
+    padding-left: 40px; /* Ensure default padding for lists */
+  }
+
+  #preview ul {
+    list-style-type: disc;
+  }
+
+  #preview ol {
+    list-style-type: decimal;
+  }
+
+  #preview li {
+    margin-bottom: 0.5em;
   }
 
   #preview table {
@@ -173,4 +202,9 @@
     padding: 2px 4px;
     border-radius: 4px;
   }
+
+  #preview strong, #preview b {
+    font-weight: bolder;
+  }
 </style>
+
