@@ -264,7 +264,7 @@
 	};
 </script>
 
-{#if field.name == 'question'}
+{#if field.name == 'question_______to be removed'}
 	<div>
 		<button class="btn" on:click={() => questionAiPanel.show()} type="button"
 			>use AI</button
