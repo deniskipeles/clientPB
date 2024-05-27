@@ -92,8 +92,8 @@
 	const setQs = (responseText: string) => {
 		try {
 			const result = getJson(responseText) as AiResponse;
-                        //result.questions = qvalues;
-			if (result.questions) {
+      result.questions = qvalues;
+			if (result?.questions) {
 				// console.log(result);
 				res = result;
 				for (const obj of res.questions) {
@@ -116,7 +116,7 @@
 							answers: CommonHelper.getAnsFromArray(obj.answers)
 						}
 					];
-					qValues = questions.map((val) => {
+					qValues = questions?.map((val) => {
 						return {
 							...val,
 							answers: CommonHelper.getAnsFromArray(val.answers)
@@ -191,7 +191,7 @@
 	let qValues: any[] = [value];
 	onMount(() => {
 		showOverlay = true;
-		setQs(responseText);
+		//setQs(responseText);
 		if (typeof value == 'object' && !Array.isArray(value) && value?.question) {
 			res.questions = [value];
 		}
@@ -207,21 +207,7 @@
 		}[]
 	) => {};
 
-	onMount(async () => {
-		await ApiClient.collection('ai_queries').subscribe(
-			'*',
-			(e) => {
-				if (e.action == 'create' || e.action == 'update') {
-					setQs(e.record?.data);
-					addSuccessToast('The ai generated the questions successfully.');
-				}
-			},
-			{
-				filter: `request_id = '${request_id}' || request_id = '${$page.url.hostname}'`,
-				fields: '*,'
-			}
-		);
-	});
+	
 	export let field = { name: '' };
 
 	const getAiQs = async (apiKey: string) => {

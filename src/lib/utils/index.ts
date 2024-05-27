@@ -148,15 +148,15 @@ export async function urlToBase64(url: string): Promise<string | null> {
 
 // const imageUrl = 'http://example.com/path/to/your/image.jpg';
 
-export function printFxn(divId: string, title = 'Document'): void {
+export function printFxn(divId: string, title = 'Document',content=""): void {
 	const fileName = `${title}_${new Date().toLocaleDateString()}.html`;
 	const mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=150');
 
 	if (mywindow) {
-		mywindow.document.write(`<html><head><title>${title}</title>`);
+		mywindow.document.write(`<html><head><title>${title} ${fileName}</title>`);
 		mywindow.document.write('<script src="//i.upmath.me/latex.js"></script></head><body>');
 
-		const divContent = document.getElementById(divId)?.innerHTML;
+		const divContent = document.getElementById(divId)?.innerHTML ?? content;
 
 		if (divContent) {
 			mywindow.document.write(divContent);
