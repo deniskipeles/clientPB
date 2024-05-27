@@ -97,7 +97,7 @@
 
 <style>
   .no-tailwind {
-      all: unset;
+      all: initial;
   }
 </style>
 
