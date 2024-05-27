@@ -19,7 +19,7 @@ export async function load({ params, url }) {
         fields: `*:excerpt(${250},${true})`
       });
 
-    return { articles };
+    return { results:articles };
   } catch (error) {
     return { error };
   }

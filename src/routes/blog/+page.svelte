@@ -26,21 +26,21 @@
   $: if(data){
     isLoading = false;
   }
-  $: canLoadMore = data?.articles?.totalItems > data?.articles?.items?.length;
+  $: canLoadMore = data?.results?.totalItems > data?.results?.items?.length;
   let isLoadingMore = false;
   
   import { pb } from '$lib/pocketbase';
   async function loadMore() {
     isLoadingMore=true
     try {
-      const perPage = Number($page.url.searchParams.get('perPage') ?? data.articles.perPage ?? 30);
-      const pagge = Number($page.url.searchParams.get('page') ?? (data.articles.page+1) ?? 2);
+      const perPage = Number($page.url.searchParams.get('perPage') ?? data.results.perPage ?? 30);
+      const pagge = Number($page.url.searchParams.get('page') ?? (data.results.page+1) ?? 2);
       const category = ($page.url.searchParams.get('category') ?? '');
       const search = ($page.url.searchParams.get('search') ?? '');
       
       const filter = `category ~ "${category}" && title ~ "${search}"`;
       
-      const articles= await pb
+      const results= await pb
         .collection('blog')
         .getList(pagge, perPage, {
           filter,
@@ -48,8 +48,8 @@
           fields: `*:excerpt(${200},${true})`
         });
   
-      data.articles.items = [...data?.articles?.items,...articles?.items]
-      data.articles.page = articles?.page
+      data.results.items = [...data?.results?.items,...results?.items]
+      data.results.page = results?.page
       isLoadingMore=false
     } catch (error) {
       isLoadingMore=false
@@ -92,7 +92,7 @@
     </div>
 
   <div class="grid relative md:grid-cols-3 gap-6">
-    {#each data?.articles?.items ?? [] as article (article?.id)}
+    {#each data?.results?.items ?? [] as article (article?.id)}
       <Card>
         <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
           {article?.title}
@@ -123,7 +123,7 @@
     {/each}
   </div>
 </div>
-{#if data?.articles?.items.length && canLoadMore}
+{#if data?.results?.items.length && canLoadMore}
 	<tr>
 		<td colspan="99" class="txt-center">
 			<button
