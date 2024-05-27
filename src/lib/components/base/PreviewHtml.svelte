@@ -69,6 +69,7 @@
   		{@html markdown}
   	{/key}
 </div>
+  </div>
 
 <div class="flex">
 	<button type="button" class="btn btn-transparent" on:click={genPDF_fxn}>
@@ -89,7 +90,9 @@
   </button>
 </div>
 
-
+<svelte:head>
+  <link href="http://yui.yahooapis.com/3.18.1/build/cssreset-context/cssreset-context-min.css" rel="stylesheet" />
+</svelte:head>
 
 <style lang="scss">
   #preview {
