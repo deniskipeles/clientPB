@@ -70,11 +70,7 @@
   	{/key}
 </div>
   ============
-<div class="no-tailwind">
-    {#key markdown}
-  		{@html markdown}
-  	{/key}
-</div>
+<div class="no-tailwind" bind:innerHTML={markdown}/>
   </div>
 <!--LatexImage/-->
 
