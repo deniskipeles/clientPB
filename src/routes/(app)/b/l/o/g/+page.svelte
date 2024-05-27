@@ -30,7 +30,10 @@
   
 //$ queryString = Object.entries(data).map(([key, value]) =>key).join('-');
 //const queryString1 = Object.entries(data).map(([key, value]) =>key).join('-');
-console.log(data)
+onMount(()=>{
+  console.log("onMount",data)
+})
+console.log("not mount",data)
 </script>
 
 <Breadcrumb class="pt-20 py-8">
