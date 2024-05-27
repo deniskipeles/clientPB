@@ -11,7 +11,7 @@ export const load = async({ params,parent, url }) =>{
         fields: `*:excerpt(${200},${true})`
       })
       
-    return {,
+    return {
       results
     };
   } catch (error) {
