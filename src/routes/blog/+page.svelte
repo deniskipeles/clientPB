@@ -1,5 +1,7 @@
+
 <script>
   import { goto } from '$app/navigation';
+  import { onMount } from 'svelte';
   import {
     Card,
     Button,
@@ -16,8 +18,8 @@
   /** @type {import('./$types').PageData} */
   export let data;
 
-  let collection = $page?.data?.tables?.find((t)=> t?.name=="blog");
-  let collectionUpsert = $page?.data?.tables?.find((t)=> t?.name=="blog");
+  let collection = data?.tables?.find((t)=> t?.name=="blog");
+  let collectionUpsert = data?.tables?.find((t)=> t?.name=="blog");
   let recordUpsertPanel;
 
   let categories = collection?.schema?.find(field => field?.name === 'category')?.options?.values ?? [];
@@ -56,10 +58,11 @@
       console.log(error);
     }
   }
-  $: if(data){
-    console.log(data)
-  }
-
+  
+let schowOverlay=false
+onMount(()=>{
+  schowOverlay=true
+})
 </script>
 
 <Breadcrumb class="pt-20 py-8">
@@ -68,7 +71,7 @@
 </Breadcrumb>
 
 <div>
-  {#if $page?.data?.user && $page?.data?.user.roles?.includes('blogger')}
+  {#if data?.user && data?.user.roles?.includes('blogger')}
     <button type="button" class="btn btn-expanded" on:click={() => recordUpsertPanel?.show()}>
       <i class="ri-add-line" />
       <span class="txt">New record</span>
@@ -104,7 +107,7 @@
         <Button href={`/blog/${article?.id}`} class="w-fit">
           Read more
         </Button>
-          {#if article?.by?.includes($page.data?.user?.id)}
+          {#if article?.by?.includes(data?.user?.id)}
 							&nbsp;
 							<button
 								type="button"
@@ -123,6 +126,10 @@
     {/each}
   </div>
 </div>
+
+
+
+
 {#if data?.results?.items.length && canLoadMore}
 	<tr>
 		<td colspan="99" class="txt-center">
@@ -141,7 +148,7 @@
 
 
 <Backdrop {isLoading}/>
-
+{#if schowOverlay}
 <RecordUpsertPanel
   bind:this={recordUpsertPanel}
   collection={collectionUpsert}
@@ -155,3 +162,4 @@
     invalidateAll();
   }}
 />
+{/if}
