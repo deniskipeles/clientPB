@@ -64,7 +64,13 @@
 </script>
 
   <div id={uniqueDivId} class="tinymce-wrapper">
-<div id="preview">
+<div class="remove-all">
+    {#key markdown}
+  		{@html markdown}
+  	{/key}
+</div>
+  ============
+<div class="no-tailwind">
     {#key markdown}
   		{@html markdown}
   	{/key}
@@ -93,118 +99,10 @@
 
 
 
-
-
-
 <style>
-  /* General reset for all elements inside the preview */
-  #preview, #preview * {
-    all: initial;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: inherit;
-    font-size: inherit;
-    line-height: inherit;
-    color: inherit;
-    background: none;
-    border: none;
-    text-decoration: none;
-  }
-
-  /* Apply default styles for common elements */
-  #preview {
-    font-family: Arial, sans-serif;
-    font-size: 14pt;
-    line-height: 1.6;
-    color: #333;
-    padding: 20px;
-    border: 1px solid #ddd;
-    background-color: #f9f9f9;
-    overflow: auto;
-  }
-
-  #preview h1, #preview h2, #preview h3, #preview h4, #preview h5, #preview h6 {
-    font-weight: bold;
-    margin-top: 1em;
-    margin-bottom: 0.5em;
-  }
-
-  #preview h1 {
-    font-size: 2em;
-  }
-  #preview h2 {
-    font-size: 1.5em;
-  }
-  #preview h3 {
-    font-size: 1.17em;
-  }
-  #preview h4 {
-    font-size: 1em;
-  }
-  #preview h5 {
-    font-size: 0.83em;
-  }
-  #preview h6 {
-    font-size: 0.67em;
-  }
-
-  #preview p {
-    margin: 0 0 1em 0;
-  }
-
-  #preview a {
-    color: #0066cc;
-    text-decoration: underline;
-  }
-
-  #preview ul, #preview ol {
-    margin: 0 0 1em 1.5em;
-    padding-left: 40px; /* Ensure default padding for lists */
-  }
-
-  #preview ul {
-    list-style-type: disc;
-  }
-
-  #preview ol {
-    list-style-type: decimal;
-  }
-
-  #preview li {
-    margin-bottom: 0.5em;
-  }
-
-  #preview table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 1em;
-  }
-
-  #preview th, #preview td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-  }
-
-  #preview th {
-    background-color: #f2f2f2;
-  }
-
-  #preview img {
-    max-width: 100%;
-    height: auto;
-  }
-
-  #preview code {
-    font-family: "Courier New", Courier, monospace;
-    background-color: #f5f5f5;
-    padding: 2px 4px;
-    border-radius: 4px;
-  }
-
-  #preview strong, #preview b {
-    font-weight: bolder;
+  .no-tailwind {
+      all: unset;
   }
 </style>
+
 
