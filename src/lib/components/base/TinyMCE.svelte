@@ -335,7 +335,7 @@
 <button
     use:tooltip={`Click here to download or print what you see in this table in pdf format.`}
     class={`flex ${printingPDF ? 'animate-ping' : ''}`}
-    on:click={() => printFxn(uniqueDivId,("Document-"+uniqueDivId),value)}
+    on:click={() => printFxn('uniqueDivId',("Document-"+uniqueDivId),value)}
 >
   <span class="txt">
     <Printer />{'print'}

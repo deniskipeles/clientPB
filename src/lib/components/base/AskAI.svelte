@@ -180,7 +180,7 @@
 				  <CloudArrowDown /> {'pdf'}
 				</span>
 			</button>|
-			<button type="button" class="btn btn-transparent" on:click={() => printFxn(uniqueDivId)}>
+			<button type="button" class="btn btn-transparent" on:click={() => printFxn(uniqueDivId,("document-"+uniqueDivId))}>
 				<span class="txt">
 				  <Printer />{'print'}
 				</span>
