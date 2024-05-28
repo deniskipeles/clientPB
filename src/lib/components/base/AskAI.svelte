@@ -52,7 +52,6 @@
 		body:{context},
 		onFinish: (prompt, completion) =>{
 		  $input=""
-		  shadowRootFxn()
 		} ,
 		onError: (error) => console.log(error.message),
 	  api:"https://aik-bice.vercel.app/api/completion/schools"
@@ -60,7 +59,7 @@
 	$:if($completion && $isLoading){
 	  if(marked) value = marked($completion);
 	  if(!marked) value = $completion;
-	  
+	  viewContext=false
 	}
 	let marked
 	$: value=""
@@ -93,35 +92,6 @@
     generating=options.generating;
     // file=options.file;
   })
-  
-  const shadowRootFxn=() => {
-    let shadowRoot
-    let markdown=value
-    let scriptSources=[]
-    let st=``
-    const previewElement = document.getElementById('preview-shadow');
-    
-    shadowRoot = previewElement.attachShadow({ mode: 'open' });
-
-    // Inject styles
-    const style = document.createElement('style');
-    style.textContent = st
-    shadowRoot.appendChild(style);
-
-    // Inject content
-    const contentDiv = document.createElement('div');
-    contentDiv.innerHTML = marked ? marked.parse(markdown) : markdown;
-    shadowRoot.appendChild(contentDiv);
-
-    // Inject scripts
-    scriptSources.forEach(src => {
-      const script = document.createElement('script');
-      script.src = src;
-      script.onload = () => {
-        // You can execute additional script logic here if needed
-      };
-    });
-  }
 /*
 const script = document.createElement('script');
 script.textContent = `alert("hey");`;

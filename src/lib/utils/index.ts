@@ -1,6 +1,6 @@
 import { pb } from '$lib/pocketbase';
 import { addErrorToast } from '$lib/stores/toasts';
-const customCSS = `
+export const customCSS = `
 <style>
 /* General Styles */
 body {

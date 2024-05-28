@@ -21,7 +21,6 @@
 		loadMarked()
 		loadMathjax()
 		try{iframeFxn()}catch(e){console.log(e)}
-		try{shadowRootFxn()}catch(e){console.log(e)}
 	})
 	const loadMarked = () => {
 	  if(!window.marked){
@@ -77,7 +76,98 @@
 
     // Inject styles
     const style = doc.createElement('style');
-    style.textContent = ``
+    style.textContent = `
+    /* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000;
+}
+/* Page Settings */
+@page {
+    size: A4; /* or use letter for US letter size */
+    margin: 1in;
+}
+/* Margins for the body */
+body {
+    margin: 0;
+    padding: 1in;
+}
+/* Headers and Footers */
+header, footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    color: #555;
+    text-align: center;
+}
+header {
+    top: 0;
+}
+footer {
+    bottom: 0;
+    font-size: 10pt;
+}
+/* Page Numbering */
+footer::after {
+    content: "Page " counter(page) " of " counter(pages);
+}
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+}
+/* Prevent page break within elements */
+p, blockquote, pre, table, figure {
+    page-break-inside: avoid;
+}
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1em;
+}
+th, td {
+    border: 1px solid #000;
+    padding: 0.5em;
+    text-align: left;
+}
+th {
+    background-color: #f2f2f2;
+}
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+}
+/* Links */
+a {
+    color: #000;
+    text-decoration: none;
+}
+a:visited {
+    color: #000;
+}
+/* Lists */
+ul, ol {
+    margin: 0 0 1em 1em;
+}
+/* Code blocks */
+pre, code {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 10pt;
+}
+/* Avoid breaking code blocks */
+pre {
+    page-break-inside: avoid;
+}
+/* Remove styles not needed for print */
+@media print {
+    nav, aside, .no-print {
+        display: none;
+    }
+}
+    `
     head.appendChild(style);
     body.appendChild(style);
 
@@ -105,7 +195,6 @@
   title="Article"
   id='microapp-{uniqueDivId}'
   frameborder='0'
-  scrolling='no'
   bind:this={iframe}
 ></iframe>
 
