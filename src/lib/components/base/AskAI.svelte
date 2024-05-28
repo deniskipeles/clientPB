@@ -176,16 +176,7 @@
 		</Field>
 		
 		<div id={uniqueDivId} class="overflow-content">
-		  {#if loadingFrame}
         {@html value}
-      {:else}
-        <iframe
-          title="AI response"
-          id='microapp-{uniqueDivId}'
-          frameborder='0'
-          bind:this={iframe}
-        ></iframe>
-		  {/if}
 		</div>
 
 		<svelte:fragment slot="footer">
