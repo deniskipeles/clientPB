@@ -18,7 +18,7 @@
 	}
 	
 	onMount(()=>{
-		loadMarked()
+		//loadMarked()
 		loadMathjax()
 	})
 	const loadMarked = () => {
@@ -106,7 +106,7 @@ style lang="scss">
 -->
 
 
-<style>
+<!--style>
   /* General reset for all elements inside the preview */
   #preview, #preview * {
     all: unset; /* Start by unsetting all styles */
@@ -206,5 +206,5 @@ style lang="scss">
   #preview strong, #preview b {
     font-weight: bolder;
   }
-</style>
+</style-->
 
