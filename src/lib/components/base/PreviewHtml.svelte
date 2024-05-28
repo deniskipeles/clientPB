@@ -67,8 +67,8 @@
   export let scriptSources = [
     "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
     ]; // Array of script URLs to inject
-
   let iframe;
+  let loadingFrame=true;
   const iframeFxn=() => {
     const doc = iframe.contentDocument;
     const head = doc.head;
@@ -143,6 +143,7 @@ pre {
       script.src = src;
       
       head.appendChild(script);
+      loadingFrame=false
     });
   }
   
@@ -153,7 +154,9 @@ pre {
     iframe { width: 100%; height:1000px}
 </style>
 
-
+{#if loadingFrame}
+<h2>loading...</h2>
+{:else}
 <iframe
   title="Article"
   id='microapp-{uniqueDivId}'
@@ -179,5 +182,5 @@ pre {
     </span>
   </button>
 </div>
-
+{/if}
 

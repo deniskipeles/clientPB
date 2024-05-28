@@ -52,6 +52,7 @@
 		body:{context},
 		onFinish: (prompt, completion) =>{
 		  $input=""
+		  iframeFxn()
 		} ,
 		onError: (error) => console.log(error.message),
 	  api:"https://aik-bice.vercel.app/api/completion/schools"
@@ -100,9 +101,93 @@ const el = document.querySelector('.testing');
 el.attachShadow({mode:'open'});
 el.shadowRoot.appendChild(script);
 */
+
+  export let scriptSources = [
+    "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
+    ]; // Array of script URLs to inject
+  let iframe;
+  let loadingFrame=true;
+  const iframeFxn=() => {
+    const doc = iframe.contentDocument;
+    const head = doc.head;
+    const body = doc.body;
+
+    // Inject styles
+    const style = doc.createElement('style');
+    style.textContent = `
+    /* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    font-size: 10pt;
+    line-height: 1.5;
+    color: #000;
+}
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+}
+/* Prevent page break within elements */
+p, blockquote, pre, table, figure {
+    page-break-inside: avoid;
+}
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1em;
+}
+th, td {
+    border: 1px solid #000;
+    padding: 0.5em;
+    text-align: left;
+}
+th {
+    background-color: #f2f2f2;
+}
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+}
+/* Links */
+a {
+    color: #000;
+    text-decoration: none;
+}
+a:visited {
+    color: #000;
+}
+/* Lists */
+ul, ol {
+    margin: 0 0 1em 1em;
+}
+/* Code blocks */
+pre, code {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 10pt;
+}
+/* Avoid breaking code blocks */
+pre {
+    page-break-inside: avoid;
+}
+    `
+    head.appendChild(style);
+    // Inject content
+    body.innerHTML = marked?marked.parse(markdown):markdown;
+
+    // Inject scripts
+    scriptSources.forEach(src => {
+      const script = doc.createElement('script');
+      script.src = src;
+      
+      head.appendChild(script);
+      loadingFrame=false
+    });
+  }
+  
 </script>
 
-<div id="preview-shadow"></div>
+
 <div>
 		<button class="btn" on:click={() =>{
 		  if(contextFxn){
@@ -181,8 +266,17 @@ el.shadowRoot.appendChild(script);
 			</div>
 		</Field>
 		
-		<div id={uniqueDivId} class="m-2 overflow-content">
-		  {@html value}
+		<div id={uniqueDivId} class="overflow-content">
+		  {#if loadingFrame}
+        {@html value}
+      {:else}
+        <iframe
+          title="AI response"
+          id='microapp-{uniqueDivId}'
+          frameborder='0'
+          bind:this={iframe}
+        ></iframe>
+		  {/if}
 		</div>
 
 		<svelte:fragment slot="footer">
