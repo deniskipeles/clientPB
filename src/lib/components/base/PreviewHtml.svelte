@@ -80,38 +80,9 @@
     /* General Styles */
 body {
     font-family: Arial, sans-serif;
-    font-size: 12pt;
+    font-size: 10pt;
     line-height: 1.5;
     color: #000;
-}
-/* Page Settings */
-@page {
-    size: A4; /* or use letter for US letter size */
-    margin: 1in;
-}
-/* Margins for the body */
-body {
-    margin: 0;
-    padding: 1in;
-}
-/* Headers and Footers */
-header, footer {
-    position: fixed;
-    left: 0;
-    right: 0;
-    color: #555;
-    text-align: center;
-}
-header {
-    top: 0;
-}
-footer {
-    bottom: 0;
-    font-size: 10pt;
-}
-/* Page Numbering */
-footer::after {
-    content: "Page " counter(page) " of " counter(pages);
 }
 /* Headings */
 h1, h2, h3, h4, h5, h6 {
@@ -160,12 +131,6 @@ pre, code {
 /* Avoid breaking code blocks */
 pre {
     page-break-inside: avoid;
-}
-/* Remove styles not needed for print */
-@media print {
-    nav, aside, .no-print {
-        display: none;
-    }
 }
     `
     head.appendChild(style);
