@@ -169,8 +169,6 @@ pre {
 }
     `
     head.appendChild(style);
-    body.appendChild(style);
-
     // Inject content
     body.innerHTML = marked?marked.parse(markdown):markdown;
 
@@ -208,7 +206,7 @@ pre {
       use:tooltip={`Click here to download or print what you see in this table in pdf format.`}
       class={`btn btn-transparent ${printingPDF ? 'animate-ping' : ''}`}
       on:click={() => {
-          printFxn(uniqueDivId,uniqueDivId,markdown);
+          printFxn(uniqueDivId,uniqueDivId,iframe?.contentDocument?.body?.innerHTML??markdown);
       }}
   >
     <span class="txt">
