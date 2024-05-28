@@ -154,9 +154,7 @@ pre {
     iframe { width: 100%; height:1000px}
 </style>
 
-{#if loadingFrame}
-<h2>loading...</h2>
-{:else}
+
 <iframe
   title="Article"
   id='microapp-{uniqueDivId}'
@@ -182,5 +180,5 @@ pre {
     </span>
   </button>
 </div>
-{/if}
+
 
