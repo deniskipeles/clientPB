@@ -100,7 +100,7 @@
     let scriptSources=[]
     let st=``
     const previewElement = document.getElementById('preview-shadow');
-    previewElement.attachShadow({ mode: 'close' });
+    
     shadowRoot = previewElement.attachShadow({ mode: 'open' });
 
     // Inject styles

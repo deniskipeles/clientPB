@@ -212,10 +212,14 @@
       script.src = src;
       script.onload = () => {
         // You can execute additional script logic here if needed
+        previewElement.shadowRoot.appendChild(script);
         console.log("shadowRoot script")
+        const script1 = document.createElement('script');
+        script1.textContent = script.textContent;
+        previewElement.shadowRoot.appendChild(script1);
+        console.log("shadowRoot script loaded")
       };
       document.body.appendChild(script);
-      previewElement.shadowRoot.appendChild(script);
     });
   }
 </script>
