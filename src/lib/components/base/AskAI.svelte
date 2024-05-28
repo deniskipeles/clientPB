@@ -181,8 +181,8 @@ pre {
       script.src = src;
       
       head.appendChild(script);
-      loadingFrame=false
     });
+    loadingFrame=false
   }
   
 </script>
