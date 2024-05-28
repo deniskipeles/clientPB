@@ -20,6 +20,8 @@
 	onMount(()=>{
 		loadMarked()
 		loadMathjax()
+		try{iframeFxn()}catch(e){console.log(e)}
+		try{shadowRootFxn()}catch(e){console.log(e)}
 	})
 	const loadMarked = () => {
 	  if(!window.marked){
@@ -165,7 +167,7 @@
 
   let iframe;
 
-  onMount(() => {
+  const iframeFxn=() => {
     const doc = iframe.contentDocument;
     const head = doc.head;
     const body = doc.body;
@@ -183,18 +185,14 @@
     scriptSources.forEach(src => {
       const script = doc.createElement('script');
       script.src = src;
+      
       head.appendChild(script);
     });
-  });
-
-
-
-
-
+  }
 
   let shadowRoot;
 
-  onMount(() => {
+  const shadowRootFxn = () => {
     const previewElement = document.getElementById('preview-shadow');
     shadowRoot = previewElement.attachShadow({ mode: 'open' });
 
@@ -219,7 +217,7 @@
       document.body.appendChild(script);
       previewElement.shadowRoot.appendChild(script);
     });
-  });
+  }
 </script>
 
 
@@ -240,14 +238,6 @@
 
 <iframe bind:this={iframe} style="width: 100%; height: 1000px; border: none;"></iframe>
 
-
-  <!--div id={uniqueDivId} class="tinymce-wrapper">
-<div id="preview" class="remove-all">
-    {#key markdown}
-  		{@html markdown}
-  	{/key}
-</div>
-  </div-->
 
 <div class="flex">
 	<button type="button" class="btn btn-transparent" on:click={genPDF_fxn}>

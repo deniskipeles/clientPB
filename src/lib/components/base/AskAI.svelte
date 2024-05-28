@@ -50,14 +50,17 @@
 		setInput,
 	} = useCompletion({
 		body:{context},
-		onFinish: (prompt, completion) => $input="",
+		onFinish: (prompt, completion) =>{
+		  $input=""
+		  shadowRootFxn()
+		} ,
 		onError: (error) => console.log(error.message),
 	  api:"https://aik-bice.vercel.app/api/completion/schools"
 	});
 	$:if($completion && $isLoading){
 	  if(marked) value = marked($completion);
 	  if(!marked) value = $completion;
-	  shadowRootFxn()
+	  
 	}
 	let marked
 	$: value=""
@@ -97,6 +100,7 @@
     let scriptSources=[]
     let st=``
     const previewElement = document.getElementById('preview-shadow');
+    previewElement.attachShadow({ mode: 'close' });
     shadowRoot = previewElement.attachShadow({ mode: 'open' });
 
     // Inject styles
@@ -116,7 +120,6 @@
       script.onload = () => {
         // You can execute additional script logic here if needed
       };
-      document.body.appendChild(script);
     });
   }
 /*
