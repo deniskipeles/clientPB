@@ -80,6 +80,16 @@
         display: block;
         width: 100%;
       }
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        padding: 20px;
+        border: 1px solid #ddd;
+        background-color: #f9f9f9;
+        display: block;
+        width: 100%;
+      }
 
       h1, h2, h3, h4, h5, h6 {
         font-weight: bold;
@@ -164,6 +174,7 @@
     const style = doc.createElement('style');
     style.textContent = st
     head.appendChild(style);
+    body.appendChild(style);
 
     // Inject content
     body.innerHTML = marked?marked.parse(markdown):markdown;
@@ -220,16 +231,12 @@
     width: 100%;
     height: 100%;
   }
-  .preview-shadow {
-    width: 100%;
-    height: 100%;
-  }
 </style>
 
 <div id="preview-shadow"></div>
 
 
-<iframe class="preview-shadow" bind:this={iframe} style="width: 100%; height: 1000px; border: none;"></iframe>
+<iframe bind:this={iframe} style="width: 100%; height: 1000px; border: none;"></iframe>
 
 
   <!--div id={uniqueDivId} class="tinymce-wrapper">

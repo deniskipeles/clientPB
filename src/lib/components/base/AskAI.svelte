@@ -89,6 +89,34 @@
     generating=options.generating;
     // file=options.file;
   })
+  
+  const shadowRootFxn=() => {
+    let shadowRoot
+    let markdown=value
+    let scriptSources=[]
+    const previewElement = document.getElementById('preview-shadow');
+    shadowRoot = previewElement.attachShadow({ mode: 'open' });
+
+    // Inject styles
+    const style = document.createElement('style');
+    style.textContent = st
+    shadowRoot.appendChild(style);
+
+    // Inject content
+    const contentDiv = document.createElement('div');
+    contentDiv.innerHTML = marked ? marked.parse(markdown) : markdown;
+    shadowRoot.appendChild(contentDiv);
+
+    // Inject scripts
+    scriptSources.forEach(src => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = () => {
+        // You can execute additional script logic here if needed
+      };
+      document.body.appendChild(script);
+    });
+  }
 </script>
 
 
@@ -180,7 +208,7 @@
 				  <CloudArrowDown /> {'pdf'}
 				</span>
 			</button>|
-			<button type="button" class="btn btn-transparent" on:click={() => printFxn(uniqueDivId,("document-"+uniqueDivId))}>
+			<button type="button" class="btn btn-transparent" on:click={() => printFxn(uniqueDivId,("document-"+uniqueDivId),value)}>
 				<span class="txt">
 				  <Printer />{'print'}
 				</span>
