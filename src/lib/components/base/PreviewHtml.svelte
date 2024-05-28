@@ -162,7 +162,7 @@
 
     // Inject styles
     const style = doc.createElement('style');
-    style.textContent = St
+    style.textContent = st
     head.appendChild(style);
 
     // Inject content
