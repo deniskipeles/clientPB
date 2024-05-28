@@ -1,5 +1,5 @@
 {
-    "short_name": "k-school",
+    "short_name": "kschool",
     "name": "kenyan prime schools",
     "start_url": "/",
     "icons": [
@@ -16,10 +16,10 @@
     "shortcuts": [
       {
         "name": "ktechs school blog",
-        "short_name": "kschool-blog",
+        "short_name": "ktechs",
         "description": "views information for today",
         "url": "/blog",
-        "icons": [{ "src": "logo_512.png", "sizes": "512x512" }]
+        "icons": [{ "src": "/logo_512.png", "sizes": "512x512" }]
       }
     ],
     "description": "k-schools is a school management system web application developed and maintained by ktechs"
