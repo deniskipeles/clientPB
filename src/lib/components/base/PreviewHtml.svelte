@@ -46,7 +46,6 @@
 		script.onload = () => {
       MathJax = {
         tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
-        svg: {fontCache: 'global'}
       };
 		};
 		console.log("mathjax loaded")
@@ -63,110 +62,14 @@
     generating=options.generating;
     // file=options.file;
   })
-
-
-
-
   
-
+  
   export let content = "";
-  export let scriptSources = ["https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"]; // Array of script URLs to inject
-  let st=`
-      :host {
-        font-family: Arial, sans-serif;
-        line-height: 1.6;
-        color: #333;
-        padding: 20px;
-        border: 1px solid #ddd;
-        background-color: #f9f9f9;
-        display: block;
-        width: 100%;
-      }
-      body {
-        font-family: Arial, sans-serif;
-        line-height: 1.6;
-        color: #333;
-        padding: 20px;
-        border: 1px solid #ddd;
-        background-color: #f9f9f9;
-        display: block;
-        width: 100%;
-      }
-
-      h1, h2, h3, h4, h5, h6 {
-        font-weight: bold;
-        margin-top: 1em;
-        margin-bottom: 0.5em;
-      }
-
-      h1 { font-size: 2em; }
-      h2 { font-size: 1.5em; }
-      h3 { font-size: 1.17em; }
-      h4 { font-size: 1em; }
-      h5 { font-size: 0.83em; }
-      h6 { font-size: 0.67em; }
-
-      p {
-        margin: 0 0 1em 0;
-      }
-
-      a {
-        color: #0066cc;
-        text-decoration: underline;
-      }
-
-      ul, ol {
-        margin: 0 0 1em 1.5em;
-        padding-left: 40px;
-      }
-
-      ul {
-        list-style-type: disc;
-      }
-
-      ol {
-        list-style-type: decimal;
-      }
-
-      li {
-        margin-bottom: 0.5em;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 1em;
-      }
-
-      th, td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-      }
-
-      th {
-        background-color: #f2f2f2;
-      }
-
-      img {
-        max-width: 100%;
-        height: auto;
-      }
-
-      code {
-        font-family: "Courier New", Courier, monospace;
-        background-color: #f5f5f5;
-        padding: 2px 4px;
-        border-radius: 4px;
-      }
-
-      strong, b {
-        font-weight: bolder;
-      }
-    `;
+  export let scriptSources = [
+    "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
+    ]; // Array of script URLs to inject
 
   let iframe;
-
   const iframeFxn=() => {
     const doc = iframe.contentDocument;
     const head = doc.head;
@@ -174,7 +77,7 @@
 
     // Inject styles
     const style = doc.createElement('style');
-    style.textContent = st
+    style.textContent = ``
     head.appendChild(style);
     body.appendChild(style);
 
@@ -189,59 +92,22 @@
       head.appendChild(script);
     });
   }
-
-  let shadowRoot;
-
-  const shadowRootFxn = () => {
-    const previewElement = document.getElementById('preview-shadow');
-    shadowRoot = previewElement.attachShadow({ mode: 'open' });
-
-    // Inject styles
-    const style = document.createElement('style');
-    style.textContent = st
-    shadowRoot.appendChild(style);
-
-    // Inject content
-    const contentDiv = document.createElement('div');
-    contentDiv.innerHTML = marked ? marked.parse(markdown) : markdown;
-    shadowRoot.appendChild(contentDiv);
-
-    // Inject scripts
-    scriptSources.forEach(src => {
-      const script = document.createElement('script');
-      script.src = src;
-      script.onload = () => {
-        // You can execute additional script logic here if needed
-        previewElement.shadowRoot.appendChild(script);
-        console.log("shadowRoot script")
-        const script1 = document.createElement('script');
-        script1.textContent = script.textContent;
-        previewElement.shadowRoot.appendChild(script1);
-        console.log("shadowRoot script loaded")
-      };
-      document.body.appendChild(script);
-    });
-  }
+  
 </script>
 
 
-
-
-
-
-
 <style>
-  #preview-shadow {
-    width: 100%;
-    height: 100%;
-  }
+    iframe { width: 100%; height:1000px}
 </style>
 
-<div id="preview-shadow"></div>
 
-
-<iframe bind:this={iframe} style="width: 100%; height: 1000px; border: none;"></iframe>
-
+<iframe
+  title="Article"
+  id='microapp-{uniqueDivId}'
+  frameborder='0'
+  scrolling='no'
+  bind:this={iframe}
+></iframe>
 
 <div class="flex">
 	<button type="button" class="btn btn-transparent" on:click={genPDF_fxn}>
