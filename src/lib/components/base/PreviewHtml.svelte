@@ -69,49 +69,7 @@
 
   export let content = "";
   export let scriptSources = ["https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"]; // Array of script URLs to inject
-
-  let iframe;
-
-  onMount(() => {
-    const doc = iframe.contentDocument;
-    const head = doc.head;
-    const body = doc.body;
-
-    // Inject styles
-    const style = doc.createElement('style');
-    style.textContent = `
-      body {
-        font-family: Arial, sans-serif;
-        line-height: 1.6;
-        color: #333;
-        padding: 20px;
-        border: 1px solid #ddd;
-        background-color: #f9f9f9;
-      }
-    `;
-    head.appendChild(style);
-
-    // Inject content
-    body.innerHTML = marked?marked.parse(markdown):markdown;
-
-    // Inject scripts
-    scriptSources.forEach(src => {
-      const script = doc.createElement('script');
-      script.src = src;
-      head.appendChild(script);
-    });
-  });
-
-
-
-
-  onMount(() => {
-    const previewElement = document.getElementById('preview-shadow');
-    const shadowRoot = previewElement.attachShadow({ mode: 'open' });
-
-    // Inject styles
-    const style = document.createElement('style');
-    style.textContent = `
+  let st=`
       :host {
         font-family: Arial, sans-serif;
         line-height: 1.6;
@@ -195,34 +153,83 @@
       }
     `;
 
-    // Inject content
-    const contentDiv = document.createElement('div');
-    contentDiv.innerHTML = marked ? marked.parse(markdown):markdown;
-    shadowRoot.appendChild(contentDiv);
+  let iframe;
+
+  onMount(() => {
+    const doc = iframe.contentDocument;
+    const head = doc.head;
+    const body = doc.body;
 
     // Inject styles
+    const style = doc.createElement('style');
+    style.textContent = St
+    head.appendChild(style);
+
+    // Inject content
+    body.innerHTML = marked?marked.parse(markdown):markdown;
+
+    // Inject scripts
+    scriptSources.forEach(src => {
+      const script = doc.createElement('script');
+      script.src = src;
+      head.appendChild(script);
+    });
+  });
+
+
+
+
+
+
+  let shadowRoot;
+
+  onMount(() => {
+    const previewElement = document.getElementById('preview-shadow');
+    shadowRoot = previewElement.attachShadow({ mode: 'open' });
+
+    // Inject styles
+    const style = document.createElement('style');
+    style.textContent = st
     shadowRoot.appendChild(style);
+
+    // Inject content
+    const contentDiv = document.createElement('div');
+    contentDiv.innerHTML = marked ? marked.parse(markdown) : markdown;
+    shadowRoot.appendChild(contentDiv);
 
     // Inject scripts
     scriptSources.forEach(src => {
       const script = document.createElement('script');
       script.src = src;
-      shadowRoot.appendChild(script);
+      script.onload = () => {
+        // You can execute additional script logic here if needed
+      };
+      document.body.appendChild(script);
     });
   });
 </script>
+
+
+
+
+
+
+
 <style>
   #preview-shadow {
     width: 100%;
     height: 100%;
   }
+  .preview-shadow {
+    width: 100%;
+    height: 100%;
+  }
 </style>
-
 
 <div id="preview-shadow"></div>
 
 
-<iframe id="preview-shadow" bind:this={iframe} style="width: 100%; height: 100%; border: none;"></iframe>
+<iframe class="preview-shadow" bind:this={iframe} style="width: 100%; height: 1000px; border: none;"></iframe>
 
 
   <!--div id={uniqueDivId} class="tinymce-wrapper">
