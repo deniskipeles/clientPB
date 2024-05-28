@@ -214,8 +214,10 @@
       script.src = src;
       script.onload = () => {
         // You can execute additional script logic here if needed
+        console.log("shadowRoot script")
       };
       document.body.appendChild(script);
+      previewElement.shadowRoot.appendChild(script);
     });
   });
 </script>

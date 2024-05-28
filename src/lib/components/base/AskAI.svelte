@@ -57,6 +57,7 @@
 	$:if($completion && $isLoading){
 	  if(marked) value = marked($completion);
 	  if(!marked) value = $completion;
+	  shadowRootFxn()
 	}
 	let marked
 	$: value=""
@@ -94,6 +95,7 @@
     let shadowRoot
     let markdown=value
     let scriptSources=[]
+    let st=``
     const previewElement = document.getElementById('preview-shadow');
     shadowRoot = previewElement.attachShadow({ mode: 'open' });
 
@@ -117,9 +119,17 @@
       document.body.appendChild(script);
     });
   }
+/*
+const script = document.createElement('script');
+script.textContent = `alert("hey");`;
+
+const el = document.querySelector('.testing');
+el.attachShadow({mode:'open'});
+el.shadowRoot.appendChild(script);
+*/
 </script>
 
-
+<div id="preview-shadow"></div>
 <div>
 		<button class="btn" on:click={() =>{
 		  if(contextFxn){
