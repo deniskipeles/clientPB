@@ -2,6 +2,7 @@
 	import { createEventDispatcher, onMount } from 'svelte';
 	import CommonHelper from "$lib/utils/CommonHelper";
 	import LatexImage from "$lib/components/base/LatexImage.svelte";
+	import {processHTMLString} from "$lib/utils/latexProcessor";
 	import tooltip from '$lib/actions/tooltip';
 	
 	
@@ -14,6 +15,7 @@
 	const dispatch = createEventDispatcher();
 
 	$: if (markdown) {
+	  markdown = processHTMLString(markdown)
 		if(marked)markdown = marked.parse(markdown);
 	}
 	
@@ -183,6 +185,3 @@ pre {
 </div>
 
 
-<svelte:head>
-	<script src="https://i.upmath.me/latex.js"></script>
-</svelte:head>
