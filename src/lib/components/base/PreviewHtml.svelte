@@ -65,6 +65,7 @@
   
   export let content = "";
   export let scriptSources = [
+    "https://i.upmath.me/latex.js",
     "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
     ]; // Array of script URLs to inject
   let iframe;
@@ -182,3 +183,6 @@ pre {
 </div>
 
 
+<svelte:head>
+	<script src="https://i.upmath.me/latex.js"></script>
+</svelte:head>
