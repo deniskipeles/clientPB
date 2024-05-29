@@ -24,7 +24,7 @@
   };
 </script>
 
-<div id={uniqueDivId}>
+<div id={uniqueDivId+"-"}>
   <Iframe {markdown} />
 </div>
 
