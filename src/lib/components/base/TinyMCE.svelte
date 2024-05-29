@@ -276,12 +276,12 @@
 	} = useCompletion({
 		onFinish: (prompt, completeText) => {
 		  $input="";
-		  onCompletionUpdate(completeText)
 		  if(marked) {
           value = marked(completeText);
         } else {
           value = completeText;
       }
+		  onCompletionUpdate(completeText)
 		},
 		onError: (error) => console.log(error.message),
 	  api:"https://aik-bice.vercel.app/api/completion/schools"
@@ -306,7 +306,8 @@
   }
 
 	$:if($completion && $isLoading){
-	  onCompletionUpdate($completion)
+	  value=$completion
+	  //onCompletionUpdate($completion)
 	}
 	
     
