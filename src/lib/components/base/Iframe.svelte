@@ -47,7 +47,7 @@
   };
 
   const uniqueDivId = `print${CommonHelper.randomString(7)}`;
-  let iframe;
+  export let iframe;
   let loadingFrame = true;
 
   const iframeFxn = () => {

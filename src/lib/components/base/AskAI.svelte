@@ -8,6 +8,8 @@
 	import CommonHelper from '$lib/utils/CommonHelper';
 	import {arrayToCsv} from '$lib/utils/json_to_csv';
 	import JsonField from '../records/fields/JsonField.svelte';
+	import Iframe from '$lib/components/base/Iframe.svelte';
+	
 	import { page } from '$app/stores';
 	const request_id = CommonHelper.randomString(8);
 
@@ -175,8 +177,8 @@
 			</div>
 		</Field>
 		
-		<div id={uniqueDivId} class="overflow-content">
-        {@html value}
+		<div id={uniqueDivId} class="overflow-content-">
+        <Iframe markdown={value} />
 		</div>
 
 		<svelte:fragment slot="footer">
