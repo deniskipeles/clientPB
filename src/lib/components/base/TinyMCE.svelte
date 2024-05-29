@@ -274,9 +274,9 @@
 		handleSubmit,
 		setInput,
 	} = useCompletion({
-		onFinish: (prompt, completion) => {
+		onFinish: (prompt, completeText) => {
 		  $input="";
-		  onCompletionUpdate($completion)
+		  onCompletionUpdate(completeText)
 		},
 		onError: (error) => console.log(error.message),
 	  api:"https://aik-bice.vercel.app/api/completion/schools"
