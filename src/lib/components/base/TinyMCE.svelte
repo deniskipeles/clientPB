@@ -274,17 +274,36 @@
 		handleSubmit,
 		setInput,
 	} = useCompletion({
-		onFinish: (prompt, completion) => $input="",
+		onFinish: (prompt, completion) => {
+		  $input="";
+		  onCompletionUpdate($completion)
+		},
 		onError: (error) => console.log(error.message),
 	  api:"https://aik-bice.vercel.app/api/completion/schools"
 	});
+	
+	
+	let lastUpdateTime = 0;
+  let lastCompletion = "";
+  // Assuming $completion gets updated by a stream response
+  function onCompletionUpdate(newCompletion) {
+    if($isLoading){
+      let currentTime = new Date().getTime();
+      if ($completion !== lastCompletion && currentTime - lastUpdateTime >= 1000) {
+        lastUpdateTime = currentTime;
+        lastCompletion = $completion;
+        if(marked) {
+          value = marked($completion);
+        } else {
+          value = $completion;
+        }
+        //console.log($completion)
+      }
+    }
+  }
+
 	$:if($completion && $isLoading){
-	  if(marked) {
-	    value = marked($completion);
-	  }else{
-	    value = $completion;
-	  } 
-	  //console.log($completion)
+	  onCompletionUpdate($completion)
 	}
 	
     
