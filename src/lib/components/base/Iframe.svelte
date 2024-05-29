@@ -17,6 +17,10 @@
   $: if (markdown) {
     markdown = processHTMLString(markdown);
     if (marked) markdown = marked.parse(markdown);
+    if (iframe?.contentDocument?.body?.innerHTML) {
+      iframe.contentDocument.body.innerHTML = marked ? marked.parse(markdown) : markdown;
+      typesetMath();
+    }
   }
 
   onMount(() => {
@@ -131,6 +135,29 @@
     loadingFrame = false;
   };
 
+  const typesetMath = () => {
+    const doc = iframe.contentDocument;
+    const mathElements = doc.querySelectorAll('script[type="math/tex"]');
+
+    mathElements.forEach((mathElement, index) => {
+      const tex = mathElement.textContent;
+      const chtml = window.MathJax.typesetPromise({
+        math: tex,
+        format: 'tex',
+        svg: false,
+        display: mathElement.parentNode.tagName === 'P'
+      }).then((typeset) => {
+        const html = typeset.html;
+        mathElement.parentNode.insertAdjacentHTML('beforeend', html);
+        mathElement.parentNode.removeChild(mathElement);
+
+        if (index === mathElements.length - 1) {
+          dispatch('html-updated', { id, html: doc.body.innerHTML });
+        }
+      });
+    });
+  };
+  
   const handleMessage = (event) => {
     if (event.data === 'print-ready') {
       dispatch('print-ready', { id });

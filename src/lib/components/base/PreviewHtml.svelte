@@ -22,10 +22,17 @@
       // file = options.file;
     });
   };
+  
+  let printHtml = ""
+  const handleHtmlUpdated = ({ detail: { id, html } }) => {
+    if (id === 'print' && html) {
+      printHtml = html;
+    }
+  };
 </script>
 
 <div id={uniqueDivId+"-"}>
-  <Iframe {markdown} />
+  <Iframe {markdown} id="print" on:html-updated={handleHtmlUpdated} />
 </div>
 
 <div class="flex">
@@ -43,7 +50,7 @@
     use:tooltip={`Click here to download or print what you see in this table in pdf format.`}
     class={`btn btn-transparent ${printingPDF ? 'animate-ping' : ''}`}
     on:click={() => {
-      printFxn(uniqueDivId, uniqueDivId, markdown);
+      printFxn(uniqueDivId, uniqueDivId, printHtml);
     }}
   >
     <span class="txt">

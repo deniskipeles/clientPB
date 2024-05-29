@@ -63,6 +63,14 @@
         viewContext = false;
         value = processHTMLString($completion);
     }
+    const uniqueDivId = `print-${CommonHelper.randomString(7)}`;
+    
+    let printHtml = ""
+    const handleHtmlUpdated = ({ detail: { id, html } }) => {
+      if (id === 'print' && html) {
+        printHtml = html;
+      }
+    };
 </script>
 
 <div>
@@ -139,7 +147,7 @@
         </Field>
 
         <div id={uniqueDivId+"-"} class="overflow-content-">
-            <Iframe markdown={value} />
+            <Iframe markdown={value} id="print" on:html-updated={handleHtmlUpdated} />
         </div>
 
         <svelte:fragment slot="footer">
@@ -148,7 +156,7 @@
                     <CloudArrowDown /> {'pdf'}
                 </span>
             </button>|
-            <button type="button" class="btn btn-transparent" on:click={() => printFxn(uniqueDivId, ("document-" + uniqueDivId), value)}>
+            <button type="button" class="btn btn-transparent" on:click={() => printFxn(uniqueDivId, ("document-" + uniqueDivId), printHtml)}>
                 <span class="txt">
                     <Printer />{'print'}
                 </span>
