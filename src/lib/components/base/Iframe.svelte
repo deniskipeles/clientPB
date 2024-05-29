@@ -1,5 +1,5 @@
 <script>
-  import { createEventDispatcher, onMount } from 'svelte';
+  import { createEventDispatcher, onMount, onDestroy } from 'svelte';
   import CommonHelper from "$lib/utils/CommonHelper";
   import { processHTMLString } from "$lib/utils/latexProcessor";
   import tooltip from '$lib/actions/tooltip';
@@ -17,18 +17,15 @@
   $: if (markdown) {
     markdown = processHTMLString(markdown);
     if (marked) markdown = marked.parse(markdown);
-    if (iframe?.contentDocument?.body?.innerHTML) {
-      iframe.contentDocument.body.innerHTML = marked ? marked.parse(markdown) : markdown;
-    }
   }
 
   onMount(() => {
     loadMarked();
-    try {
-      iframeFxn();
-    } catch (e) {
-      console.log(e);
-    }
+    window.addEventListener('message', handleMessage);
+  });
+
+  onDestroy(() => {
+    window.removeEventListener('message', handleMessage);
   });
 
   const loadMarked = () => {
@@ -40,15 +37,21 @@
       script.onload = () => {
         marked = window.marked.marked;
         console.log('marked loaded');
+        iframeFxn();
       };
     } else {
       marked = window.marked.marked;
+      iframeFxn();
     }
   };
 
   const uniqueDivId = `print${CommonHelper.randomString(7)}`;
   export let iframe;
   let loadingFrame = true;
+
+  $: if (iframe && markdown) {
+    iframeFxn();
+  }
 
   const iframeFxn = () => {
     const doc = iframe.contentDocument;
@@ -126,6 +129,12 @@
       head.appendChild(script);
     });
     loadingFrame = false;
+  };
+
+  const handleMessage = (event) => {
+    if (event.data === 'print-ready') {
+      dispatch('print-ready', { id });
+    }
   };
 </script>
 
