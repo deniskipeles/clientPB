@@ -277,6 +277,11 @@
 		onFinish: (prompt, completeText) => {
 		  $input="";
 		  onCompletionUpdate(completeText)
+		  if(marked) {
+          value = marked(completeText);
+        } else {
+          value = completeText;
+      }
 		},
 		onError: (error) => console.log(error.message),
 	  api:"https://aik-bice.vercel.app/api/completion/schools"
@@ -287,9 +292,8 @@
   let lastCompletion = "";
   // Assuming $completion gets updated by a stream response
   function onCompletionUpdate(newCompletion) {
-    if($isLoading){
       let currentTime = new Date().getTime();
-      if ($completion !== lastCompletion && currentTime - lastUpdateTime >= 1000) {
+      if ($completion !== lastCompletion && (currentTime - lastUpdateTime >= 200)) {
         lastUpdateTime = currentTime;
         lastCompletion = $completion;
         if(marked) {
@@ -299,7 +303,6 @@
         }
         //console.log($completion)
       }
-    }
   }
 
 	$:if($completion && $isLoading){
