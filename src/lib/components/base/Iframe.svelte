@@ -20,12 +20,14 @@
     if (iframe?.contentDocument?.body?.innerHTML) {
       iframe.contentDocument.body.innerHTML = marked ? marked.parse(markdown) : markdown;
       typesetMath();
+      dispatch('html-updated', { id, html: iframe.contentDocument.body.innerHTML });
     }
   }
 
   onMount(() => {
     loadMarked();
     window.addEventListener('message', handleMessage);
+    dispatch('html-updated', { id, html: iframe.contentDocument.body.innerHTML });
   });
 
   onDestroy(() => {
@@ -152,7 +154,7 @@
         mathElement.parentNode.removeChild(mathElement);
 
         if (index === mathElements.length - 1) {
-          dispatch('html-updated', { id, html: doc.body.innerHTML });
+          dispatch('html-updated', { id, html: iframe.contentDocument.body.innerHTML });
         }
       });
     });
