@@ -41,7 +41,7 @@
     } = useCompletion({
         body: { context },
         onFinish: (prompt, completionText) => {
-            $input = "";
+            input = "";
         },
         onError: (error) => console.log(error.message),
         api: "https://aik-bice.vercel.app/api/completion/schools",
@@ -123,7 +123,7 @@
                     id={uniqueId}
                     on:input={(e) => {}}
                     required={true}
-                    bind:value={$input}
+                    bind:value={input}
                     placeholder="Enter your prompt here"
                 />
                 <button
