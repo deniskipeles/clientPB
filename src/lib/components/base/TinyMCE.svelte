@@ -307,15 +307,13 @@
   
   let originalValue = value
   let disable = disabled
-  $: if(disable) {
-    originalValue = value
-    value = processHTMLString(value)
-  }
-  
   const previewDiagrams=()=>{
     disable = !disable
     if(!disable){
       value = originalValue
+    }else {
+      originalValue = value
+      value = processHTMLString(value)
     }
   }
 </script>
@@ -365,6 +363,7 @@
     use:tooltip={`Click here to download or print what you see in this table in pdf format.`}
     class={`flex ${printingPDF ? 'animate-ping' : ''}`}
     on:click={() => printFxn('uniqueDivId',("Document-"+uniqueDivId),value)}
+    type="button"
 >
   <span class="txt">
     <Printer />{'print'}
@@ -377,6 +376,7 @@
     use:tooltip={`Click here to preview diagrams.`}
     class="flex"
     on:click={() => previewDiagrams()}
+    type="button"
 >
   <span class="txt">
     {disable ? "edit":"preview"}
