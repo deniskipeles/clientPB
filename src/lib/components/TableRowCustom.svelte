@@ -145,7 +145,7 @@
 
 <!-- <svelte:window on:contextmenu|preventDefault={rightClickContextMenu} on:click={onPageClick} /> -->
 
-<style>
+<!--style>
 	/* * {
 		padding: 0;
 		margin: 0;
@@ -202,4 +202,4 @@
 		border-bottom: 1px solid #ccc;
 		margin: 5px 0px;
 	}
-</style>
+</style-->
