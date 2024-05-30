@@ -5,9 +5,13 @@
   import { Printer, CloudArrowDown } from 'svelte-heros-v2';
   import { printFxn, genPDF } from '$lib/utils';
   import Iframe from '$lib/components/base/Iframe.svelte';
+  import { onMount } from 'svelte'
+  
+  let mounted = false;
+  onMount(()=>mounted=true);
 
   export let markdown;
-  $: if (markdown) {
+  $: if (markdown && mounted) {
     markdown = processHTMLString(markdown);
   }
 
@@ -32,6 +36,7 @@
     }
   };
 </script>
+
 
 <div id={uniqueDivId+"-"}>
   <Iframe {markdown} id="print" on:html-updated={handleHtmlUpdated} />
