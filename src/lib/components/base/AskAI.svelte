@@ -138,7 +138,7 @@
                     type="button"
                     title="Prompt ai"
                     class="btn btn-hint btn-xs"
-                    on:click={() => complete(input, { body: { context } })}
+                    on:click={$isLoading ? ()=>{}:() => complete(input, { body: { context } })}
                 >
                     <i class="ri-message-line" />
                     {$isLoading ? 'loading...' : 'Send'}

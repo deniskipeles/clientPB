@@ -266,48 +266,38 @@
   };
 
   
-  import { useCompletion } from 'ai/svelte'
+  import { useCompletion } from 'ai/svelte';
+  import { processHTMLString } from "$lib/utils/latexProcessor";
+  let notFinished=true
+  let input = ""
+  let body = { }
 	const {
 		completion,
-		input,
+		complete,
 		isLoading,
 		handleSubmit,
 		setInput,
 	} = useCompletion({
 		onFinish: (prompt, completeText) => {
-		  $input="";
+		  notFinished=false
+		  input="";
+		  completeText=processHTMLString(completeText)
 		  if(marked) {
           value = marked(completeText);
         } else {
           value = completeText;
       }
-		  onCompletionUpdate(completeText)
 		},
 		onError: (error) => console.log(error.message),
 	  api:"https://aik-bice.vercel.app/api/completion/schools"
 	});
 	
-	
-	let lastUpdateTime = 0;
-  let lastCompletion = "";
-  // Assuming $completion gets updated by a stream response
-  function onCompletionUpdate(newCompletion) {
-      let currentTime = new Date().getTime();
-      if ($completion !== lastCompletion && (currentTime - lastUpdateTime >= 200)) {
-        lastUpdateTime = currentTime;
-        lastCompletion = $completion;
-        if(marked) {
-          value = marked($completion);
-        } else {
-          value = $completion;
-        }
-        //console.log($completion)
-      }
-  }
 
 	$:if($completion && $isLoading){
-	  value=$completion
-	  //onCompletionUpdate($completion)
+	  value = $completion;
+	}
+	$:if(value){
+	  body.context = `<previous-system-content>${value}</previous-system-content>`;
 	}
 	
     
@@ -332,7 +322,7 @@
               <input
                 class="bg-transparent rounded-full py-1 px-4 focus:outline-none"
                 placeholder="Generate with AI..."
-                bind:value={$input}
+                bind:value={input}
                 aria-label="Prompt"
               />
           
@@ -340,7 +330,7 @@
                 aria-label="Submit"
                 type="button"
                 class="bg-blue-600 hover:bg-blue-500 active:bg-blue-700 transition-colors text-white size-8 md:size-10 btn btn-sm btn-circle btn-hint m-l-auto"
-                on:click={!$isLoading?handleSubmit:()=>{}}
+                on:click={!$isLoading?() => complete(input, { body }):()=>{}}
               >
                 {#if $isLoading}
                   <div class="ai-loader"></div>
