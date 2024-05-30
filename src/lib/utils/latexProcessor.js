@@ -106,3 +106,22 @@ export function processHTMLString(htmlString) {
 	processNode(container);
 	return container.innerHTML;
 }
+
+export const loadMarked = (value="") => {
+  let marked
+    if (!window.marked) {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/marked@12.0.2/lib/marked.umd.min.js';
+      document.head.append(script);
+
+      script.onload = () => {
+        marked = window.marked.marked;
+        console.log('marked loaded');
+        value = marked(value)
+      };
+      return value;
+    } else {
+      marked = window.marked.marked;
+      return marked(value)
+    }
+  };

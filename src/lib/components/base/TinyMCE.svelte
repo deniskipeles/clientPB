@@ -244,30 +244,9 @@
         };
     });
 
-
-  let marked
-  const loadMarked = () => {
-    let script = document.createElement('script');
-    script.src = "https://cdn.jsdelivr.net/npm/marked@12.0.2/lib/marked.umd.min.js";
-    document.head.append(script);
-
-    script.onload = () => {
-      marked = window.marked.marked;
-      console.log("marked loaded");
-      
-      if(marked){
-        try{
-          value=marked(value)
-        }catch(err){
-          console.log(err)
-        }
-      }
-    };
-  };
-
   
   import { useCompletion } from 'ai/svelte';
-  import { processHTMLString } from "$lib/utils/latexProcessor";
+  import { processHTMLString,loadMarked } from "$lib/utils/latexProcessor";
   let notFinished=true
   let input = ""
   let body = { }
@@ -282,11 +261,7 @@
 		  notFinished=false
 		  input="";
 		  //completeText=processHTMLString(completeText)
-		  if(marked) {
-          value = marked(completeText);
-        } else {
-          value = completeText;
-      }
+      value = loadMarked(completeText);
 		},
 		onError: (error) => console.log(error.message),
 	  api:"https://aik-bice.vercel.app/api/completion/schools"

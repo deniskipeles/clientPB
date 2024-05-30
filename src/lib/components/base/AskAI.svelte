@@ -12,7 +12,7 @@
     import { useCompletion } from 'ai/svelte';
     import { Printer, CloudArrowDown } from 'svelte-heros-v2';
     import { printFxn, genPDF } from '$lib/utils';
-    import { processHTMLString } from "$lib/utils/latexProcessor";
+    import { processHTMLString,loadMarked } from "$lib/utils/latexProcessor";
 
     let request_id = CommonHelper.randomString(8);
     let showOverlay = false;
@@ -48,7 +48,9 @@
     });
 
     const genPDF_fxn = async () => {
-        await genPDF('https://aiwebapp-rwci.onrender.com/', value, (options) => {
+        let value_ = loadMarked(value)
+        value_ = processHTMLString(value_)
+        await genPDF('https://aiwebapp-rwci.onrender.com/', value_, (options) => {
             generating = options.generating;
         });
     };

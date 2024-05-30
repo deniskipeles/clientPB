@@ -1,6 +1,6 @@
 <script>
   import CommonHelper from "$lib/utils/CommonHelper";
-  import { processHTMLString } from "$lib/utils/latexProcessor";
+  import { processHTMLString,loadMarked } from "$lib/utils/latexProcessor";
   import tooltip from '$lib/actions/tooltip';
   import { Printer, CloudArrowDown } from 'svelte-heros-v2';
   import { printFxn, genPDF } from '$lib/utils';
@@ -17,7 +17,9 @@
   let printingPDF = false;
 
   const genPDF_fxn = async () => {
-    await genPDF('https://aiwebapp-rwci.onrender.com/', markdown, (options) => {
+    let value_ = loadMarked(markdown)
+    value_ = processHTMLString(value_)
+    await genPDF('https://aiwebapp-rwci.onrender.com/', value_, (options) => {
       generating = options.generating;
       // file = options.file;
     });
