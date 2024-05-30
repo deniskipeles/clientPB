@@ -306,15 +306,15 @@
   
   
   let originalValue = value
-  const disable = disabled
-  $: if(disabled) {
+  let disable = disabled
+  $: if(disable) {
     originalValue = value
     value = processHTMLString(value)
   }
   
   const previewDiagrams=()=>{
-    disabled = !disabled
-    if(!disabled){
+    disable = !disable
+    if(!disable){
       value = originalValue
     }
   }
@@ -372,14 +372,14 @@
 </button>
 {/if}
 
-{#if !disable}
+{#if !disabled}
 <button
     use:tooltip={`Click here to preview diagrams.`}
     class="flex"
     on:click={() => previewDiagrams()}
 >
   <span class="txt">
-    {disabled ? "edit":"preview"}
+    {disable ? "edit":"preview"}
   </span>
 </button>
 {/if}
