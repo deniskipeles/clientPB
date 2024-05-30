@@ -38,6 +38,7 @@
 </script>
 
 
+{#if mounted}
 <div id={uniqueDivId+"-"}>
   <Iframe {markdown} id="print" on:html-updated={handleHtmlUpdated} />
 </div>
@@ -65,3 +66,4 @@
     </span>
   </button>
 </div>
+{/if}
