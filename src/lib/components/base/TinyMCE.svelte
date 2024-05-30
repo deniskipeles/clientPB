@@ -281,7 +281,7 @@
 		onFinish: (prompt, completeText) => {
 		  notFinished=false
 		  input="";
-		  completeText=processHTMLString(completeText)
+		  //completeText=processHTMLString(completeText)
 		  if(marked) {
           value = marked(completeText);
         } else {
@@ -303,6 +303,21 @@
     
   import { printFxn } from '$lib/utils';
   const uniqueDivId = "print" + CommonHelper.randomString(7);
+  
+  
+  let originalValue = value
+  const disable = disabled
+  $: if(disabled) {
+    originalValue = value
+    value = processHTMLString(value)
+  }
+  
+  const previewDiagrams=()=>{
+    disabled = !disabled
+    if(!disabled){
+      value = originalValue
+    }
+  }
 </script>
 
 
@@ -344,6 +359,7 @@
     {/if}
 </div>
 
+<div class="flex">
 {#if disabled && value.length>250}
 <button
     use:tooltip={`Click here to download or print what you see in this table in pdf format.`}
@@ -356,6 +372,18 @@
 </button>
 {/if}
 
+{#if !disable}
+<button
+    use:tooltip={`Click here to preview diagrams.`}
+    class="flex"
+    on:click={() => previewDiagrams()}
+>
+  <span class="txt">
+    {disabled ? "edit":"preview"}
+  </span>
+</button>
+{/if}
+</div>
 
 
 
