@@ -9,7 +9,8 @@
   export let scriptSources = [
     'https://i.upmath.me/latex.js',
     'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js',
-    'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs'
+    //'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs',
+    "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"
   ];
 
   let marked;
@@ -20,7 +21,7 @@
     if (marked) markdown = marked.parse(markdown);
     if (iframe?.contentDocument?.body?.innerHTML) {
       iframe.contentDocument.body.innerHTML = marked ? marked.parse(markdown) : markdown;
-      typesetMath();
+      //typesetMath();
       dispatch('html-updated', { id, html: iframe.contentDocument.body.innerHTML });
     }
   }
