@@ -9,6 +9,7 @@
   export let scriptSources = [
     'https://i.upmath.me/latex.js',
     'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js',
+    'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs'
   ];
 
   let marked;
