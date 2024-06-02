@@ -19,7 +19,19 @@
 
   $: if (markdown) {
     markdown = processHTMLString(markdown);
-    if (marked) markdown = marked.parse(markdown);
+    if (marked) {
+      markdown = marked.parse(markdown);
+      
+      const bodyDiv = document.createElement('div');
+      bodyDiv.innerHTML = markdown;
+      bodyDiv.querySelectorAll('.language-mermaid').forEach((element) => {
+        const newElement = document.createElement('div');
+        newElement.classList.add('mermaid');
+        newElement.innerHTML = element.innerHTML;
+        element.parentNode.replaceChild(newElement, element);
+      });
+      markdown = bodyDiv.innerHTML
+    }
     if (iframe?.contentDocument?.body?.innerHTML) {
       iframe.contentDocument.body.innerHTML = marked ? marked.parse(markdown) : markdown;
       //typesetMath();
