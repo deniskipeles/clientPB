@@ -143,9 +143,13 @@
     });
     console.log(linkList);
     context += `<links>${JSON.stringify(linkList)}</links>`
+    return context
 	}
 	afterNavigate(()=>load())
 	onMount(()=>load())
+	function contextFxn(){
+	  return load()
+	}
 </script>
 
 <svelte:head>
@@ -289,7 +293,7 @@
 	  </div>
 		<Toasts />
 		<div class="absolute z-50 right-2 bottom-4">
-		  <Pagepilot {context} input="what can i use this page for." btnText="pagepilot" />
+		  <Pagepilot {context} {contextFxn} input="what can i use this page for." btnText="pagepilot" />
 		</div>
 	</main>
 </div>

@@ -252,7 +252,9 @@
                 }, 2000);
             }}
         >
-            <CloudArrowDown />{`download pdf`}
+          <span class="txt">
+            <CloudArrowDown />pdf
+          </span>
         </button>
         <button
             use:tooltip={`Click here to download or print what you see in this table in pdf format.`}
@@ -261,7 +263,9 @@
                 printFxn('printableThis');
             }}
         >
-            <Printer />{'print'}
+          <span class="txt">
+            <Printer />print
+          </span>
         </button>
     </div>
 </div>
