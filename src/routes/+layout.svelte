@@ -100,10 +100,10 @@
 
   function getContent() {
     let content = ""
-    const tinymce = document.body.querySelector('.tox-edit-area iframe');
-    const iframe = document.querySelector('iframe');
+    const tinymce = document.body.querySelector('.tox-edit-area iframe') || document.querySelector('.tox-edit-area iframe');
+    const iframe = document.querySelector('iframe')||document.body.querySelector('iframe');
     if (tinymce && tinymce.contentDocument) {
-      content = iframe.contentDocument.body.innerHTML;
+      content = tinymce.contentDocument.body.innerHTML;
     } else if (iframe && iframe.contentDocument) {
         content = iframe.contentDocument.body.innerHTML;
     } else {
@@ -122,7 +122,8 @@
     links.forEach((link, index) => {
       if (index === 100) return;
       const linkText = link.textContent;
-      linkList.push({ text: linkText, url: link.href });
+      //linkList.push({ text: linkText, url: link.href });
+      if(!linkList.find(i=>i?.url==link?.href)) linkList.push({ text: linkText, url: link.href });
     });
     
     return {textContent,linkList}
@@ -138,7 +139,7 @@
     links.forEach((link, index) => {
       if (index === 100) return;
       const linkText = link.textContent;
-      linkList.push({ text: linkText, url: link.href });
+      if(!linkList.find(i=>i?.url==link?.href)) linkList.push({ text: linkText, url: link.href });
     });
     console.log(linkList);
     context += `. links=${JSON.stringify(linkList)}`

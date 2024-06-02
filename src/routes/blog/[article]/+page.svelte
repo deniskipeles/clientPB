@@ -50,7 +50,7 @@
 </svelte:head>
 <div class="pt-20">
 	<h4 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{data?.article?.title}</h4>
-	{#if !inline}
+	<!--{#if !inline}
 	<TinyMce
 		cssClass="tinymce-preview custom-scrollbar"
 		conf={{
@@ -71,6 +71,6 @@
 		disabled
 	/>
 	{:else}
+	{/if}-->
 	  <PreviewHtml markdown={data?.article?.content ?? app?.html_data ?? html_data} />
-	{/if}
 </div>

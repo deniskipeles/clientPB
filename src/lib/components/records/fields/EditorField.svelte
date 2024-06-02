@@ -4,6 +4,7 @@
     // import ApiClient from "$lib/utils/ApiClient";
     import Field from "$lib/components/base/Field.svelte";
     import TinyMCE from "$lib/components/base/TinyMCE.svelte";
+    import PreviewHtml from "$lib/components/base/PreviewHtml.svelte";
     import RecordFilePicker from "$lib/components/records/RecordFilePicker.svelte";
 	import { pb as ApiClient } from "$lib/pocketbase";
 
@@ -40,6 +41,8 @@
             clearTimeout(mountedTimeoutId);
         };
     });
+    
+  let preview = false
 </script>
 
 <Field class="form-field form-field-editor {field.required ? 'required' : ''}" name={field.name} let:uniqueId>
@@ -48,6 +51,9 @@
         <span class="txt">{field.name}</span>
     </label>
     {#if mounted}
+      {#if preview}
+        <PreviewHtml markdown={value} />
+      {:else}
         <TinyMCE
             id={uniqueId}
             {conf}
@@ -59,6 +65,19 @@
                 });
             }}
         />
+      {/if}
+        
+        <button
+            use:tooltip={`Click here to preview diagrams.`}
+            class="flex"
+            on:click={() => preview=!preview}
+            type="button"
+        >
+          <span class="txt">
+            {preview ? "edit":"preview"}
+          </span>
+        </button>
+
     {:else}
         <div class="tinymce-wrapper" />
     {/if}

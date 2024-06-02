@@ -275,22 +275,8 @@
 	  body.context = `<previous-system-content>${value}</previous-system-content>`;
 	}
 	
-    
-  import { printFxn } from '$lib/utils';
-  const uniqueDivId = "print" + CommonHelper.randomString(7);
-  
-  
-  let originalValue = value
-  let disable = disabled
-  const previewDiagrams=()=>{
-    disable = !disable
-    if(!disable){
-      value = originalValue
-    }else {
-      originalValue = value
-      value = processHTMLString(value)
-    }
-  }
+	import { printFxn } from '$lib/utils';
+	const uniqueDivId = "print" + CommonHelper.randomString(7);
 </script>
 
 
@@ -332,36 +318,19 @@
     {/if}
 </div>
 
-<div class="flex">
+
 {#if disabled && value.length>250}
-<button
-    use:tooltip={`Click here to download or print what you see in this table in pdf format.`}
-    class={`flex ${printingPDF ? 'animate-ping' : ''}`}
-    on:click={() => printFxn('uniqueDivId',("Document-"+uniqueDivId),value)}
-    type="button"
->
-  <span class="txt">
-    <Printer />{'print'}
-  </span>
-</button>
+  <button
+      use:tooltip={`Click here to download or print what you see in this table in pdf format.`}
+      class={`flex ${printingPDF ? 'animate-ping' : ''}`}
+      on:click={() => printFxn('uniqueDivId',("Document-"+uniqueDivId),value)}
+      type="button"
+  >
+    <span class="txt">
+      <Printer />{'print'}
+    </span>
+  </button>
 {/if}
-
-{#if !disabled}
-<button
-    use:tooltip={`Click here to preview diagrams.`}
-    class="flex"
-    on:click={() => previewDiagrams()}
-    type="button"
->
-  <span class="txt">
-    {disable ? "edit":"preview"}
-  </span>
-</button>
-{/if}
-</div>
-
-
-
 
 
 
