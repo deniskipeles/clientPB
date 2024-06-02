@@ -248,8 +248,10 @@ export function printFxn(divId: string, title = 'Document',content=""): void {
 	const mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=150');
 
 	if (mywindow) {
+	  const mermaidjs = `<script src="${window.location.origin}/libs/scripts/mermaid.js"></script>`
 		mywindow.document.write(`<html><head><title>${title} ${fileName}</title>`);
 		mywindow.document.write(paperCSS);
+		mywindow.document.write(mermaidjs);
 		mywindow.document.write('<script src="//i.upmath.me/latex.js"></script></head><body>');
 
 		const divContent = document.getElementById(divId)?.innerHTML ?? content;
@@ -278,7 +280,8 @@ export const genPDF = async (urlApi = 'https://aiwebapp-rwci.onrender.com/', con
   let generating = true;
   callback({ generating: true, file: null });
   try {
-    const data = `<html><head>${paperCSS}<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script><script src="https://i.upmath.me/latex.js"></script></head><body>${content}</body></html>`
+    const mermaidjs = `<script src="${window.location.origin}/libs/scripts/mermaid.js"></script>`
+    const data = `<html><head>${paperCSS}${mermaidjs}<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script><script src="https://i.upmath.me/latex.js"></script></head><body>${content}</body></html>`
     const response: Response = await fetch(urlApi, {
       method: 'POST',
       headers: {
