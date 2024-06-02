@@ -143,7 +143,7 @@
     });
     console.log(linkList);
     context += `<links>${JSON.stringify(linkList)}</links>`
-    return context
+    return context+`. <current-window-link>${$page?.url?.href}</current-window-link>`
 	}
 	afterNavigate(()=>load())
 	onMount(()=>load())
@@ -151,6 +151,7 @@
 	  return load()
 	}
 </script>
+
 
 <svelte:head>
 	<title>{app?.data?.name ?? 'ClientPB'}</title>
