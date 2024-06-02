@@ -28,7 +28,8 @@ const loadMermaid = async () => {
 
 // The function to update the component's content based on the Mermaid rendering state
 const updateComponent = () => {
-  document.querySelectorAll(".mermaid, .language-mermaid").forEach((diagramSlot, index) => {
+  const mermaidElements = document.querySelectorAll(':is(.mermaid, .language-mermaid)');
+  mermaidElements.forEach((diagramSlot, index) => {
     const loadingPlaceholder = document.createElement('div');
     loadingPlaceholder.className = 'load';
     loadingPlaceholder.innerText = ' loading... ';
