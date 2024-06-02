@@ -95,10 +95,37 @@
 	
 	import Pagepilot from '$lib/components/base/AskAI.svelte';
 	import { afterNavigate } from '$app/navigation';
+	
+	
+
+  function getContent() {
+    let content = ""
+    const tinymce = document.body.querySelector('.tox-edit-area iframe');
+    const iframe = document.querySelector('iframe');
+    if (tinymce && tinymce.contentDocument) {
+      content = iframe.contentDocument.body.innerHTML;
+    } else if (iframe && iframe.contentDocument) {
+        content = iframe.contentDocument.body.innerHTML;
+    } else {
+      console.log('No visible content found');
+      content = document?.body?.innerHTML
+    }
+    return content
+  }
   
 	let context=""
 	afterNavigate(()=>{
-	  context=document?.body?.innerText
+	  context=getContent()
+	  
+	  const links = document.querySelectorAll('body a');
+    const linkList = [];
+    links.forEach((link, index) => {
+      if (index === 100) return;
+      const linkText = link.textContent;
+      linkList.push({ text: linkText, url: link.href });
+    });
+    console.log(linkList);
+    context += linkList
 	})
 </script>
 
@@ -253,3 +280,6 @@
 <div class="dark:bg-slate-900 mx-auto mb-4 pt-4 lg:pl-64">
 	<FooterComp {app} />
 </div>
+
+
+
