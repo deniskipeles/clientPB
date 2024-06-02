@@ -129,7 +129,7 @@
   }
   
 	let context=""
-	afterNavigate(()=>{
+	const load =()=>{
 	  context=getContent()
 	  const {textContent,linkList}=getTextContent(context)
 	  context = textContent
@@ -142,7 +142,9 @@
     });
     console.log(linkList);
     context += `. links=${JSON.stringify(linkList)}`
-	})
+	}
+	afterNavigate(()=>load())
+	onMount(()=>load())
 </script>
 
 <svelte:head>
