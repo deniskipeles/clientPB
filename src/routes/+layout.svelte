@@ -112,20 +112,36 @@
     }
     return content
   }
+  function getTextContent(htmlContent) {
+    const div = document.createElement('div');
+    div.innerHTML = htmlContent;
+    const textContent = div.textContent || div.innerText || "";
+    
+    const linkList = [];
+    const links = div.querySelectorAll('a');
+    links.forEach((link, index) => {
+      if (index === 100) return;
+      const linkText = link.textContent;
+      linkList.push({ text: linkText, url: link.href });
+    });
+    
+    return {textContent,linkList}
+  }
   
 	let context=""
 	afterNavigate(()=>{
 	  context=getContent()
-	  
+	  const {textContent,linkList}=getTextContent(context)
+	  context = textContent
 	  const links = document.querySelectorAll('body a');
-    const linkList = [];
+    //const linkList = [];
     links.forEach((link, index) => {
       if (index === 100) return;
       const linkText = link.textContent;
       linkList.push({ text: linkText, url: link.href });
     });
     console.log(linkList);
-    context += linkList
+    context += `. links=${JSON.stringify(linkList)}`
 	})
 </script>
 
