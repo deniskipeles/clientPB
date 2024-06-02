@@ -142,8 +142,8 @@
       if(!linkList.find(i=>i?.url==link?.href)) linkList.push({ text: linkText, url: link.href });
     });
     console.log(linkList);
-    context += `<links>${JSON.stringify(linkList)}</links>`
-    return context+`. <current-window-link>${$page?.url?.href}</current-window-link>`
+    context += `<links>${JSON.stringify(linkList)}</links>. <current-window-link>${$page?.url?.href}</current-window-link>`
+    return context
 	}
 	afterNavigate(()=>load())
 	onMount(()=>load())
