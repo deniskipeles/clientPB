@@ -42,6 +42,7 @@
         };
     });
     
+  import tooltip from '$lib/actions/tooltip';
   let preview = false
 </script>
 

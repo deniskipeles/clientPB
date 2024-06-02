@@ -134,7 +134,7 @@
 	  context=getContent()
 	  const {textContent,linkList}=getTextContent(context)
 	  context = textContent
-	  const links = document.querySelectorAll('body a');
+	  const links = document.querySelectorAll('a') || document.querySelectorAll('body a');
     //const linkList = [];
     links.forEach((link, index) => {
       if (index === 100) return;
@@ -142,7 +142,7 @@
       if(!linkList.find(i=>i?.url==link?.href)) linkList.push({ text: linkText, url: link.href });
     });
     console.log(linkList);
-    context += `. links=${JSON.stringify(linkList)}`
+    context += `<links>${JSON.stringify(linkList)}</links>`
 	}
 	afterNavigate(()=>load())
 	onMount(()=>load())
