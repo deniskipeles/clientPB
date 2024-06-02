@@ -92,6 +92,14 @@
 			? app?.photos[app?.data?.logo ?? 0]
 			: null;
 	$: controls=$page.data?.roots?.find(obj=>obj.name=="controls") ?? {}
+	
+	import Pagepilot from '$lib/components/base/AskAI.svelte';
+	import { afterNavigate } from '$app/navigation';
+  
+	let context=""
+	afterNavigate(()=>{
+	  context=document?.body?.innerText
+	})
 </script>
 
 <svelte:head>
@@ -230,8 +238,13 @@
 
 <div class="flex px-4 mx-auto w-full">
 	<main class="lg:pl-64 w-full mx-auto">
-		<slot />
+	  <div class="pageContentDiv">
+		  <slot />
+	  </div>
 		<Toasts />
+		<div class="absolute z-50 right-2 bottom-4">
+		  <Pagepilot {context} input="what can i use this page for." btnText="pagepilot" />
+		</div>
 	</main>
 </div>
 {#if showWhichHasOverlay}

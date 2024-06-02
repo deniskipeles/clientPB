@@ -17,9 +17,11 @@
     let request_id = CommonHelper.randomString(8);
     let showOverlay = false;
     let questionAiPanel;
+    export let systemPrompt = null;
+    export let btnText = "Page pilot";
     export let context = null;
     export let contextFxn = null;
-    let input = "Explain for me this record.";
+    export let input = "Explain for me this record.";
     let value = "";
     let generating = false;
     let viewContext = false;
@@ -46,6 +48,13 @@
         onError: (error) => console.log(error.message),
         api: "https://aik-bice.vercel.app/api/completion/schools",
     });
+    let body ={}
+    $:if(context){ 
+      body.context = context
+    }
+    $:if(systemPrompt){ 
+      body.systemPrompt = systemPrompt
+    }
 
     const genPDF_fxn = async () => {
         let value_ = loadMarked(value)
@@ -81,7 +90,7 @@
             context = contextFxn();
         }
         return questionAiPanel.show();
-    }} type="button">ask AI</button>
+    }} type="button">{btnText}</button>
 </div>
 
 {#if showOverlay}
@@ -94,7 +103,7 @@
         {...$$restProps}
     >
         <svelte:fragment slot="header">
-            <h4>Prompting <strong>ai</strong> for help.</h4>
+            <h4>Page pilot.</h4>
         </svelte:fragment>
 
         {#if viewContext}
@@ -140,7 +149,7 @@
                     type="button"
                     title="Prompt ai"
                     class="btn btn-hint btn-xs"
-                    on:click={$isLoading ? ()=>{}:() => complete(input, { body: { context } })}
+                    on:click={$isLoading ? ()=>{}:() => complete(input, {body})}
                 >
                     <i class="ri-message-line" />
                     {$isLoading ? 'loading...' : 'Send'}
