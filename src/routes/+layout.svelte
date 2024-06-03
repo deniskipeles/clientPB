@@ -151,7 +151,6 @@
 	function contextFxn(){
 	  context = load()
 	  drawerHidden = true
-	  toggleSide()
 	  return context
 	}
 </script>
