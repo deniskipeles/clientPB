@@ -150,6 +150,7 @@
 	onMount(()=>load())
 	function contextFxn(){
 	  context = load()
+	  activateClickOutside = false
 	  drawerHidden = true
 	  return context
 	}
