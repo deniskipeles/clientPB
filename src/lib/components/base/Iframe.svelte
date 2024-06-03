@@ -197,6 +197,6 @@
   bind:this={iframe}
 ></iframe>
 
-<svelte:head>
-    <base target="_parent"/>
-</svelte:head>
+<!--svelte:head>
+    <base target="_parent">
+</svelte:head-->
