@@ -195,3 +195,7 @@
   frameborder="0"
   bind:this={iframe}
 ></iframe>
+
+<svelte:head>
+    <base target="_parent">
+</svelte:head>
