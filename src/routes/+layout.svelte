@@ -151,7 +151,7 @@
 	function contextFxn(){
 	  context = load()
 	  activateClickOutside = false
-	  drawerHidden = true
+	  drawerHidden = false
 	  return context
 	}
 </script>
