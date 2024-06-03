@@ -92,6 +92,7 @@
 			? app?.photos[app?.data?.logo ?? 0]
 			: null;
 	$: controls=$page.data?.roots?.find(obj=>obj.name=="controls") ?? {}
+	$: ai_controls=($page.data?.roots?.find(obj=>obj.name=="ai_controls"))?.data ?? {}
 	
 	import Pagepilot from '$lib/components/base/AskAI.svelte';
 	import { afterNavigate } from '$app/navigation';
@@ -284,6 +285,9 @@
 				</SidebarGroup>
 			{/if}
 		</SidebarWrapper>
+		<div class="absolute mx-auto py-4">
+		  <Pagepilot {context} systemPrompt={ai_controls} {contextFxn} input="what can i use this page for." btnText="Pagepilot" />
+		</div>
 	</Sidebar>
 </Drawer>
 
@@ -293,9 +297,6 @@
 		  <slot />
 	  </div>
 		<Toasts />
-		<div class="absolute z-50 right-2 bottom-4">
-		  <Pagepilot {context} {contextFxn} input="what can i use this page for." btnText="pagepilot" />
-		</div>
 	</main>
 </div>
 {#if showWhichHasOverlay}
