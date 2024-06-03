@@ -190,6 +190,7 @@
 </style>
 
 <iframe
+  sandbox="allow-top-navigation"
   title="Article"
   id={`microapp-${uniqueDivId}`}
   frameborder="0"
@@ -197,5 +198,5 @@
 ></iframe>
 
 <svelte:head>
-    <base target="_parent">
+    <base target="_parent"/>
 </svelte:head>
