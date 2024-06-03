@@ -29,6 +29,9 @@
     export function hide() {
         return questionAiPanel?.hide();
     }
+    export function show() {
+        return questionAiPanel?.show();
+    }
 
     onMount(() => {
         showOverlay = true;
@@ -89,7 +92,7 @@
         if (contextFxn) {
             context = contextFxn();
         }
-        return questionAiPanel.show();
+        setTimeout(()=>show(),300);
     }} type="button">{btnText}</button>
 </div>
 

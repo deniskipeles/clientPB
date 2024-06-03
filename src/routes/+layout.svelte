@@ -150,6 +150,7 @@
 	onMount(()=>load())
 	function contextFxn(){
 	  context = load()
+	  drawerHidden = true
 	  toggleSide()
 	  return context
 	}
