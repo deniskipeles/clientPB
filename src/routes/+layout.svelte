@@ -149,7 +149,9 @@
 	afterNavigate(()=>load())
 	onMount(()=>load())
 	function contextFxn(){
-	  return load()
+	  context = load()
+	  toggleSide()
+	  return context
 	}
 </script>
 
