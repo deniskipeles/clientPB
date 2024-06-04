@@ -17,14 +17,14 @@ const loadMathJax = () => {
     };
 
     // Render the equations
-    try {
+    /*try {
       MathJax.typesetClear();
       MathJax.typesetPromise().then(() => {
         dispatchEvent(new CustomEvent('mathjax:rendered'));
       });
     } catch (e) {
       console.log(e);
-    }
+    }*/
   };
 };
 
@@ -50,5 +50,5 @@ const updateComponent = () => {
 loadMathJax();
 
 // Update the component's content when the MathJax rendering state changes
-document.addEventListener('mathjax:rendered', updateComponent);
-window.addEventListener('popstate', updateComponent);
+//document.addEventListener('mathjax:rendered', updateComponent);
+//window.addEventListener('popstate', updateComponent);
