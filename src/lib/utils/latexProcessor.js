@@ -52,7 +52,7 @@ export function processHTMLString(htmlString) {
 			if (n === 3 &&
 				/^[ \t]$/.test(as[0]) &&
 				/^(?:[ \t]*\([ \t]*\S+[ \t]*\))?[ \t]*$/.test(as[2]) &&
-				as[1].includes('tikzpicture') &&
+				as[1].includes('tikz') &&
 				node.tagName === 'P' && node.childNodes.length <= 2
 			) {
 				eResult = createImgNode(as[1], 1);
@@ -72,7 +72,7 @@ export function processHTMLString(htmlString) {
 
 				for (i = 0; i < n; i++) {
 					if (i % 2) {
-						if (as[i].includes('tikzpicture')) {
+						if (as[i].includes('tikz')) {
 							if (i + 1 < n) {
 								eResult = createImgNode(as[i], 0);
 
