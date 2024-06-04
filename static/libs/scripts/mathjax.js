@@ -5,7 +5,7 @@ const loadMathJax = () => {
   document.head.appendChild(mathjaxScript);
 
   mathjaxScript.onload = () => {
-    window.MathJax = {
+    MathJax = {
       tex: {
         inlineMath: [
           ['$', '$'],

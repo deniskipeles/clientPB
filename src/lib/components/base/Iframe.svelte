@@ -9,7 +9,7 @@
   export let id = `iframe-${CommonHelper.randomString(7)}`;
   export let scriptSources = [
     'https://i.upmath.me/latex.js',
-    //'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js',
+    'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js',
     //"https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"
     `${$page.url.origin}/libs/scripts/mermaid.js`,
     `${$page.url.origin}/libs/scripts/mathjax.js`
