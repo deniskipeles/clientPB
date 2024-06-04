@@ -190,7 +190,6 @@
 </style>
 
 <iframe
-  sandbox="allow-top-navigation"
   title="Article"
   id={`microapp-${uniqueDivId}`}
   frameborder="0"
