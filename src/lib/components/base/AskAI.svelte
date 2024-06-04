@@ -41,7 +41,7 @@
         handleSubmit,
         setInput,
     } = useCompletion({
-        body: { context },
+        body: { context, systemPrompt },
         onFinish: (prompt, completionText) => {
             input = "";
         },

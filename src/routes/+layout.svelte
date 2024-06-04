@@ -109,7 +109,6 @@
         content = iframe.contentDocument.body.innerHTML;
     } else {
       console.log('No visible content found');
-      content = document?.body?.innerHTML
     }
     return content
   }
@@ -134,7 +133,9 @@
 	const load =()=>{
 	  context=getContent()
 	  const {textContent,linkList}=getTextContent(context)
-	  context = textContent
+	  const body  = document?.body?.innerHTML
+	  const {textContent:textContentBody,linkList:linkListBody}=getTextContent(body)
+	  context = textContent+textContentBody
 	  const links = document.querySelectorAll('a') || document.querySelectorAll('body a');
     //const linkList = [];
     links.forEach((link, index) => {
@@ -143,7 +144,7 @@
       if(!linkList.find(i=>i?.url==link?.href)) linkList.push({ text: linkText, url: link.href });
     });
     console.log(linkList);
-    context += `<links>${JSON.stringify(linkList)}</links>. <current-window-link>${$page?.url?.href}</current-window-link>`
+    context += `<links>${JSON.stringify(linkList)}</links>. <current-window-link>${$page?.url?.href}</current-window-link><current-user-type>${$page.data?.user?.collectionName??"anonymous user"} ${$page.data?.user?.collectionName ? (":<username>"+$page.data?.user?.username+"</username>") :""}</current-user-type>`
     return context
 	}
 	afterNavigate(()=>load())
